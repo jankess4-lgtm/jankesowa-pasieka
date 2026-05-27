@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-green: #166534;
+  --brand-brown: #92400E;
+  --brand-cream: #F5EDE4;
+  --brand-gold: #D97706;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Premium serif headings */
+h1, h2, .font-serif {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+/* Elegant button styles mimicking shadcn */
+.btn {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+}
+
+.btn-primary {
+  @apply bg-brand-gold text-white hover:bg-brand-goldDark active:scale-[0.985] shadow-sm;
+}
+
+.btn-secondary {
+  @apply bg-brand-green text-white hover:bg-brand-greenDark active:scale-[0.985];
+}
+
+.btn-outline {
+  @apply border border-brand-brown/70 bg-transparent text-brand-brown hover:bg-brand-cream active:bg-brand-cream/70;
+}
+
+.btn-ghost {
+  @apply hover:bg-brand-cream text-brand-brown;
+}
+
+/* Product card */
+.product-card {
+  @apply bg-white rounded-xl overflow-hidden border border-brand-creamDark shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+}
+
+/* Cart drawer */
+.cart-drawer {
+  box-shadow: -10px 0 30px -15px rgb(0 0 0 / 0.15);
+}
+
+/* Nice inputs */
+.input {
+  @apply w-full rounded-md border border-brand-brown/30 bg-white px-4 py-2.5 text-sm placeholder:text-brand-brown/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:border-brand-gold transition;
+}
+
+.textarea {
+  @apply input min-h-[120px] resize-y;
+}
+
+/* Elegant section dividers */
+.section-divider {
+  @apply w-16 h-px bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent mx-auto;
+}
+
+/* Honey accent */
+.honey-accent {
+  @apply text-brand-gold;
+}
+
+/* Responsive product grid */
+.products-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+/* Toast customization for sonner */
+.sonner-toast {
+  background: #166534 !important;
+  color: white !important;
+  border: 1px solid #92400E !important;
+}

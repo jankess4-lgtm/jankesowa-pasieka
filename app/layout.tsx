@@ -1,43 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-
-const inter = Inter({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-playfair",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
 
 export const metadata: Metadata = {
-  title: "Jankesowa Pasieka | Naturalne miody z Kujaw nad Wisłą",
-  description: "Rodzinna pasieka na terenach nadwiślańskich Kujaw (Topolno, gmina Pruszcz). Najwyższej jakości miody niepasteryzowane, pyłek pszczeli, plastry miodu i świece z wosku. Wirowane na zimno, bez antybiotyków.",
-  icons: {
-    icon: "/favicon.svg",
-  },
+  title: "Jankesowa Pasieka",
+  description: "Naturalne miody z Kujaw",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="pl" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <Toaster position="top-center" richColors closeButton />
+    <html lang="pl">
+      <body style={{ margin: 0, padding: 0 }}>
+        {children}
       </body>
     </html>
   );

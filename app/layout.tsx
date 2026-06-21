@@ -1,7 +1,7 @@
 // Fixed 404 - correct App Router structure
-// Logo added to Navbar and Footer (from public/logo.png)
+// Logo + "JANKESOWA PASIEKA" text with Satisfy font added to Navbar and Footer
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Satisfy } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
@@ -20,6 +20,12 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+const satisfy = Satisfy({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-satisfy",
+});
+
 export const metadata: Metadata = {
   title: "Jankesowa Pasieka | Naturalne miody z Kujaw nad Wisłą",
   description: "Rodzinna pasieka w Topolnie (gmina Pruszcz). Najwyższej jakości miody niepasteryzowane z terenów nadwiślańskich Kujaw. Ręcznie zbierane, bez antybiotyków.",
@@ -34,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="pl" className={`${inter.variable} ${playfair.variable} ${satisfy.variable}`}>
       <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
         <Navbar />
         <main>{children}</main>

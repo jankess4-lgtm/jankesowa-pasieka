@@ -8,14 +8,17 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-y-12">
         {/* Brand */}
         <div className="md:col-span-5">
-          <Link href="/" className="flex items-center mb-4" aria-label="Jankesowa Pasieka - Strona główna">
+          <Link href="/" className="flex items-center gap-2 mb-3" aria-label="Jankesowa Pasieka - Strona główna">
             <Image 
               src="/logo.png" 
               alt="Jankesowa Pasieka" 
-              width={160} 
-              height={48} 
-              className="h-9 md:h-10 w-auto object-contain" 
+              width={170} 
+              height={50} 
+              className="h-[42px] md:h-[50px] w-auto object-contain" 
             />
+            <span className="font-[var(--font-satisfy)] text-[#92400E] text-base md:text-lg tracking-[1px] font-normal">
+              JANKESOWA PASIEKA
+            </span>
           </Link>
           <p className="max-w-sm text-sm text-white/70 leading-relaxed">
             Rodzinna pasieka na malowniczych terenach nadwiślańskich Kujaw. 

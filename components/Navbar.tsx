@@ -36,17 +36,22 @@ export default function Navbar() {
   return (
     <>
       <nav className="sticky top-0 z-40 bg-[#F5EDE4]/95 backdrop-blur-md border-b border-brand-brown/10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center group" aria-label="Jankesowa Pasieka - Strona główna">
+        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+          {/* Logo + Brand Name */}
+          <Link href="/" className="flex items-center gap-3 group" aria-label="Jankesowa Pasieka - Strona główna">
             <Image 
               src="/logo.png" 
               alt="Jankesowa Pasieka" 
-              width={180} 
-              height={55} 
-              className="h-10 md:h-[52px] w-auto object-contain" 
-              priority
+              width={230} 
+              height={68} 
+              className="h-[55px] md:h-[68px] w-auto object-contain" 
+              priority 
             />
+            <span 
+              className="font-[var(--font-satisfy)] text-[#92400E] text-[22px] md:text-[28px] tracking-[1.5px] font-normal leading-none"
+            >
+              JANKESOWA PASIEKA
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

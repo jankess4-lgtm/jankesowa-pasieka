@@ -154,7 +154,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   };
 
   const features = getFeatures(product);
-  const isAvailable = product.available !== false;
 
   return (
     <div className="bg-[#F5EDE4] min-h-screen py-12">

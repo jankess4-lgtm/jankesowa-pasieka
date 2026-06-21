@@ -1,5 +1,5 @@
 // Fixed 404 - correct App Router structure
-// Logo + "JANKESOWA PASIEKA" text with Satisfy font added to Navbar and Footer
+// Recreated layout, page, globals from scratch with full Jankesowa Pasieka content (hero, products, about, contact) + Navbar/Footer
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Satisfy } from "next/font/google";
 import "./globals.css";

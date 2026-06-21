@@ -12,12 +12,12 @@ export default function Footer() {
             <Image 
               src="/logo.png" 
               alt="Jankesowa Pasieka" 
-              width={170} 
-              height={50} 
-              className="h-10 md:h-12 w-auto object-contain" 
+              width={160} 
+              height={48} 
+              className="h-12 w-auto object-contain" 
             />
             <span 
-              className="text-[#78350F] text-sm md:text-base tracking-[1px] font-normal"
+              className="text-[#78350F] text-base md:text-lg tracking-[0.5px] font-normal"
               style={{ fontFamily: "'Kristen ITC', cursive" }}
             >
               JANKESOWA PASIEKA

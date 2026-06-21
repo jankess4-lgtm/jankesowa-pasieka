@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Recreated globals.css for full working site */
+
+
 :root {
   --brand-green: #166534;
   --brand-brown: #92400E;

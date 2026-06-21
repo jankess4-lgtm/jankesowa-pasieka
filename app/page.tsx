@@ -1,3 +1,4 @@
+// Full working homepage with current Jankesowa Pasieka data (Kujawy, Topolno, products, etc.)
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { products } from "@/lib/products";

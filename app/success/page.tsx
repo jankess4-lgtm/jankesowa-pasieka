@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, ArrowRight, ShoppingBag, Home } from "lucide-react";
+import { CheckCircle, ShoppingBag, Home } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/useCart";
 
@@ -21,7 +21,22 @@ interface SessionData {
   }>;
 }
 
-export default function SuccessPage() {
+// Simple loading fallback shown by the Suspense boundary
+// This makes the page build correctly and keeps the shell optimizable
+function SuccessLoading() {
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center bg-[#F5EDE4]">
+      <div className="text-center">
+        <div className="animate-spin w-8 h-8 border-4 border-brand-gold border-t-transparent rounded-full mx-auto mb-4" />
+        <p className="text-brand-brown">Ładowanie...</p>
+      </div>
+    </div>
+  );
+}
+
+// Inner component that actually uses useSearchParams()
+// It must be rendered inside a <Suspense> boundary
+function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const orderRef = searchParams.get("order");
@@ -74,7 +89,7 @@ export default function SuccessPage() {
     return (amount / 100).toFixed(2).replace(".", ",");
   };
 
-  // Loading state
+  // Internal loading state (shown after params resolved)
   if (loading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center bg-[#F5EDE4]">
@@ -191,5 +206,17 @@ export default function SuccessPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+// Main exported page component
+// The logic that calls useSearchParams() is inside SuccessContent,
+// which is wrapped in a Suspense boundary. This fixes the build error
+// and allows better static rendering of the route shell.
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<SuccessLoading />}>
+      <SuccessContent />
+    </Suspense>
   );
 }

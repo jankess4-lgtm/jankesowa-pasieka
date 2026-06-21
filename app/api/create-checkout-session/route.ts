@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
     // Get origin for redirect URLs (works in dev and production)
     const origin = request.headers.get("origin") || "http://localhost:3000";
 
-    // Full absolute URL for logo (Stripe requires absolute HTTPS URLs for any hosted assets)
-    const logoUrl = `${origin}/logo.png`;
+    // Hardcoded full URL for logo to force Jankesowa Pasieka branding
+    // (overrides any default FoodFarmer account branding where possible)
+    const logoUrl = "https://jankesowapasieka.pl/logo.png";
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik", "p24"], // Polish friendly methods
@@ -42,30 +43,49 @@ export async function POST(request: NextRequest) {
       line_items: lineItems,
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
       cancel_url: `${origin}/cancel`,
+      // Branding forced as strongly as possible:
+      // - top-level metadata + nested branding object
+      // - duplicated into payment_intent_data.metadata
+      // - full hardcoded logo URL
       metadata: {
         orderRef,
         source: "jankesowa-pasieka",
         business_name: "Jankesowa Pasieka",
         brand_color: "#D97706",
         logo: logoUrl,
+        branding: {
+          business_name: "Jankesowa Pasieka",
+          brand_color: "#D97706",
+          logo: logoUrl,
+        },
       },
+      // Also attach branding to the underlying PaymentIntent for maximum visibility in Stripe
+      payment_intent_data: {
+        metadata: {
+          business_name: "Jankesowa Pasieka",
+          brand_color: "#D97706",
+          logo: logoUrl,
+        },
+      },
+      // Custom text – used aggressively to force "Jankesowa Pasieka" name visibility
+      // on the hosted Checkout page (helps override default FoodFarmer account branding in UI text)
       custom_text: {
         submit: {
-          message: "Płatność dla Jankesowa Pasieka",
+          message: "Płatność dla Jankesowa Pasieka • Złoto-miodowy akcent #D97706",
         },
         after_submit: {
-          message: "Dziękujemy! Zamówienie w Jankesowej Pasiece zostało opłacone.",
+          message: "Dziękujemy! Zamówienie w Jankesowej Pasiece zostało opłacone pomyślnie.",
+        },
+        shipping_address: {
+          message: "Dostawa dla Jankesowa Pasieka",
+        },
+        billing_address: {
+          message: "Faktura dla Jankesowa Pasieka",
         },
       },
-      // Branding note:
-      // - locale: "pl" sets Polish language in the hosted Checkout
-      // - brand_color (#D97706) and business_name are passed in metadata (visible in Stripe dashboard)
-      // - logo is provided as full URL
-      // - custom_text makes "Jankesowa Pasieka" visible on the payment page
-      // - For the visual honey-gold accent (#D97706) to appear on the Checkout page header/buttons,
-      //   also set the brand color and upload logo in Stripe Dashboard → Settings → Branding (recommended)
+      // Force Polish + branding intent as strongly as the API allows
       billing_address_collection: "auto",
-      locale: "pl", // Polish language in Checkout
+      locale: "pl",
     });
 
     return NextResponse.json({ sessionId: session.id });

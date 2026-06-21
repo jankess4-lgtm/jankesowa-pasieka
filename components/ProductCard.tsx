@@ -56,7 +56,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   };
 
   // UNAVAILABLE PRODUCT — full card faded logo, no product photo, desaturated, elegant message
-  const productSlug = product.slug || product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const productSlug = product.slug!;
 
   if (!isAvailable) {
     return (
@@ -111,7 +111,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   }
 
   // AVAILABLE PRODUCTS — unchanged, full color photos and active button
-  const productSlug = product.slug || product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const productSlug = product.slug!;
 
   return (
     <div className="product-card group flex flex-col h-full shadow-md hover:shadow-lg hover:-translate-y-0.5">

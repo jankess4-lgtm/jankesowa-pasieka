@@ -9,13 +9,6 @@ interface ProductPageProps {
   params: { slug: string };
 }
 
-// Generate static paths for all products
-export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug || generateSlug(product.name),
-  }));
-}
-
 function generateSlug(name: string): string {
   return name
     .toLowerCase()
@@ -31,10 +24,20 @@ function generateSlug(name: string): string {
 }
 
 function getProductBySlug(slug: string): Product | undefined {
-  return products.find(
-    (p) => (p.slug || generateSlug(p.name)) === slug
-  );
+  return products.find((p) => p.slug === slug);
 }
+
+// Generate static paths for all products
+export async function generateStaticParams() {
+  return products
+    .filter((product) => product.slug)
+    .map((product) => ({
+      slug: product.slug!,
+    }));
+}
+
+// Disable on-demand rendering for unknown slugs (strict 404)
+export const dynamicParams = false;
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = params;

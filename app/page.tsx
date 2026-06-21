@@ -52,7 +52,7 @@ export default function HomePage() {
       {/* HERO */}
       <section className="relative h-[92vh] min-h-[620px] flex items-center justify-center overflow-hidden">
         <Image 
-          src="/images/pasieka.PNG" 
+          src="/images/pasieka.jpg" 
           alt="Jankesowa Pasieka - widok z ulami na tle łąk" 
           fill 
           className="object-cover" 

@@ -14,8 +14,8 @@ function Badge({ className, variant = "default", ...props }: BadgeProps) {
           "bg-brand-green text-white": variant === "default",
           "border border-brand-brown/40 text-brand-brown": variant === "outline",
           "bg-brand-gold/90 text-white": variant === "gold",
-          "bg-orange-500 text-white": variant === "warning",
-          "bg-gray-500 text-white": variant === "unavailable",
+          "bg-amber-500 text-white": variant === "warning",
+          "bg-neutral-400 text-white": variant === "unavailable",
         },
         className
       )}

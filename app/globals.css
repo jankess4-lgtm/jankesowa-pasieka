@@ -44,7 +44,7 @@ h1, h2, .font-serif {
 
 /* Product card */
 .product-card {
-  @apply bg-white rounded-xl overflow-hidden border border-brand-creamDark shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+  @apply bg-white rounded-xl overflow-hidden border border-brand-creamDark shadow-sm transition-all duration-300 hover:shadow-lg;
 }
 
 /* Cart drawer */

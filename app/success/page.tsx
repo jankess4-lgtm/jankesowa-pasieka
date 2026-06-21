@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, ArrowRight, ShoppingBag } from "lucide-react";
+import { CheckCircle, ArrowRight, ShoppingBag, Home } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/useCart";
 
@@ -31,10 +31,12 @@ export default function SuccessPage() {
   const [error, setError] = useState<string | null>(null);
 
   const { clearCart } = useCart();
+  const cartClearedRef = useRef(false);
 
   useEffect(() => {
+    // Simple error if no session_id
     if (!sessionId) {
-      setError("Brak identyfikatora sesji płatności.");
+      setError("Brak identyfikatora sesji płatności. Płatność nie została potwierdzona.");
       setLoading(false);
       return;
     }
@@ -42,16 +44,23 @@ export default function SuccessPage() {
     const fetchSession = async () => {
       try {
         const res = await fetch(`/api/checkout-session?session_id=${sessionId}`);
-        if (!res.ok) throw new Error("Nie udało się pobrać danych płatności");
 
-        const data = await res.json();
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.error || "Nie udało się pobrać danych sesji płatności");
+        }
+
+        const data: SessionData = await res.json();
         setSessionData(data);
 
-        // Clear the cart after successful payment
-        clearCart();
-      } catch (err) {
-        console.error(err);
-        setError("Nie udało się potwierdzić płatności. Skontaktuj się z nami.");
+        // Clear cart only once after successful fetch
+        if (!cartClearedRef.current) {
+          clearCart();
+          cartClearedRef.current = true;
+        }
+      } catch (err: any) {
+        console.error("Błąd pobierania sesji Stripe:", err);
+        setError(err.message || "Nie udało się potwierdzić płatności. Skontaktuj się z nami.");
       } finally {
         setLoading(false);
       }
@@ -65,6 +74,7 @@ export default function SuccessPage() {
     return (amount / 100).toFixed(2).replace(".", ",");
   };
 
+  // Loading state
   if (loading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center bg-[#F5EDE4]">
@@ -76,20 +86,29 @@ export default function SuccessPage() {
     );
   }
 
+  // Error state
   if (error || !sessionData) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center bg-[#F5EDE4] px-6">
         <div className="text-center max-w-md">
           <h1 className="font-serif text-4xl text-brand-brown mb-4">Coś poszło nie tak</h1>
           <p className="text-brand-brown/70 mb-8">{error || "Nie znaleziono sesji płatności."}</p>
-          <Link href="/produkty">
-            <Button variant="secondary">Wróć do oferty</Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/">
+              <Button variant="outline" className="w-full sm:w-auto gap-2">
+                <Home className="w-4 h-4" /> Strona główna
+              </Button>
+            </Link>
+            <Link href="/produkty">
+              <Button variant="secondary" className="w-full sm:w-auto">Wróć do oferty</Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Success state with order summary
   return (
     <div className="bg-[#F5EDE4] min-h-[80vh] py-16">
       <div className="max-w-2xl mx-auto px-6">
@@ -105,7 +124,7 @@ export default function SuccessPage() {
             Płatność została przyjęta pomyślnie.
           </p>
 
-          {/* Order info */}
+          {/* Order summary */}
           <div className="bg-[#F8F4EF] rounded-2xl p-6 mb-8 text-left">
             <div className="flex justify-between items-center mb-4">
               <div>
@@ -137,6 +156,11 @@ export default function SuccessPage() {
                 <span className="tabular-nums">{formatAmount(sessionData.amount_total)} zł</span>
               </div>
             </div>
+
+            {/* Session ID */}
+            <div className="mt-4 pt-3 border-t border-brand-creamDark text-xs text-brand-brown/50">
+              ID sesji: {sessionData.id}
+            </div>
           </div>
 
           <div className="text-sm text-brand-brown/60 mb-8 leading-relaxed max-w-md mx-auto">
@@ -145,14 +169,14 @@ export default function SuccessPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/produkty">
+            <Link href="/">
               <Button variant="outline" className="w-full sm:w-auto gap-2">
-                <ShoppingBag className="w-4 h-4" /> Przeglądaj ofertę
+                <Home className="w-4 h-4" /> Strona główna
               </Button>
             </Link>
-            <Link href="/">
-              <Button className="w-full sm:w-auto gap-2">
-                Strona główna <ArrowRight className="w-4 h-4" />
+            <Link href="/produkty">
+              <Button variant="secondary" className="w-full sm:w-auto gap-2">
+                <ShoppingBag className="w-4 h-4" /> Przeglądaj ofertę
               </Button>
             </Link>
           </div>

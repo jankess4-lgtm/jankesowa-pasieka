@@ -37,7 +37,7 @@ const testimonials = [
     author: "Marek K., Bydgoszcz",
   },
   {
-    quote: "Miód akacjowy i pyłek pszczeli to codzienność w naszej kuchni. Wyjątkowa jakość i smak.",
+    quote: "Miód akacjowy to codzienność w naszej kuchni. Wyjątkowa jakość i smak.",
     author: "Anna i Tomasz, Toruń",
   },
   {

@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function KoszykPage() {
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
@@ -61,15 +62,14 @@ export default function KoszykPage() {
           <div className="lg:col-span-7 space-y-4">
             {items.map((item) => (
               <div key={item.id} className="bg-white border border-brand-creamDark rounded-2xl p-5 flex gap-5">
-                <div className="w-24 h-24 rounded-xl overflow-hidden bg-brand-cream flex-shrink-0">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <div className="w-24 h-24 rounded-xl overflow-hidden bg-brand-cream flex-shrink-0 relative">
+                  <Image src={item.image} alt={item.name} fill className="object-cover" sizes="96px" />
                 </div>
 
                 <div className="flex-1 min-w-0 flex flex-col">
                   <div className="flex justify-between gap-3">
                     <div>
                       <p className="font-medium text-lg leading-tight text-brand-brown">{item.name}</p>
-                      <p className="text-xs text-brand-brown/60 mt-px">{item.unit}</p>
                     </div>
                     <button onClick={() => removeFromCart(item.id)} className="text-red-500/70 hover:text-red-600">
                       <Trash2 className="w-4 h-4" />

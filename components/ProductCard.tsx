@@ -33,12 +33,12 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       <div className="flex flex-col flex-1 p-5">
         <div className="mb-auto">
           <h3 className="font-serif text-xl leading-tight text-brand-brown mb-1.5">{product.name}</h3>
+          <div className="text-sm text-brand-brown/60 mb-1">{product.unit}</div>
           <p className="text-sm text-[#374151] line-clamp-3 mb-4">{product.description}</p>
         </div>
 
         <div className="flex items-end justify-between pt-3 border-t border-brand-creamDark mt-auto">
           <div>
-            <div className="text-xs text-brand-brown/60">{product.unit}</div>
             <div className="text-2xl font-semibold tabular-nums text-brand-brown">{product.price} <span className="text-base align-super font-normal">zł</span></div>
           </div>
 

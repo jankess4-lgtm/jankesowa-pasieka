@@ -15,7 +15,10 @@ export function useCart() {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
       if (saved) {
-        setItems(JSON.parse(saved));
+        let loaded = JSON.parse(saved);
+        // Remove Pyłek pszczeli if present (product removed from offer)
+        loaded = loaded.filter((item: any) => !item.name?.toLowerCase().includes("pyłek"));
+        setItems(loaded);
       }
     } catch (error) {
       console.error("Błąd wczytywania koszyka:", error);

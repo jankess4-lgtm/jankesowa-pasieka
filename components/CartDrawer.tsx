@@ -118,7 +118,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-brand-brown leading-tight pr-2">{item.name}</p>
-                            <p className="text-xs text-brand-brown/60 mt-0.5">{item.unit}</p>
                           </div>
                           <button
                             onClick={() => removeFromCart(item.id)}

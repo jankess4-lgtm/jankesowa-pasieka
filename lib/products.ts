@@ -125,7 +125,7 @@ export const products: Product[] = [
   {
     id: 10,
     name: "Miód nawłociowy – 900 ml (1,2 kg)",
-    slug: "miod-nawłociowy-900ml",
+    slug: "miod-nawlociowy-900ml",
     description: "Złocisto-żółty, o intensywnym ziołowym aromacie. Późnoletni miód wspierający odporność.",
     longDescription: "Miód pozyskiwany późnym latem i jesienią z nektaru nawłoci pospolitej. Charakteryzuje się piękną, złocistą barwą i intensywnym, ziołowo-kwiatowym aromatem. Wspiera naturalną odporność organizmu. Pochodzi z bogatych, dzikich łąk i zadrzewień nad Wisłą. Dostępny od września do grudnia.",
     price: 60,

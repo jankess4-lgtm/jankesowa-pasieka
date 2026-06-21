@@ -9,27 +9,7 @@ interface ProductPageProps {
   params: { slug: string };
 }
 
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/–/g, "-")
-    .replace(/\s+/g, "-")
-    .replace(/[()]/g, "")
-    .replace(/,/g, "")
-    .replace(/ml/g, "ml")
-    .replace(/kg/g, "kg")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .trim();
-}
-
-function getProductBySlug(slug: string): Product | undefined {
-  return products.find(
-    (p) => p.slug === slug || generateSlug(p.name) === slug
-  );
-}
-
-// Generate static paths for all products
+// Generate static paths for all products using explicit slugs
 export async function generateStaticParams() {
   return products
     .filter((product) => product.slug)
@@ -38,12 +18,14 @@ export async function generateStaticParams() {
     }));
 }
 
-// Disable on-demand rendering for unknown slugs (strict 404)
+// Disable on-demand rendering for unknown slugs (strict 404 on Vercel + locally)
 export const dynamicParams = false;
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = params;
-  const product = getProductBySlug(slug);
+
+  // Direct lookup by explicit slug (no generateSlug fallback)
+  const product = products.find((p) => p.slug === slug);
 
   if (!product) {
     notFound();
@@ -120,7 +102,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         "Właściwości: rzadki i ceniony bukiet smakowy",
       ];
     }
-    if (product.name.toLowerCase().includes("nawłociowy")) {
+    if (product.name.toLowerCase().includes("nawłociowy") || product.name.toLowerCase().includes("nawlociowy")) {
       return [
         ...baseFeatures,
         "Smak: złocisty, ziołowo-kwiatowy",
@@ -140,7 +122,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         "Właściwości: najczystsza i najbardziej tradycyjna forma",
       ];
     }
-    if (product.name.toLowerCase().includes("świeca")) {
+    if (product.name.toLowerCase().includes("świeca") || product.name.toLowerCase().includes("swiece")) {
       return [
         "Ręcznie wytwarzane w naszej pasiece w Topolnie",
         "100% czystego wosku pszczelego – bez parafiny i dodatków",

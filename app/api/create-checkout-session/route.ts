@@ -9,14 +9,24 @@ export async function POST(request: NextRequest) {
   try {
     const { items } = await request.json();
 
+    // Detailed logging for debugging session creation issues
+    console.log("Full cart items received:", JSON.stringify(items, null, 2));
+    console.log("Prices from cart:", items.map((item: any) => ({
+      name: item.name,
+      price: item.price,
+      unit_amount_grosze: Math.round(item.price * 100)
+    })));
+
     // Validate items from cart
     if (!items || !Array.isArray(items) || items.length === 0) {
+      console.log("Validation failed: empty or invalid items");
       return NextResponse.json({ error: "Brak produktów w zamówieniu" }, { status: 400 });
     }
 
     // Validate each item has required fields and price is positive number
     for (const item of items) {
       if (!item.name || typeof item.price !== "number" || item.price <= 0) {
+        console.log("Validation failed for item:", item);
         return NextResponse.json(
           { error: "Nieprawidłowe dane produktu w koszyku (brak nazwy lub ceny)" },
           { status: 400 }
@@ -42,11 +52,13 @@ export async function POST(request: NextRequest) {
         product_data: {
           name: item.name,
           description: item.unit || undefined,
-          images: [logoUrl], // Force logo image on product cards in Checkout
+          images: ["https://jankesowapasieka.pl/logo.png"], // Must be array of strings
         },
       },
       quantity: item.quantity || 1,
     }));
+
+    console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 
     // Create Checkout Session - MAXIMALLY force Jankesowa Pasieka branding (złoto-miodowy #D97706)
     // Using every possible field to override default white / previous account branding
@@ -65,11 +77,10 @@ export async function POST(request: NextRequest) {
         business_name: "Jankesowa Pasieka",
         brand_color: "#D97706",
         logo: logoUrl,
-        images: [logoUrl],
-        // Extra copies to maximize override of default white look
-        "Jankesowa Pasieka": "true",
+        // images removed from here - must be array of strings only inside product_data, not in metadata
+        // Extra copies (valid keys only - all values must be strings)
         accent_color: "#D97706",
-        company_name: "Jankesowa Pasieka",
+        company_name: "Jankesowa_Pasieka",
         primary_color: "#D97706",
         company_logo: logoUrl,
       },
@@ -80,7 +91,7 @@ export async function POST(request: NextRequest) {
           business_name: "Jankesowa Pasieka",
           brand_color: "#D97706",
           logo: logoUrl,
-          images: [logoUrl],
+          // images removed - only allowed as array of strings in product_data
           accent: "#D97706",
           company: "Jankesowa Pasieka",
           primary_color: "#D97706",
@@ -121,20 +132,14 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ sessionId: session.id });
   } catch (err: any) {
-    // Full detailed error handling
-    console.error("Stripe Checkout session creation failed:", err);
-    console.error("Error details:", {
-      message: err?.message,
-      type: err?.type,
-      code: err?.code,
-      param: err?.param,
-      statusCode: err?.statusCode,
-      raw: err?.raw,
-    });
+    // Full detailed error handling as requested
+    console.error("Stripe Checkout session creation failed - full error:", err);
+    console.error("Error stack:", err?.stack);
 
     return Response.json(
       {
-        error: "Nie udało się utworzyć sesji płatności",
+        error: err.message || "Nie udało się utworzyć sesji płatności",
+        details: err.stack || "No stack trace available"
       },
       { status: 500 }
     );

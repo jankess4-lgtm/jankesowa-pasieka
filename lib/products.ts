@@ -11,6 +11,7 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 42,
+    available: true,
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-049-kg.PNG",
     inStock: 35,
+    available: true,
   },
   {
     id: 3,
@@ -33,6 +35,8 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 28,
+    available: false,
+    badgeText: "Już wkrótce",
   },
   {
     id: 4,
@@ -44,6 +48,8 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 51,
+    available: false,
+    badgeText: "Produkt sezonowy - niedostępny",
   },
   {
     id: 5,
@@ -55,6 +61,8 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 29,
+    available: false,
+    badgeText: "Produkt sezonowy - niedostępny",
   },
   {
     id: 6,
@@ -66,6 +74,8 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 24,
+    available: false,
+    badgeText: "Produkt sezonowy - niedostępny",
   },
   {
     id: 7,
@@ -77,6 +87,7 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 19,
+    available: true,
   },
   {
     id: 8,
@@ -88,6 +99,7 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 22,
+    available: true,
   },
   {
     id: 9,
@@ -99,6 +111,7 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 15,
+    available: true,
   },
   {
     id: 10,
@@ -110,6 +123,8 @@ export const products: Product[] = [
     category: "miody",
     image: "/images/swiece-z-wosku-pszczelego.PNG",
     inStock: 18,
+    available: false,
+    badgeText: "Produkt sezonowy - niedostępny",
   },
 
   {
@@ -122,6 +137,7 @@ export const products: Product[] = [
     category: "produkty",
     image: "/images/plastry-miodu.PNG",
     inStock: 12,
+    available: true,
   },
   {
     id: 13,
@@ -133,5 +149,6 @@ export const products: Product[] = [
     category: "produkty",
     image: "/images/swiece-z-wosku-pszczelego.PNG",
     inStock: 31,
+    available: true,
   },
 ];

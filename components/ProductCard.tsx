@@ -14,20 +14,28 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, compact = false }: ProductCardProps) {
   const { addToCart, isInCart } = useCart();
+  const isAvailable = product.available !== false;
 
   return (
-    <div className="product-card group flex flex-col h-full shadow-md hover:shadow-lg">
+    <div className={`product-card group flex flex-col h-full shadow-md hover:shadow-lg ${!isAvailable ? 'opacity-80' : ''}`}>
       <div className="relative aspect-[4/3] overflow-hidden bg-brand-cream rounded-xl shadow-md group-hover:shadow-xl">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-xl"
+          className={`object-cover transition-transform duration-500 rounded-xl ${!isAvailable ? 'opacity-60' : 'group-hover:scale-105'}`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute top-3 left-3">
           <Badge variant="gold">{product.category === "miody" ? "Miód" : "Produkt"}</Badge>
         </div>
+        {!isAvailable && product.badgeText && (
+          <div className="absolute top-3 right-3">
+            <Badge variant={product.badgeText.includes("wkrótce") ? "unavailable" : "warning"}>
+              {product.badgeText}
+            </Badge>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col flex-1 p-5">
@@ -43,13 +51,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           </div>
 
           <Button
-            onClick={() => addToCart(product)}
+            onClick={() => isAvailable && addToCart(product)}
             size="sm"
-            variant={isInCart(product.id) ? "outline" : "primary"}
-            className="gap-2"
+            variant={isAvailable ? (isInCart(product.id) ? "outline" : "primary") : "ghost"}
+            disabled={!isAvailable}
+            className={`gap-2 ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            {isInCart(product.id) ? "Dodano" : "Dodaj"}
+            {isAvailable && <ShoppingCart className="w-3.5 h-3.5" />}
+            {isAvailable ? (isInCart(product.id) ? "Dodano" : "Dodaj") : "Niedostępny"}
           </Button>
         </div>
       </div>

@@ -8,6 +8,8 @@ export interface Product {
   category: "miody" | "produkty" | "zestawy";
   image: string;
   inStock: number;
+  available?: boolean;
+  badgeText?: string;
 }
 
 export interface CartItem extends Product {

@@ -24,7 +24,7 @@ export default function Footer() {
           <div className="font-medium text-white mb-4 tracking-wider text-xs uppercase">Nawigacja</div>
           <div className="space-y-2.5">
             <Link href="/produkty" className="block hover:text-white transition">Oferta produktów</Link>
-            <Link href="/o-nas" className="block hover:text-white transition">Historia pasieki</Link>
+            <Link href="/o-nas" className="block hover:text-white transition">O pasiece</Link>
             <Link href="/kontakt" className="block hover:text-white transition">Kontakt i dojazd</Link>
           </div>
         </div>

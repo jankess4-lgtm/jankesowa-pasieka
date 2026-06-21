@@ -45,17 +45,18 @@ export async function POST(request: NextRequest) {
     // Get origin for redirect URLs (works in dev and production)
     const origin = request.headers.get("origin") || "http://localhost:3000";
 
-    // Hardcoded full URL for logo to force Jankesowa Pasieka branding
+    // Full production URL for logo - strongly forced to override any default account branding (e.g. FoodFarmer)
     const logoUrl = "https://jankesowapasieka.pl/logo.png";
 
-    // Create Checkout Session in TEST mode (determined by using sk_test_ key)
+    // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik", "p24"], // Polish friendly methods
       mode: "payment",
+      ui_mode: "hosted",
       line_items: lineItems,
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
       cancel_url: `${origin}/cancel`,
-      // Branding info passed via metadata (visible in Stripe dashboard)
+      // Branding info (flat primitives only - Stripe metadata does not support nested objects)
       metadata: {
         orderRef,
         source: "jankesowa-pasieka",
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
         brand_color: "#D97706",
         logo: logoUrl,
       },
-      // Also attach branding to the underlying PaymentIntent
+      // Attach branding also to the underlying PaymentIntent
       payment_intent_data: {
         metadata: {
           business_name: "Jankesowa Pasieka",
@@ -86,21 +87,20 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ sessionId: session.id });
   } catch (err: any) {
-    // Detailed error logging for debugging
-    console.error("Stripe Checkout error (detailed):", {
-      message: err.message,
-      type: err.type,
-      code: err.code,
-      param: err.param,
-      raw: err.raw,
-      stack: err.stack,
+    // Full detailed error handling
+    console.error("Stripe Checkout session creation failed:", err);
+    console.error("Error details:", {
+      message: err?.message,
+      type: err?.type,
+      code: err?.code,
+      param: err?.param,
+      statusCode: err?.statusCode,
+      raw: err?.raw,
     });
 
-    // Return readable error JSON (generic for client, details in logs)
-    return NextResponse.json(
+    return Response.json(
       {
         error: "Nie udało się utworzyć sesji płatności",
-        details: err.message || "Unknown Stripe error",
       },
       { status: 500 }
     );

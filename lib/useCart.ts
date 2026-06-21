@@ -12,24 +12,53 @@ export function useCart() {
 
   // Load from localStorage on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      if (saved) {
-        let loaded = JSON.parse(saved);
-        // Remove Pyłek pszczeli if present (product removed from offer)
-        loaded = loaded.filter((item: any) => !item.name?.toLowerCase().includes("pyłek"));
-        setItems(loaded);
+    const loadCart = () => {
+      try {
+        const saved = localStorage.getItem(CART_STORAGE_KEY);
+        if (saved) {
+          let loaded = JSON.parse(saved);
+          // Remove Pyłek pszczeli if present (product removed from offer)
+          loaded = loaded.filter((item: any) => !item.name?.toLowerCase().includes("pyłek"));
+          setItems(loaded);
+        }
+      } catch (error) {
+        console.error("Błąd wczytywania koszyka:", error);
       }
-    } catch (error) {
-      console.error("Błąd wczytywania koszyka:", error);
-    }
+    };
+
+    loadCart();
     setIsLoaded(true);
+
+    // Listen for external updates (other hook instances, other tabs)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === CART_STORAGE_KEY) {
+        loadCart();
+      }
+    };
+
+    const handleCartUpdated = (e: CustomEvent<CartItem[]>) => {
+      if (e.detail) {
+        setItems(e.detail);
+      } else {
+        loadCart();
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("cart-updated", handleCartUpdated as EventListener);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("cart-updated", handleCartUpdated as EventListener);
+    };
   }, []);
 
-  // Persist to localStorage
+  // Persist to localStorage + broadcast to other instances in same tab
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+      // Notify other useCart hooks in the same tab so they update live
+      window.dispatchEvent(new CustomEvent("cart-updated", { detail: items }));
     }
   }, [items, isLoaded]);
 

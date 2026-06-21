@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, ShoppingBag, Truck } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, Truck, CreditCard } from "lucide-react";
 import { useCart } from "@/lib/useCart";
 import { Button } from "./ui/Button";
 import { toast } from "sonner";
 import Image from "next/image";
+import { startStripeCheckout } from "@/lib/stripeCheckout";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -26,20 +27,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (items.length === 0) return;
 
     setIsCheckingOut(true);
 
-    // Simulate checkout process
-    setTimeout(() => {
-      toast.success("Zamówienie złożone pomyślnie!", {
-        description: `Dziękujemy! Wartość zamówienia: ${totalPrice} zł. Skontaktujemy się w celu potwierdzenia dostawy.`,
+    try {
+      await startStripeCheckout(items);
+      // On success Stripe will redirect; cart is cleared on /success
+    } catch (err: any) {
+      toast.error("Błąd płatności", {
+        description: err.message || "Nie udało się rozpocząć płatności Stripe.",
       });
-      clearCart();
+    } finally {
       setIsCheckingOut(false);
-      onClose();
-    }, 1350);
+    }
   };
 
   const shippingCost = totalPrice > 150 ? 0 : 14;
@@ -189,15 +191,16 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                   <Button
                     onClick={handleCheckout}
-                    className="w-full py-3 text-base"
+                    className="w-full py-3 text-base gap-2"
                     disabled={isCheckingOut}
                   >
-                    {isCheckingOut ? "Przetwarzanie zamówienia..." : "Złóż zamówienie"}
+                    <CreditCard className="w-4 h-4" />
+                    {isCheckingOut ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
                   </Button>
 
                   <p className="text-[10px] text-center text-brand-brown/50 leading-snug">
-                    Zamówienie zostanie potwierdzone telefonicznie lub mailowo w ciągu 24h.<br />
-                    Płatność przy odbiorze lub przelewem.
+                    Bezpieczna płatność online kartą, BLIK lub Przelewy24.<br />
+                    Po opłaceniu skontaktujemy się w sprawie dostawy.
                   </p>
                 </div>
               </>

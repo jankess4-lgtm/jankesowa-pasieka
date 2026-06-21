@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/useCart";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, CreditCard } from "lucide-react";
 import Image from "next/image";
+import { startStripeCheckout } from "@/lib/stripeCheckout";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
@@ -13,8 +16,43 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, compact = false }: ProductCardProps) {
-  const { addToCart, isInCart } = useCart();
+  const { items, addToCart, isInCart } = useCart();
   const isAvailable = product.available !== false;
+
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
+
+  const handleStripeCheckout = async () => {
+    if (!isAvailable) return;
+
+    setIsStripeLoading(true);
+
+    try {
+      // Checkout using current cart items (as requested)
+      // Ensure the clicked product is included in the checkout
+      const isAlreadyInCart = items.some((item) => item.id === product.id);
+      if (!isAlreadyInCart) {
+        addToCart(product);
+      }
+
+      let checkoutItems = [...items];
+      if (!isAlreadyInCart) {
+        checkoutItems = [...checkoutItems, { ...product, quantity: 1 } as any];
+      }
+
+      if (checkoutItems.length === 0) {
+        checkoutItems = [{ ...product, quantity: 1 } as any];
+      }
+
+      await startStripeCheckout(checkoutItems);
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Błąd płatności", {
+        description: err.message || "Nie udało się rozpocząć płatności Stripe.",
+      });
+    } finally {
+      setIsStripeLoading(false);
+    }
+  };
 
   // UNAVAILABLE PRODUCT — full card faded logo, no product photo, desaturated, elegant message
   if (!isAvailable) {
@@ -90,19 +128,33 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <p className="text-sm text-[#374151] line-clamp-3 mb-4">{product.description}</p>
         </div>
 
-        <div className="flex items-end justify-between pt-3 border-t border-brand-creamDark mt-auto">
-          <div>
-            <div className="text-2xl font-semibold tabular-nums text-brand-brown">{product.price} <span className="text-base align-super font-normal">zł</span></div>
+        <div className="pt-3 border-t border-brand-creamDark mt-auto space-y-2">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-2xl font-semibold tabular-nums text-brand-brown">{product.price} <span className="text-base align-super font-normal">zł</span></div>
+            </div>
+
+            <Button
+              onClick={() => addToCart(product)}
+              size="sm"
+              variant={isInCart(product.id) ? "outline" : "primary"}
+              className="gap-2"
+            >
+              <ShoppingCart className="w-3.5 h-3.5" />
+              {isInCart(product.id) ? "Dodano" : "Dodaj"}
+            </Button>
           </div>
 
+          {/* Direct Stripe Checkout button */}
           <Button
-            onClick={() => addToCart(product)}
+            onClick={handleStripeCheckout}
             size="sm"
-            variant={isInCart(product.id) ? "outline" : "primary"}
-            className="gap-2"
+            variant="outline"
+            disabled={isStripeLoading}
+            className="w-full gap-2 text-xs tracking-[0.5px] border-brand-gold/60 text-brand-brown hover:bg-brand-gold/5 active:bg-brand-gold/10"
           >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            {isInCart(product.id) ? "Dodano" : "Dodaj"}
+            <CreditCard className="w-3.5 h-3.5" />
+            {isStripeLoading ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
           </Button>
         </div>
       </div>

@@ -2,11 +2,12 @@
 
 import { useCart } from "@/lib/useCart";
 import { Button } from "@/components/ui/Button";
-import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { startStripeCheckout } from "@/lib/stripeCheckout";
 
 export default function KoszykPage() {
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
@@ -15,18 +16,21 @@ export default function KoszykPage() {
   const shipping = totalPrice > 150 ? 0 : 14;
   const total = totalPrice + shipping;
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (items.length === 0) return;
 
     setIsCheckingOut(true);
 
-    setTimeout(() => {
-      toast.success("Zamówienie zostało złożone!", {
-        description: `Numer zamówienia: #JP-${Date.now().toString().slice(-6)}. Dziękujemy!`,
+    try {
+      await startStripeCheckout(items);
+      // Stripe redirects; cart cleared on success page
+    } catch (err: any) {
+      toast.error("Błąd płatności", {
+        description: err.message || "Nie udało się rozpocząć płatności.",
       });
-      clearCart();
+    } finally {
       setIsCheckingOut(false);
-    }, 1250);
+    }
   };
 
   if (items.length === 0) {
@@ -129,14 +133,15 @@ export default function KoszykPage() {
 
               <Button 
                 onClick={handleCheckout} 
-                className="w-full py-4 text-base" 
+                className="w-full py-4 text-base gap-2" 
                 disabled={isCheckingOut}
               >
-                {isCheckingOut ? "Przetwarzamy zamówienie..." : "Złóż zamówienie"}
+                <CreditCard className="w-4 h-4" />
+                {isCheckingOut ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
               </Button>
 
               <div className="mt-4 text-center text-[10px] leading-snug text-brand-brown/60">
-                Płatność przy odbiorze lub przelewem na konto.<br />Dostawa kurierem lub odbiór osobisty w Jankowie.
+                Bezpieczna płatność kartą, BLIK lub Przelewy24.<br />Dostawa kurierem lub odbiór osobisty.
               </div>
 
               <button 

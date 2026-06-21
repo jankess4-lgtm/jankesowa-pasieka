@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Hexagon, MapPin, Phone, Mail } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -7,12 +8,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-y-12">
         {/* Brand */}
         <div className="md:col-span-5">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <Hexagon className="w-4.5 h-4.5 text-white" />
-            </div>
-            <span className="font-serif text-2xl tracking-tight">Jankesowa Pasieka</span>
-          </div>
+          <Link href="/" className="flex items-center mb-4" aria-label="Jankesowa Pasieka - Strona główna">
+            <Image 
+              src="/logo.png" 
+              alt="Jankesowa Pasieka" 
+              width={160} 
+              height={48} 
+              className="h-9 md:h-10 w-auto object-contain" 
+            />
+          </Link>
           <p className="max-w-sm text-sm text-white/70 leading-relaxed">
             Rodzinna pasieka na malowniczych terenach nadwiślańskich Kujaw. 
             Dbamy o pszczoły i produkujemy najczystsze, niepasteryzowane miody oraz produkty pszczele.

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Hexagon } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 import { useCart } from "@/lib/useCart";
 import CartDrawer from "./CartDrawer";
 
@@ -37,14 +38,15 @@ export default function Navbar() {
       <nav className="sticky top-0 z-40 bg-[#F5EDE4]/95 backdrop-blur-md border-b border-brand-brown/10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-full bg-brand-green flex items-center justify-center">
-              <Hexagon className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <div className="font-serif text-2xl text-brand-green tracking-tight">Jankesowa</div>
-              <div className="text-[10px] text-brand-brown/60 -mt-1.5 tracking-[2px]">PASIEKA</div>
-            </div>
+          <Link href="/" className="flex items-center group" aria-label="Jankesowa Pasieka - Strona główna">
+            <Image 
+              src="/logo.png" 
+              alt="Jankesowa Pasieka" 
+              width={180} 
+              height={55} 
+              className="h-10 md:h-[52px] w-auto object-contain" 
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}

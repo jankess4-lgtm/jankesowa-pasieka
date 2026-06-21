@@ -1,15 +1,21 @@
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Leaf, Award, Heart } from "lucide-react";
+import Image from "next/image";
 
 export default function ONasPage() {
   return (
     <div className="bg-[#F5EDE4]">
-      {/* Hero section */}
-      <div className="relative h-[380px] flex items-center justify-center bg-brand-green overflow-hidden">
-        <div 
-          className="absolute inset-0 opacity-25 bg-[radial-gradient(#fff_0.8px,transparent_1px)] bg-[length:6px_6px]" 
+      {/* Hero section with apiary photo */}
+      <div className="relative h-[380px] flex items-center justify-center overflow-hidden">
+        <Image 
+          src="/images/pasieka.PNG" 
+          alt="Jankesowa Pasieka - widok z ulami na tle łąk" 
+          fill 
+          className="object-cover" 
+          priority 
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
         <div className="relative z-10 text-center px-6 text-white">
           <div className="tracking-[3px] uppercase text-xs mb-2 text-white/70">TERENY NADWIŚLAŃSKIE KUJAW</div>
           <h1 className="font-serif text-6xl tracking-[-1.2px]">O pasiece</h1>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { products } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { Leaf, Award, Users, Heart } from "lucide-react";
+import Image from "next/image";
 
 const featuredProducts = products.slice(0, 4);
 
@@ -50,11 +51,12 @@ export default function HomePage() {
     <div className="bg-[#F5EDE4]">
       {/* HERO */}
       <section className="relative h-[92vh] min-h-[620px] flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=1600&q=80')",
-          }}
+        <Image 
+          src="/images/pasieka.PNG" 
+          alt="Jankesowa Pasieka" 
+          fill 
+          className="object-cover" 
+          priority 
         />
         {/* Dark elegant overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />

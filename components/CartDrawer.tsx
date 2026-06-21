@@ -6,6 +6,7 @@ import { X, Plus, Minus, ShoppingBag, Truck } from "lucide-react";
 import { useCart } from "@/lib/useCart";
 import { Button } from "./ui/Button";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -103,11 +104,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       key={item.id}
                       className="flex gap-4 bg-white p-4 rounded-xl border border-brand-creamDark"
                     >
-                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-brand-cream flex-shrink-0">
-                        <img
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-brand-cream flex-shrink-0 relative">
+                        <Image
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="64px"
                         />
                       </div>
 

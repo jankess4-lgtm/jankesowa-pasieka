@@ -9,7 +9,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1608797178974-15b35a64ede9?w=800&q=80",
+    image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 42,
   },
   {
@@ -20,7 +20,7 @@ export const products: Product[] = [
     price: 30,
     unit: "słoik 350 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1608797178974-15b35a64ede9?w=800&q=80",
+    image: "/images/miod-mniszkowo-rzepakowy-049-kg.PNG",
     inStock: 35,
   },
   {
@@ -31,7 +31,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1587049352851-8d4e8912c8f8?w=800&q=80",
+    image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 28,
   },
   {
@@ -42,7 +42,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1502741126161-b048400d0859?w=800&q=80",
+    image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 51,
   },
   {
@@ -53,7 +53,7 @@ export const products: Product[] = [
     price: 30,
     unit: "słoik 350 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1502741126161-b048400d0859?w=800&q=80",
+    image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 29,
   },
   {
@@ -64,7 +64,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80",
+    image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
     inStock: 24,
   },
   {
@@ -75,7 +75,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=800&q=80",
+    image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 19,
   },
   {
@@ -86,7 +86,7 @@ export const products: Product[] = [
     price: 30,
     unit: "słoik 350 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=800&q=80",
+    image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 22,
   },
   {
@@ -97,7 +97,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1471943311424-646960669fbc?w=800&q=80",
+    image: "/images/miod-akacjowy-049-kg.PNG",
     inStock: 15,
   },
   {
@@ -108,7 +108,7 @@ export const products: Product[] = [
     price: 60,
     unit: "słoik 900 g",
     category: "miody",
-    image: "https://images.unsplash.com/photo-1609505848912-b7c3c6f5f3e3?w=800&q=80",
+    image: "/images/swiece-z-wosku-pszczelego.PNG",
     inStock: 18,
   },
   {
@@ -119,7 +119,7 @@ export const products: Product[] = [
     price: 38,
     unit: "słoik 200 g",
     category: "produkty",
-    image: "https://images.unsplash.com/photo-1599599810769-b8a4c1c1c1c1?w=800&q=80",
+    image: "/images/pasieka.PNG",
     inStock: 26,
   },
   {
@@ -130,7 +130,7 @@ export const products: Product[] = [
     price: 55,
     unit: "plaster ok. 450–500 g",
     category: "produkty",
-    image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80",
+    image: "/images/plastry-miodu.PNG",
     inStock: 12,
   },
   {
@@ -141,7 +141,7 @@ export const products: Product[] = [
     price: 32,
     unit: "150 g",
     category: "produkty",
-    image: "https://images.unsplash.com/photo-1602874801006-5c5f4a5e4f1c?w=800&q=80",
+    image: "/images/swiece-z-wosku-pszczelego.PNG",
     inStock: 31,
   },
 ];

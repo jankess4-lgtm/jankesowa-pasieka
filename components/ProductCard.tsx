@@ -5,6 +5,7 @@ import { useCart } from "@/lib/useCart";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
 import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
 
 interface ProductCardProps {
   product: Product;
@@ -15,12 +16,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   const { addToCart, isInCart } = useCart();
 
   return (
-    <div className="product-card group flex flex-col h-full">
-      <div className="relative aspect-[4/3] overflow-hidden bg-brand-cream">
-        <img
+    <div className="product-card group flex flex-col h-full shadow-md hover:shadow-lg">
+      <div className="relative aspect-[4/3] overflow-hidden bg-brand-cream rounded-xl shadow-md group-hover:shadow-xl">
+        <Image
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-xl"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute top-3 left-3">
           <Badge variant="gold">{product.category === "miody" ? "Miód" : "Produkt"}</Badge>

@@ -4,6 +4,7 @@ export const products: Product[] = [
   {
     id: 1,
     name: "Miód rzepakowy – 900 ml (1,2 kg)",
+    slug: "miod-rzepakowy-900ml",
     description: "Jasnozłoty, bardzo słodki i delikatny. Szybko krystalizuje w drobną, kremową konsystencję.",
     longDescription: "Miód rzepakowy to jeden z najjaśniejszych polskich miodów. Charakteryzuje się bardzo słodkim, delikatnym smakiem z nutą kwiatową. Szybko krystalizuje, tworząc drobną, kremową konsystencję. Idealny do herbaty, kanapek, naleśników i dla dzieci. Pochodzi z obfitych pożytków rzepakowych na kujawskich polach.",
     price: 60,
@@ -16,6 +17,7 @@ export const products: Product[] = [
   {
     id: 2,
     name: "Miód rzepakowy – 350 ml (0,49 kg)",
+    slug: "miod-rzepakowy-350ml",
     description: "Jasnozłoty, bardzo słodki i delikatny. Szybko krystalizuje w drobną, kremową konsystencję.",
     longDescription: "Miód rzepakowy to jeden z najjaśniejszych polskich miodów. Charakteryzuje się bardzo słodkim, delikatnym smakiem z nutą kwiatową. Szybko krystalizuje, tworząc drobną, kremową konsystencję. Idealny do herbaty, kanapek, naleśników i dla dzieci. Pochodzi z obfitych pożytków rzepakowych na kujawskich polach.",
     price: 30,
@@ -28,6 +30,7 @@ export const products: Product[] = [
   {
     id: 3,
     name: "Miód lipowy – 900 ml (1,2 kg)",
+    slug: "miod-lipowy-900ml",
     description: "Intensywny, mentolowy, z wyraźnym aromatem kwitnącej lipy. Działa uspokajająco i wspiera odporność.",
     longDescription: "Miód lipowy pozyskiwany z nektaru kwiatów lipy. Posiada intensywny, korzenno-mentolowy aromat i delikatnie rozgrzewający smak. Tradycyjnie stosowany przy przeziębieniach, problemach z gardłem oraz jako naturalny środek uspokajający. Pochodzi z pięknych, starych lip rosnących wzdłuż Wisły i na terenach nadwiślańskich.",
     price: 60,
@@ -41,6 +44,7 @@ export const products: Product[] = [
   {
     id: 4,
     name: "Miód wielokwiatowy – 900 ml (1,2 kg)",
+    slug: "miod-wielokwiatowy-900ml",
     description: "Delikatny, kwiatowy, o przyjemnym i złożonym smaku. Najbardziej uniwersalny miód na co dzień.",
     longDescription: "Miód zbierany z bogatej, zróżnicowanej bazy pożytkowej terenów nadwiślańskich Kujaw — łąk, zadrzewień i ogrodów. Delikatny, zrównoważony smak z nutami wielu kwiatów. Najlepszy wybór na co dzień: do herbaty, kanapek, deserów i dla całej rodziny. Bogaty w naturalne enzymy i mikroelementy.",
     price: 60,
@@ -54,6 +58,7 @@ export const products: Product[] = [
   {
     id: 5,
     name: "Miód wielokwiatowy – 350 ml (0,49 kg)",
+    slug: "miod-wielokwiatowy-350ml",
     description: "Delikatny, kwiatowy, o przyjemnym i złożonym smaku. Najbardziej uniwersalny miód na co dzień.",
     longDescription: "Miód zbierany z bogatej, zróżnicowanej bazy pożytkowej terenów nadwiślańskich Kujaw — łąk, zadrzewień i ogrodów. Delikatny, zrównoważony smak z nutami wielu kwiatów. Najlepszy wybór na co dzień: do herbaty, kanapek, deserów i dla całej rodziny. Bogaty w naturalne enzymy i mikroelementy.",
     price: 30,
@@ -67,6 +72,7 @@ export const products: Product[] = [
   {
     id: 6,
     name: "Miód gryczany – 900 ml (1,2 kg)",
+    slug: "miod-gryczany-900ml",
     description: "Ciemny, intensywny, lekko pikantny i gorzki. Bogaty w rutynę i antyoksydanty. Doskonały na wzmocnienie.",
     longDescription: "Miód gryczany o głębokiej, ciemnej barwie i charakterystycznym, intensywnym smaku z lekką goryczką. Bardzo bogaty w rutynę, żelazo i antyoksydanty. Tradycyjnie polecany przy anemii, problemach z krążeniem i jako naturalne wsparcie odporności. Idealny do mięs, sosów, pierników i jako dodatek do diety wzmacniającej.",
     price: 60,
@@ -80,6 +86,7 @@ export const products: Product[] = [
   {
     id: 7,
     name: "Miód akacjowy – 900 ml (1,2 kg)",
+    slug: "miod-akacjowy-900ml",
     description: "Jeden z najjaśniejszych i najdelikatniejszych miodów. Subtelny kwiatowy zapach, bardzo wolno krystalizuje.",
     longDescription: "Miód akacjowy z robinii akacjowej — jeden z najdelikatniejszych i najjaśniejszych miodów. Subtelny, kwiatowy aromat, bardzo łagodny smak. Krystalizuje niezwykle wolno, przez wiele miesięcy zachowując płynną konsystencję. Idealny do herbaty, deserów, naleśników i dla osób ceniących łagodne smaki. Polecany także dla dzieci.",
     price: 60,
@@ -92,6 +99,7 @@ export const products: Product[] = [
   {
     id: 8,
     name: "Miód akacjowy – 350 ml (0,49 kg)",
+    slug: "miod-akacjowy-350ml",
     description: "Jeden z najjaśniejszych i najdelikatniejszych miodów. Subtelny kwiatowy zapach, bardzo wolno krystalizuje.",
     longDescription: "Miód akacjowy z robinii akacjowej — jeden z najdelikatniejszych i najjaśniejszych miodów. Subtelny, kwiatowy aromat, bardzo łagodny smak. Krystalizuje niezwykle wolno, przez wiele miesięcy zachowując płynną konsystencję. Idealny do herbaty, deserów, naleśników i dla osób ceniących łagodne smaki. Polecany także dla dzieci.",
     price: 30,
@@ -104,6 +112,7 @@ export const products: Product[] = [
   {
     id: 9,
     name: "Miód akacjowo-spadzowy – 900 ml (1,2 kg)",
+    slug: "miod-akacjowo-spadzowy-900ml",
     description: "Połączenie delikatności akacji z żywiczną głębią spadzi. Wyjątkowy, złożony bukiet smakowy.",
     longDescription: "Rzadki i ceniony miód powstały z połączenia nektaru akacji oraz spadzi. Łączy w sobie delikatność i subtelność akacji z głębokim, żywicznym aromatem spadzi. Posiada wyjątkowy, złożony bukiet smakowy. Pochodzi z terenów bogatych w akacje i lasy nadwiślańskie. Dostępny w ograniczonej ilości.",
     price: 60,
@@ -116,6 +125,7 @@ export const products: Product[] = [
   {
     id: 10,
     name: "Miód nawłociowy – 900 ml (1,2 kg)",
+    slug: "miod-nawłociowy-900ml",
     description: "Złocisto-żółty, o intensywnym ziołowym aromacie. Późnoletni miód wspierający odporność.",
     longDescription: "Miód pozyskiwany późnym latem i jesienią z nektaru nawłoci pospolitej. Charakteryzuje się piękną, złocistą barwą i intensywnym, ziołowo-kwiatowym aromatem. Wspiera naturalną odporność organizmu. Pochodzi z bogatych, dzikich łąk i zadrzewień nad Wisłą. Dostępny od września do grudnia.",
     price: 60,
@@ -130,6 +140,7 @@ export const products: Product[] = [
   {
     id: 12,
     name: "Plastry miodu",
+    slug: "plastry-miodu",
     description: "Naturalny miód w plastrze – prosto z ula. Najczystsza, najbardziej pierwotna forma miodu.",
     longDescription: "Piękne, pełne plastry miodu prosto z naszych uli. Miód w naturalnym woskowym plastrze – bez wirowania i obróbki. Najczystsza i najbardziej tradycyjna forma spożycia miodu. Można jeść razem z woskiem (wosk jest jadalny i bogaty w propolis). Idealny na deser, do herbaty lub jako wyjątkowy, naturalny przysmak. Waga ok. 450–500 g.",
     price: 55,
@@ -142,6 +153,7 @@ export const products: Product[] = [
   {
     id: 13,
     name: "Świece z wosku pszczelego",
+    slug: "swiece-z-wosku-pszczelego",
     description: "Naturalne świece 100% z wosku pszczelego. Czyste spalanie i delikatny miodowy zapach.",
     longDescription: "Ręcznie wytwarzane świece ze 100% czystego wosku pszczelego pozyskanego w naszej pasiece. Bez parafiny, stearyny i sztucznych dodatków. Palą się równo, czysto, nie kopcą i wydzielają subtelny, naturalny zapach miodu i wosku. Tworzą przyjemną, ciepłą atmosferę. Świece mniejsze (ok. 150 g) oraz większe (od 45 zł).",
     price: 32,

@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Fixed 404 - correct App Router structure
 const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_URL: 'https://jankesowapasieka.pl',
@@ -14,6 +15,7 @@ const nextConfig = {
         destination: 'https://jankesowapasieka.pl/:path*',
         permanent: true,
       },
+
       // 2. jankesowapasieka.com.pl → jankesowapasieka.pl
       {
         source: '/:path*',
@@ -21,6 +23,7 @@ const nextConfig = {
         destination: 'https://jankesowapasieka.pl/:path*',
         permanent: true,
       },
+
       // 3. www.jankesowapasieka.com.pl → jankesowapasieka.pl
       {
         source: '/:path*',

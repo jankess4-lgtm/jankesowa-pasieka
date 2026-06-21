@@ -24,7 +24,9 @@ function generateSlug(name: string): string {
 }
 
 function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  return products.find(
+    (p) => p.slug === slug || generateSlug(p.name) === slug
+  );
 }
 
 // Generate static paths for all products

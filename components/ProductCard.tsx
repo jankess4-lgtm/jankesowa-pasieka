@@ -56,9 +56,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   };
 
   // UNAVAILABLE PRODUCT — full card faded logo, no product photo, desaturated, elegant message
-  const productSlug = product.slug!;
-
   if (!isAvailable) {
+    const productSlug = product.slug!;
     return (
       <Link href={`/produkty/${productSlug}`} className="block">
         <div className="product-card flex flex-col h-full shadow-md bg-[#F8F4EF] border-[#EDE4D6] relative overflow-hidden hover:opacity-90 transition">

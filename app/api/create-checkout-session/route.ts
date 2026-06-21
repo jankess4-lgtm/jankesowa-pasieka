@@ -98,24 +98,11 @@ export async function POST(request: NextRequest) {
         },
       },
 
-      // 3. Rich custom_text - heavily branded text appears directly on the Checkout page
-      // to force Jankesowa Pasieka + złoto-miodowy #D97706 look instead of default
+      // 3. Custom text - only using supported fields to avoid Stripe errors
       custom_text: {
         submit: {
-          message: "Płatność dla Jankesowa Pasieka • Złoto-miodowy #D97706",
-        },
-        after_submit: {
-          message: "Dziękujemy! Zamówienie w Jankesowej Pasiece opłacone. Złoto-miodowy #D97706",
-        },
-        shipping_address: {
-          message: "Dostawa dla Jankesowa Pasieka (złoto-miodowy #D97706)",
-        },
-        billing_address: {
-          message: "Faktura - Jankesowa Pasieka • Złoto-miodowy #D97706",
-        },
-        terms_of_service: {
-          message: "Akceptuję regulamin Jankesowa Pasieka",
-        },
+          message: "Zapłać za zamówienie w Jankesowej Pasiece"
+        }
       },
 
       // 4. Force address collection + other UI fields for consistent branded experience

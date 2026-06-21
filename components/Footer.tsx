@@ -14,9 +14,12 @@ export default function Footer() {
               alt="Jankesowa Pasieka" 
               width={170} 
               height={50} 
-              className="h-[42px] md:h-[50px] w-auto object-contain" 
+              className="h-10 md:h-12 w-auto object-contain" 
             />
-            <span className="font-[var(--font-satisfy)] text-[#92400E] text-base md:text-lg tracking-[1px] font-normal">
+            <span 
+              className="text-[#78350F] text-sm md:text-base tracking-[1px] font-normal"
+              style={{ fontFamily: "'Kristen ITC', cursive" }}
+            >
               JANKESOWA PASIEKA
             </span>
           </Link>

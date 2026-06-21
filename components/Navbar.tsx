@@ -44,11 +44,12 @@ export default function Navbar() {
               alt="Jankesowa Pasieka" 
               width={230} 
               height={68} 
-              className="h-[55px] md:h-[68px] w-auto object-contain" 
+              className="h-14 md:h-16 w-auto object-contain" 
               priority 
             />
             <span 
-              className="font-[var(--font-satisfy)] text-[#92400E] text-[22px] md:text-[28px] tracking-[1.5px] font-normal leading-none"
+              className="text-[#78350F] text-xl md:text-2xl tracking-[1px] font-normal leading-none"
+              style={{ fontFamily: "'Kristen ITC', cursive" }}
             >
               JANKESOWA PASIEKA
             </span>

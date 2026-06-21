@@ -30,7 +30,15 @@ export const metadata: Metadata = {
   title: "Jankesowa Pasieka | Naturalne miody z Kujaw nad Wisłą",
   description: "Rodzinna pasieka w Topolnie (gmina Pruszcz). Najwyższej jakości miody niepasteryzowane z terenów nadwiślańskich Kujaw. Ręcznie zbierane, bez antybiotyków.",
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/logo.png", sizes: "16x16", type: "image/png" },
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 

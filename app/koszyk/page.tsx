@@ -792,6 +792,18 @@ export default function KoszykPage() {
         if (parsed.deliveryMethod === "parcel") {
           setParcelSearch(parsed.formData?.parcelLocker || "");
         }
+
+        // If the restored delivery method is not "address", forcibly clear address fields
+        // so they are never present / validated / sent for paczkomat or pickup.
+        const restoredMethod = parsed.deliveryMethod as DeliveryMethod | undefined;
+        if (restoredMethod && restoredMethod !== "address") {
+          setFormData((current) => ({
+            ...current,
+            street: "",
+            postalCode: "",
+            city: "",
+          }));
+        }
       } catch {}
     }
   }, []);
@@ -913,13 +925,27 @@ export default function KoszykPage() {
       parcelLocker: undefined,
     }));
 
-    if (method === "pickup") {
+    if (method === "address") {
+      // keep parcel data if any, but clear nothing extra
+    } else if (method === "parcel") {
+      // clear address fields completely when using paczkomat (they are not needed and must be hidden)
+      setFormData((prev) => ({
+        ...prev,
+        street: "",
+        postalCode: "",
+        city: "",
+      }));
+      // keep current filter/search for parcel
+    } else if (method === "pickup") {
       clearSelectedPaczkomat();
       setParcelSearch("");
-    } else if (method === "parcel") {
-      // keep current filter/search for parcel
-    } else {
-      clearSelectedPaczkomat();
+      // clear address fields for pickup too
+      setFormData((prev) => ({
+        ...prev,
+        street: "",
+        postalCode: "",
+        city: "",
+      }));
     }
   };
 
@@ -1202,8 +1228,8 @@ export default function KoszykPage() {
                     </div>
                   </div>
 
-                  {/* Conditional fields */}
-                  {deliveryMethod === "address" ? (
+                  {/* Address fields - VISIBLE ONLY for courier delivery */}
+                  {deliveryMethod === "address" && (
                     <>
                       <div>
                         <label className="block text-sm font-medium text-brand-brown mb-1.5">Ulica i nr domu/mieszkania *</label>
@@ -1242,8 +1268,10 @@ export default function KoszykPage() {
                         </div>
                       </div>
                     </>
-                  ) : deliveryMethod === "parcel" ? (
-                    /* Paczkomat InPost – stabilny, użyteczny widok listy */
+                  )}
+
+                  {/* Paczkomat InPost section - only for parcel method. No address fields here. */}
+                  {deliveryMethod === "parcel" && (
                     <div className="space-y-4">
                       {/* Duże pole tekstowe z dokładnym placeholderem */}
                       <div>
@@ -1379,8 +1407,10 @@ export default function KoszykPage() {
                         <p className="text-red-600 text-xs mt-1">{errors.parcelLocker}</p>
                       )}
                     </div>
-                  ) : (
-                    /* Pickup info - full address + hours */
+                  )}
+
+                  {/* Pickup info - only for pickup method. No address fields. */}
+                  {deliveryMethod === "pickup" && (
                     <div className="p-5 bg-brand-cream/60 rounded-2xl text-sm text-brand-brown/90 leading-relaxed border border-brand-creamDark">
                       <div className="font-medium text-brand-brown mb-1">Odbiór osobisty w naszej Pasiece Jankesowej</div>
                       <div>ul. Topolno 12, 86-120 Pruszcz</div>

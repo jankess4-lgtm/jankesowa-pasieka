@@ -45,10 +45,10 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Rozszerzona baza paczkomatów InPost (~370+ wpisów)
-// - Toruń, Bydgoszcz, Grudziądz, Inowrocław, Włocławek: 42-45 każdy
+// Rozszerzona baza paczkomatów InPost (~480+ wpisów)
+// - Toruń ~60, Bydgoszcz ~55, Grudziądz ~53, Inowrocław ~53, Włocławek ~53 (równomierne pokrycie osiedli + sklepy)
 // - Pozostałe miasta kujawsko-pomorskie (Świecie, Chełmno, Nakło, Brodnica, Tuchola itp.): 10-15 każdy
-// Każdy wpis ma realistyczny kod, pełny adres i współrzędne do mapy.
+// Każdy wpis ma realistyczny kod (np. TORxxx), pełny adres z osiedlem/sklepem i współrzędne do mapy.
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
   // Kilka z innych regionów (dla kompletności)
   { code: "WAW001", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
@@ -224,7 +224,7 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "ZNI003", address: "ul. 3 Maja 12", city: "Żnin", hours: "24/7", distanceKm: 65, lat: 52.8520, lng: 17.7180 },
 
   // ============================================================
-  // BYDGOSZCZ — ~45 paczkomatów
+  // BYDGOSZCZ — ~55 paczkomatów (lepsze pokrycie osiedli)
   // ============================================================
   { code: "BYD001", address: "ul. Gdańska 50", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1235, lng: 18.0084 },
   { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1300, lng: 18.0150 },
@@ -271,10 +271,23 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "BYD043", address: "ul. Pomorska 150 (Kaufland)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44, lat: 53.1270, lng: 17.9880 },
   { code: "BYD044", address: "ul. Szubińska 160", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1115, lng: 17.9800 },
   { code: "BYD045", address: "ul. Fordońska 80", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1380, lng: 18.0330 },
+  // Dodatkowe — Fordon, Błonie, Szwederowo, Wyżyny, Bartodzieje
+  { code: "BYD046", address: "ul. Fordońska 280 (Biedronka, os. Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 52, lat: 53.1450, lng: 18.0550 },
+  { code: "BYD047", address: "ul. Nakielska 140 (Lidl, os. Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 49, lat: 53.1385, lng: 17.9650 },
+  { code: "BYD048", address: "ul. Szubińska 210 (Kaufland, os. Wyżyny)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1080, lng: 17.9650 },
+  { code: "BYD049", address: "ul. Grunwaldzka 220 (Biedronka, os. Szwederowo)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1220, lng: 18.0350 },
+  { code: "BYD050", address: "ul. Jagiellońska 260 (Lidl, os. Bartodzieje)", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1350, lng: 18.0350 },
+  { code: "BYD051", address: "ul. Gdańska 380 (os. Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1420, lng: 18.0100 },
+  { code: "BYD052", address: "ul. Dworcowa 95 (Biedronka, os. Śródmieście)", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1290, lng: 17.9950 },
+  { code: "BYD053", address: "ul. Pomorska 180 (Żabka, os. Wilczak)", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1185, lng: 17.9750 },
+  { code: "BYD054", address: "ul. Kujawska 160 (Lidl, os. Kapuściska)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1125, lng: 18.0300 },
+  { code: "BYD055", address: "ul. Fordońska 95 (Galeria Focus)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1380, lng: 18.0200 },
 
   // ============================================================
-  // TORUŃ — ~45 paczkomatów
+  // TORUŃ — ~60 paczkomatów (równomierne pokrycie osiedli)
   // ============================================================
+  // Osiedla: Stare Miasto / Centrum, Chełmińskie, Bydgoskie Przedmieście,
+  // Rubinkowo I & II, Mokre, Bielany, Koniuchy, Jar, Na Skarpie, Wrzosy, Podgórze
   { code: "TOR001", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.5984 },
   { code: "TOR002", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0155, lng: 18.5900 },
   { code: "TOR003", address: "ul. Chełmińska 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 36, lat: 53.0120, lng: 18.6050 },
@@ -320,9 +333,25 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "TOR043", address: "ul. Szeroka 55", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0190, lng: 18.5820 },
   { code: "TOR044", address: "ul. Sienkiewicza 12", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0130, lng: 18.5900 },
   { code: "TOR045", address: "ul. Podgórna 35 (Lidl)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0105, lng: 18.5750 },
+  // === NOWE — Rubinkowo, Mokre, Bielany, Koniuchy, Jar, Na Skarpie, Wrzosy ===
+  { code: "TOR046", address: "ul. Szubińska 82 (Biedronka, os. Rubinkowo I)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0248, lng: 18.6415 },
+  { code: "TOR047", address: "ul. Lecha i Marii Kaczyńskich 48 (Lidl, os. Rubinkowo II)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0272, lng: 18.6490 },
+  { code: "TOR048", address: "ul. Włocławska 12 (Kaufland, os. Rubinkowo)", city: "Toruń", hours: "06:00-22:00", distanceKm: 38, lat: 53.0295, lng: 18.6550 },
+  { code: "TOR049", address: "ul. PCK 25 (Biedronka, os. Mokre)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0020, lng: 18.5800 },
+  { code: "TOR050", address: "ul. Łódzka 65 (Lidl, os. Mokre)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0005, lng: 18.5720 },
+  { code: "TOR051", address: "ul. Olsztyńska 30 (os. Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0085, lng: 18.5650 },
+  { code: "TOR052", address: "ul. Bydgoska 180 (Biedronka, os. Bielany)", city: "Toruń", hours: "06:00-22:00", distanceKm: 39, lat: 53.0340, lng: 18.5820 },
+  { code: "TOR053", address: "ul. Gagarina 160 (Auchan, os. Bielany)", city: "Toruń", hours: "24/7", distanceKm: 40, lat: 53.0365, lng: 18.5780 },
+  { code: "TOR054", address: "ul. Koniuchy 8 (Żabka, os. Koniuchy)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0150, lng: 18.6350 },
+  { code: "TOR055", address: "ul. Wschodnia 42 (Biedronka, os. Koniuchy)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0185, lng: 18.6400 },
+  { code: "TOR056", address: "ul. Jarowa 15 (Lidl, os. Jar)", city: "Toruń", hours: "06:00-22:00", distanceKm: 34, lat: 53.0110, lng: 18.5680 },
+  { code: "TOR057", address: "ul. Chełmińska 140 (Biedronka, os. Chełmińskie)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0090, lng: 18.6150 },
+  { code: "TOR058", address: "ul. Sienkiewicza 85 (os. Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0220, lng: 18.6100 },
+  { code: "TOR059", address: "pl. Świętej Katarzyny 18 (Centrum)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0138, lng: 18.5988 },
+  { code: "TOR060", address: "ul. Legionów 22 (Galeria Copernicus)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0160, lng: 18.6020 },
 
   // ============================================================
-  // GRUDZIĄDZ — ~42 paczkomatów
+  // GRUDZIĄDZ — ~53 paczkomatów (lepsze pokrycie osiedli)
   // ============================================================
   { code: "GRU001", address: "ul. Długa 25", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4840, lng: 18.7530 },
   { code: "GRU002", address: "ul. Chełmińska 42", city: "Grudziądz", hours: "24/7", distanceKm: 27, lat: 53.4800, lng: 18.7600 },
@@ -366,9 +395,21 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "GRU040", address: "ul. 1 Maja 50", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4805, lng: 18.7420 },
   { code: "GRU041", address: "ul. Kościuszki 80", city: "Grudziądz", hours: "24/7", distanceKm: 23, lat: 53.4880, lng: 18.7540 },
   { code: "GRU042", address: "ul. Szkolna 40 (Biedronka)", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4855, lng: 18.7460 },
+  // Dodatkowe — Rządz, Os. Kopernika, Wyspa, Chełmińskie, Tuszyn
+  { code: "GRU043", address: "ul. Chełmińska 260 (Biedronka, os. Rządz)", city: "Grudziądz", hours: "24/7", distanceKm: 27, lat: 53.4720, lng: 18.7780 },
+  { code: "GRU044", address: "ul. 1 Maja 85 (Lidl, os. Kopernika)", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4820, lng: 18.7480 },
+  { code: "GRU045", address: "ul. Tczewska 120 (Kaufland, os. Wyspa)", city: "Grudziądz", hours: "06:00-22:00", distanceKm: 26, lat: 53.4915, lng: 18.7250 },
+  { code: "GRU046", address: "ul. Dworcowa 155 (Biedronka, os. Śródmieście)", city: "Grudziądz", hours: "24/7", distanceKm: 23, lat: 53.4860, lng: 18.7430 },
+  { code: "GRU047", address: "ul. Bydgoska 75 (os. Chełmińskie Przedmieście)", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4775, lng: 18.7500 },
+  { code: "GRU048", address: "ul. Rzeźnicka 105 (Żabka, os. Tuszyn)", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4745, lng: 18.7580 },
+  { code: "GRU049", address: "ul. Długa 310 (Lidl, os. Rządz)", city: "Grudziądz", hours: "24/7", distanceKm: 28, lat: 53.4680, lng: 18.7820 },
+  { code: "GRU050", address: "ul. 3 Maja 145 (Biedronka, os. Kopernika)", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4790, lng: 18.7420 },
+  { code: "GRU051", address: "ul. Szkolna 65 (os. Wyspa)", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4930, lng: 18.7280 },
+  { code: "GRU052", address: "ul. Kościuszki 115 (Lidl)", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4900, lng: 18.7520 },
+  { code: "GRU053", address: "ul. Tczewska 55 (Biedronka, os. Rządz)", city: "Grudziądz", hours: "24/7", distanceKm: 26, lat: 53.4870, lng: 18.7200 },
 
   // ============================================================
-  // INOWROCŁAW — ~42 paczkomatów
+  // INOWROCŁAW — ~53 paczkomatów (lepsze pokrycie osiedli)
   // ============================================================
   { code: "INO001", address: "ul. Królowej Jadwigi 15", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7980, lng: 18.2630 },
   { code: "INO002", address: "ul. Dworcowa 8", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 54, lat: 52.8005, lng: 18.2580 },
@@ -412,9 +453,21 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "INO040", address: "ul. Solankowa 110", city: "Inowrocław", hours: "24/7", distanceKm: 54, lat: 52.8060, lng: 18.2580 },
   { code: "INO041", address: "ul. Kujawska 140", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7905, lng: 18.2470 },
   { code: "INO042", address: "ul. Toruńska 5", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.8040, lng: 18.2700 },
+  // Dodatkowe — Solanki, Rąbin, Piastowskie, Stare Miasto, Mątwy
+  { code: "INO043", address: "ul. Solankowa 160 (Biedronka, os. Solanki)", city: "Inowrocław", hours: "24/7", distanceKm: 54, lat: 52.8090, lng: 18.2550 },
+  { code: "INO044", address: "ul. Kujawska 175 (Lidl, os. Rąbin)", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.7880, lng: 18.2420 },
+  { code: "INO045", address: "ul. 1 Maja 72 (Biedronka, os. Piastowskie)", city: "Inowrocław", hours: "24/7", distanceKm: 53, lat: 52.8015, lng: 18.2500 },
+  { code: "INO046", address: "ul. Dworcowa 130 (Kaufland, os. Stare Miasto)", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 54, lat: 52.7985, lng: 18.2610 },
+  { code: "INO047", address: "ul. Poznańska 205 (Lidl, os. Mątwy)", city: "Inowrocław", hours: "24/7", distanceKm: 58, lat: 52.7840, lng: 18.2850 },
+  { code: "INO048", address: "ul. Toruńska 140 (Biedronka, os. Solanki)", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.8105, lng: 18.2750 },
+  { code: "INO049", address: "ul. Kujawska 55 (Żabka, os. Rąbin)", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7915, lng: 18.2480 },
+  { code: "INO050", address: "ul. Solankowa 45 (os. Piastowskie)", city: "Inowrocław", hours: "24/7", distanceKm: 53, lat: 52.8040, lng: 18.2550 },
+  { code: "INO051", address: "ul. 3 Maja 62 (Lidl, os. Stare Miasto)", city: "Inowrocław", hours: "24/7", distanceKm: 54, lat: 52.7970, lng: 18.2590 },
+  { code: "INO052", address: "ul. Dworcowa 165 (Biedronka, os. Mątwy)", city: "Inowrocław", hours: "24/7", distanceKm: 57, lat: 52.7830, lng: 18.2750 },
+  { code: "INO053", address: "ul. Toruńska 80 (Kaufland, os. Solanki)", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.8085, lng: 18.2680 },
 
   // ============================================================
-  // WŁOCŁAWEK — ~42 paczkomatów
+  // WŁOCŁAWEK — ~53 paczkomatów (lepsze pokrycie osiedli)
   // ============================================================
   { code: "WLO001", address: "ul. Toruńska 30", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6480, lng: 19.0680 },
   { code: "WLO002", address: "ul. Brzeska 15 (Lidl)", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6505, lng: 19.0600 },
@@ -458,6 +511,18 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "WLO040", address: "ul. Kilińskiego 125", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6655, lng: 19.0750 },
   { code: "WLO041", address: "ul. Toruńska 180", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6420, lng: 19.0900 },
   { code: "WLO042", address: "ul. Dworcowa 10", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6485, lng: 19.0620 },
+  // Dodatkowe — Zazamcze, Michelin, Wschód, Południe, Śródmieście
+  { code: "WLO043", address: "ul. Toruńska 220 (Biedronka, os. Zazamcze)", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6400, lng: 19.0980 },
+  { code: "WLO044", address: "ul. Brzeska 135 (Lidl, os. Michelin)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6580, lng: 19.0500 },
+  { code: "WLO045", address: "ul. Kilińskiego 160 (Kaufland, os. Wschód)", city: "Włocławek", hours: "06:00-22:00", distanceKm: 68, lat: 52.6630, lng: 19.0850 },
+  { code: "WLO046", address: "ul. Kaliska 155 (Biedronka, os. Południe)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6530, lng: 19.1050 },
+  { code: "WLO047", address: "ul. Żytnia 130 (Lidl, os. Śródmieście)", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6445, lng: 19.0580 },
+  { code: "WLO048", address: "ul. Toruńska 50 (os. Zazamcze)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6385, lng: 19.0920 },
+  { code: "WLO049", address: "ul. Brzeska 85 (Biedronka, os. Michelin)", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6555, lng: 19.0550 },
+  { code: "WLO050", address: "ul. Kilińskiego 55 (Żabka, os. Wschód)", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6650, lng: 19.0780 },
+  { code: "WLO051", address: "ul. Kaliska 75 (Lidl, os. Południe)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6505, lng: 19.0980 },
+  { code: "WLO052", address: "ul. Dworcowa 55 (Biedronka, os. Śródmieście)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6470, lng: 19.0650 },
+  { code: "WLO053", address: "ul. Toruńska 265 (Kaufland, os. Zazamcze)", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6370, lng: 19.1020 },
 ];
 export default function KoszykPage() {
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart, isLoaded } = useCart();
@@ -563,7 +628,7 @@ export default function KoszykPage() {
           normalize(p.address).includes(nq)
         );
       }
-      return local.length > 0 ? local.slice(0, 28) : SAMPLE_PACZKOMATS.slice(0, 15);
+      return local.length > 0 ? local.slice(0, 32) : SAMPLE_PACZKOMATS.slice(0, 18);
     }
     const nq = normalize(q);
     let results = SAMPLE_PACZKOMATS.filter((p) =>
@@ -578,7 +643,7 @@ export default function KoszykPage() {
       if (aCity !== bCity) return aCity - bCity;
       return (a.distanceKm ?? 999) - (b.distanceKm ?? 999);
     });
-    return results.slice(0, 28);
+    return results.slice(0, 32);
   };
 
   // Perform search using debounced value - min 3 chars, always results for parcel
@@ -1156,7 +1221,7 @@ export default function KoszykPage() {
                                 if (selectedPaczkomat && !mapPins.some(m => m.code === selectedPaczkomat.code)) {
                                   mapPins = [...mapPins, selectedPaczkomat];
                                 }
-                                if (mapPins.length < 22) {
+                                if (mapPins.length < 25) {
                                   const localCities = ["Świecie","Toruń","Bydgoszcz","Grudziądz","Inowrocław","Włocławek","Chełmno","Nakło nad Notecią","Brodnica","Tuchola"];
                                   const extras = SAMPLE_PACZKOMATS.filter(p => 
                                     localCities.includes(p.city) && !mapPins.some(m => m.code === p.code)
@@ -1165,7 +1230,7 @@ export default function KoszykPage() {
                                 }
                                 // Ensure selected is last for top rendering + sort for nicer distribution
                                 mapPins.sort((a, b) => (selectedPaczkomat && a.code === selectedPaczkomat.code ? 1 : 0) - (selectedPaczkomat && b.code === selectedPaczkomat.code ? 1 : 0));
-                                return mapPins.slice(0, 38).map((p, i) => {
+                                return mapPins.slice(0, 42).map((p, i) => {
                                   const isSel = selectedPaczkomat?.code === p.code;
                                   let left = 18 + (i * 4.7) % 64;
                                   let top = 24 + ((i * 6.3) % 52);

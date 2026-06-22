@@ -36,18 +36,18 @@ export const dynamicParams = false;
 function getProductDetails(product: Product): ProductDetails {
   const nameLower = product.name.toLowerCase();
 
-  if (nameLower.includes("rzepakowy")) {
+  if (nameLower.includes("rzepakowo-mniszkowy") || nameLower.includes("rzepakowy")) {
     return {
-      richDescription: "Miód rzepakowy to jeden z najjaśniejszych i najbardziej charakterystycznych polskich miodów. Pochodzi z obfitych, wczesnowiosennych pożytków rzepakowych na kujawskich polach. Jego wyjątkowa, kremowa konsystencja i delikatna słodycz sprawiają, że jest ulubieńcem rodzin z dziećmi oraz osób ceniących łagodne smaki. Szybko krystalizuje, tworząc drobną, jedwabistą strukturę, która nie traci swoich cennych właściwości.",
+      richDescription: "Miód rzepakowo-mniszkowy to wyjątkowe połączenie nektaru rzepaku i mniszka lekarskiego. Pochodzi z obfitych, wczesnowiosennych pożytków na kujawskich polach nad Wisłą. Charakteryzuje się jasnozłotą barwą, bardzo słodkim i delikatnym smakiem z subtelną kwiatową nutą mniszka. Szybko krystalizuje, tworząc drobną, kremową konsystencję. Ulubiony przez rodziny z dziećmi i osoby ceniące łagodne, naturalne smaki.",
       specs: [
-        { label: "Smak", value: "Bardzo słodki, delikatny, z subtelną nutą kwiatową" },
-        { label: "Aromat", value: "Lekki, czysty, świeży, miodowy" },
+        { label: "Smak", value: "Bardzo słodki, delikatny, z subtelną nutą mniszka i kwiatową" },
+        { label: "Aromat", value: "Lekki, czysty, świeży, miodowy z nutą mniszka" },
         { label: "Krystalizacja", value: "Szybka – drobna, kremowa konsystencja" },
         { label: "Zastosowanie", value: "Herbata, kanapki, naleśniki, deserki dla dzieci" },
-        { label: "Właściwości zdrowotne", value: "Bogaty w glukozę, wspiera energię i pracę serca" },
-        { label: "Okres dostępności", value: "Wczesna wiosna (rzepak kwitnie w maju)" },
+        { label: "Właściwości zdrowotne", value: "Bogaty w glukozę, wspiera energię i pracę serca, łagodny dla żołądka" },
+        { label: "Okres dostępności", value: "Wczesna wiosna (rzepak i mniszek kwitną w maju)" },
       ],
-      whyBuy: "Idealny wybór na co dzień. Szybko krystalizujący, delikatny miód, który zachwyca zarówno dorosłych, jak i dzieci. Naturalna energia prosto z kujawskich pól.",
+      whyBuy: "Idealny wybór na co dzień. Szybko krystalizujący, delikatny miód rzepakowo-mniszkowy, który zachwyca zarówno dorosłych, jak i dzieci. Naturalna energia z kujawskich pól.",
     };
   }
 

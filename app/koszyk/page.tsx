@@ -765,6 +765,11 @@ export default function KoszykPage() {
   const productsTotal = totalPrice;
   const grandTotal = productsTotal + shippingCost;
 
+  // Clean conditional logic
+  const showAddressFields = deliveryMethod === "address";
+  const showParcelSection = deliveryMethod === "parcel";
+  const showPickupSection = deliveryMethod === "pickup";
+
   // Load from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -1228,8 +1233,8 @@ export default function KoszykPage() {
                     </div>
                   </div>
 
-                  {/* Address fields - VISIBLE ONLY for courier delivery */}
-                  {deliveryMethod === "address" && (
+                  {/* Address fields - appear ONLY when "Dostawa kurierem na adres" is selected */}
+                  {showAddressFields && (
                     <>
                       <div>
                         <label className="block text-sm font-medium text-brand-brown mb-1.5">Ulica i nr domu/mieszkania *</label>
@@ -1271,7 +1276,7 @@ export default function KoszykPage() {
                   )}
 
                   {/* Paczkomat InPost section - only for parcel method. No address fields here. */}
-                  {deliveryMethod === "parcel" && (
+                  {showParcelSection && (
                     <div className="space-y-4">
                       {/* Duże pole tekstowe z dokładnym placeholderem */}
                       <div>
@@ -1410,7 +1415,7 @@ export default function KoszykPage() {
                   )}
 
                   {/* Pickup info - only for pickup method. No address fields. */}
-                  {deliveryMethod === "pickup" && (
+                  {showPickupSection && (
                     <div className="p-5 bg-brand-cream/60 rounded-2xl text-sm text-brand-brown/90 leading-relaxed border border-brand-creamDark">
                       <div className="font-medium text-brand-brown mb-1">Odbiór osobisty w naszej Pasiece Jankesowej</div>
                       <div>ul. Topolno 12, 86-120 Pruszcz</div>

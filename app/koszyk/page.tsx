@@ -765,8 +765,8 @@ export default function KoszykPage() {
   const productsTotal = totalPrice;
   const grandTotal = productsTotal + shippingCost;
 
-  // Clean conditional logic
-  const showAddressFields = deliveryMethod === "address";
+  // Clean conditional logic - use isPaczkomat to hide address fields for paczkomat
+  const isPaczkomat = deliveryMethod === "parcel";
   const showParcelSection = deliveryMethod === "parcel";
   const showPickupSection = deliveryMethod === "pickup";
 
@@ -1233,47 +1233,46 @@ export default function KoszykPage() {
                     </div>
                   </div>
 
-                  {/* Address fields - appear ONLY when "Dostawa kurierem na adres" is selected */}
-                  {showAddressFields && (
-                    <>
+                  {/* Address fields - COMPLETELY HIDDEN for Paczkomat using isPaczkomat + hidden class.
+                      Only visible for "Dostawa kurierem na adres". Use display:none via Tailwind hidden. */}
+                  <div className={isPaczkomat || deliveryMethod === "pickup" ? "hidden" : ""}>
+                    <div>
+                      <label className="block text-sm font-medium text-brand-brown mb-1.5">Ulica i nr domu/mieszkania *</label>
+                      <input
+                        type="text"
+                        value={formData.street}
+                        onChange={(e) => updateField("street", e.target.value)}
+                        className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
+                        placeholder="ul. Leśna 12/3"
+                      />
+                      {errors.street && <p className="text-red-600 text-xs mt-1">{errors.street}</p>}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-brand-brown mb-1.5">Ulica i nr domu/mieszkania *</label>
+                        <label className="block text-sm font-medium text-brand-brown mb-1.5">Kod pocztowy *</label>
                         <input
                           type="text"
-                          value={formData.street}
-                          onChange={(e) => updateField("street", e.target.value)}
+                          value={formData.postalCode}
+                          onChange={(e) => updateField("postalCode", e.target.value)}
                           className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                          placeholder="ul. Leśna 12/3"
+                          placeholder="62-800"
                         />
-                        {errors.street && <p className="text-red-600 text-xs mt-1">{errors.street}</p>}
+                        {errors.postalCode && <p className="text-red-600 text-xs mt-1">{errors.postalCode}</p>}
                       </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-brand-brown mb-1.5">Kod pocztowy *</label>
-                          <input
-                            type="text"
-                            value={formData.postalCode}
-                            onChange={(e) => updateField("postalCode", e.target.value)}
-                            className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                            placeholder="62-800"
-                          />
-                          {errors.postalCode && <p className="text-red-600 text-xs mt-1">{errors.postalCode}</p>}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-brown mb-1.5">Miasto *</label>
-                          <input
-                            type="text"
-                            value={formData.city}
-                            onChange={(e) => updateField("city", e.target.value)}
-                            className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                            placeholder="Kalisz"
-                          />
-                          {errors.city && <p className="text-red-600 text-xs mt-1">{errors.city}</p>}
-                        </div>
+                      <div>
+                        <label className="block text-sm font-medium text-brand-brown mb-1.5">Miasto *</label>
+                        <input
+                          type="text"
+                          value={formData.city}
+                          onChange={(e) => updateField("city", e.target.value)}
+                          className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
+                          placeholder="Kalisz"
+                        />
+                        {errors.city && <p className="text-red-600 text-xs mt-1">{errors.city}</p>}
                       </div>
-                    </>
-                  )}
+                    </div>
+                  </div>
 
                   {/* Paczkomat InPost section - only for parcel method. No address fields here. */}
                   {showParcelSection && (

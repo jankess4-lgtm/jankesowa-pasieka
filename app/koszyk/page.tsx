@@ -2,7 +2,7 @@
 
 import { useCart } from "@/lib/useCart";
 import { Button } from "@/components/ui/Button";
-import { Minus, Plus, Trash2, ArrowLeft, CreditCard, Truck, Package, MapPin, Check } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, CreditCard, Truck, Package, MapPin, Check, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -928,7 +928,7 @@ export default function KoszykPage() {
         </div>
 
         <h1 className="font-serif text-5xl text-brand-brown tracking-tight mb-2">Finalizacja zamówienia</h1>
-        <p className="text-brand-brown/70 mb-8">Sprawdź swój koszyk i uzupełnij dane — wybierz dogodną formę dostawy miodów prosto z pasieki</p>
+        <p className="text-brand-brown/70 mb-8">Sprawdź swój koszyk i uzupełnij dane — wybierz dogodną formę dostawy miodów prosto z pasieki nad Wisłą</p>
 
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Items list */}
@@ -983,7 +983,7 @@ export default function KoszykPage() {
             <div className="sticky top-8 space-y-6">
               {/* Delivery method */}
               <div className="bg-white rounded-2xl border border-brand-creamDark p-7">
-                <h3 className="font-medium text-xl text-brand-brown mb-5">Metoda dostawy</h3>
+                <h3 className="font-medium text-xl text-brand-brown mb-5">Wybierz metodę dostawy</h3>
 
                 <div className="space-y-3">
                   {/* Address option - premium card */}
@@ -1009,7 +1009,7 @@ export default function KoszykPage() {
                         <span className="font-medium text-brand-brown">Dostawa kurierem na adres</span>
                         <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">16 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Kurier • 1–3 dni robocze</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Kurier • dostawa w 1–3 dni robocze • miód prosto z pasieki</p>
                     </div>
                   </label>
 
@@ -1036,7 +1036,7 @@ export default function KoszykPage() {
                         <span className="font-medium text-brand-brown">Paczkomat InPost</span>
                         <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">14 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Wybierz paczkomat w swojej okolicy • odbiór 24/7</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Paczkomat InPost • wygodny odbiór 24/7 w Twojej okolicy</p>
                     </div>
                   </label>
 
@@ -1063,7 +1063,7 @@ export default function KoszykPage() {
                         <span className="font-medium text-brand-brown">Odbiór osobisty w pasiece</span>
                         <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">0 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Topolno nad Wisłą • po uzgodnieniu</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Pasieka nad Wisłą • po uzgodnieniu dogodnego terminu</p>
                     </div>
                   </label>
                 </div>
@@ -1071,7 +1071,7 @@ export default function KoszykPage() {
 
               {/* Customer form - animated on method change */}
               <div className="bg-white rounded-2xl border border-brand-creamDark p-7">
-                <h3 className="font-medium text-xl text-brand-brown mb-5">Dane do dostawy</h3>
+                <h3 className="font-medium text-xl text-brand-brown mb-5">Twoje dane do dostawy</h3>
 
                 <motion.div
                   key={deliveryMethod}
@@ -1187,8 +1187,17 @@ export default function KoszykPage() {
                           placeholder="Wpisz kod paczkomatu (np. SWI001, TOR045, KAT023, WRO078)"
                         />
                         <p className="text-xs text-brand-brown/60 mt-1.5">
-                          Wpisz kod lub nazwę miasta – lista filtruje się automatycznie. Kliknij, aby wybrać.
+                          Wpisz kod paczkomatu lub nazwę miasta – lista podpowie dostępne opcje. Wybierz jeden, by kontynuować.
                         </p>
+
+                        {/* Przyjazna informacja dla klientów z całej Polski */}
+                        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-brand-cream/60 text-sm text-brand-brown/70 border border-brand-creamDark">
+                          <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-brown/60" />
+                          <p>
+                            Nie znalazłeś swojego paczkomatu na liście?<br />
+                            Napisz do nas w wiadomości po złożeniu zamówienia – wyślemy miód na dowolny paczkomat InPost w Polsce.
+                          </p>
+                        </div>
                       </div>
 
                       {/* Ładna karta podsumowująca – pojawia się po wyborze */}
@@ -1204,7 +1213,7 @@ export default function KoszykPage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 text-brand-gold text-sm font-semibold mb-1">
                                   <Check className="h-4 w-4" />
-                                  Wybrany paczkomat
+                                  Twój wybrany paczkomat
                                 </div>
 
                                 <div className="font-semibold text-[22px] tabular-nums tracking-[-0.3px] text-brand-brown leading-none">
@@ -1234,7 +1243,7 @@ export default function KoszykPage() {
                                 onClick={clearSelectedPaczkomat}
                                 className="text-xs font-medium text-brand-brown/70 hover:text-brand-brown underline self-start mt-1 whitespace-nowrap"
                               >
-                                Zmień
+                                Wybierz inny
                               </button>
                             </div>
                           </motion.div>
@@ -1244,7 +1253,7 @@ export default function KoszykPage() {
                       {/* Duża, widoczna lista paczkomatów (70-80+ pozycji) */}
                       <div>
                         <div className="flex items-center justify-between mb-2 px-0.5">
-                          <span className="text-xs font-medium tracking-[1px] text-brand-brown/70 uppercase">Wybierz z listy paczkomatów</span>
+                          <span className="text-xs font-medium tracking-[1px] text-brand-brown/70 uppercase">Dostępne paczkomaty w Polsce</span>
                           <span className="text-[10px] text-brand-brown/50 tabular-nums">{paczkomatList.length} paczkomatów</span>
                         </div>
                         <div className="border border-brand-creamDark rounded-2xl bg-white max-h-[500px] overflow-y-auto shadow-inner divide-y divide-brand-creamDark">
@@ -1277,10 +1286,10 @@ export default function KoszykPage() {
                               );
                             })
                           ) : (
-                            <div className="px-4 py-6 text-sm text-brand-brown/60 text-center">Brak wyników.</div>
+                            <div className="px-4 py-6 text-sm text-brand-brown/60 text-center">Nie znaleziono pasujących paczkomatów.<br />Spróbuj wpisać inny kod lub nazwę miasta.</div>
                           )}
                         </div>
-                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">80–100 paczkomatów z całej Polski. Wpisz kod lub miasto – lista filtruje się. Kliknij pozycję, aby wybrać.</p>
+                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Masz do wyboru ponad 80 paczkomatów z całej Polski. Wpisz kod lub miejscowość, a lista się przefiltruje. Kliknij, by wybrać swój ulubiony.</p>
                       </div>
 
                       {errors.parcelLocker && (
@@ -1290,10 +1299,10 @@ export default function KoszykPage() {
                   ) : (
                     /* Pickup info - full address + hours */
                     <div className="p-5 bg-brand-cream/60 rounded-2xl text-sm text-brand-brown/90 leading-relaxed border border-brand-creamDark">
-                      <div className="font-medium text-brand-brown mb-1">Odbiór osobisty w Pasiece Jankesowej</div>
+                      <div className="font-medium text-brand-brown mb-1">Odbiór osobisty w naszej Pasiece Jankesowej</div>
                       <div>ul. Topolno 12, 86-120 Pruszcz</div>
-                      <div className="mt-1 text-brand-brown/70">Godziny: po wcześniejszym uzgodnieniu (tel. lub e-mail)</div>
-                      <div className="mt-2 text-xs text-brand-brown/60">Zadzwonimy po złożeniu zamówienia, by ustalić dogodny termin odbioru. Czekamy na Ciebie!</div>
+                      <div className="mt-1 text-brand-brown/70">Godziny: po wcześniejszym uzgodnieniu terminu (tel. lub e-mail)</div>
+                      <div className="mt-2 text-xs text-brand-brown/60">Zadzwonimy po złożeniu zamówienia, by ustalić dogodny termin odbioru. Czekamy na Ciebie z otwartymi ramionami!</div>
                     </div>
                   )}
                 </motion.div>
@@ -1301,11 +1310,11 @@ export default function KoszykPage() {
 
               {/* Live summary */}
               <div className="bg-white rounded-2xl border border-brand-creamDark p-7">
-                <h3 className="font-medium text-xl text-brand-brown mb-5">Podsumowanie</h3>
+                <h3 className="font-medium text-xl text-brand-brown mb-5">Podsumowanie Twojego zamówienia</h3>
 
                 <div className="space-y-3 text-sm mb-5">
                   <div className="flex justify-between">
-                    <span className="text-brand-brown/70">Wartość produktów</span>
+                    <span className="text-brand-brown/70">Wartość Twoich miodów</span>
                     <span className="tabular-nums font-medium">{productsTotal} zł</span>
                   </div>
                   <div className="flex justify-between">
@@ -1335,7 +1344,7 @@ export default function KoszykPage() {
                 </Button>
 
                 <div className="mt-4 text-center text-[10px] leading-snug text-brand-brown/60">
-                  Bezpieczna płatność kartą, BLIK lub przelewem online
+                  Bezpieczna płatność kartą, BLIK lub przelewem online • miód prosto z pasieki
                 </div>
               </div>
             </div>

@@ -45,9 +45,11 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Rozszerzona baza paczkomatów InPost (~480+ wpisów)
-// - Toruń ~60, Bydgoszcz ~55, Grudziądz ~53, Inowrocław ~53, Włocławek ~53 (równomierne pokrycie osiedli + sklepy)
-// - Pozostałe miasta kujawsko-pomorskie (Świecie, Chełmno, Nakło, Brodnica, Tuchola itp.): 10-15 każdy
+// Rozszerzona baza paczkomatów InPost (~520+ wpisów)
+// - Toruń ~85-90 (bardzo dobre pokrycie wszystkich osiedli: Mokre, Rubinkowo I/II, Na Skarpie, Olsztyńska, Bielany, Koniuchy, Jar, Wrzosy, Chełmińskie, Centrum, Stare Miasto, Nowe Miasto)
+// - Bydgoszcz, Grudziądz, Inowrocław, Włocławek: 50-55 każdy
+// - Świecie: 25
+// - Pozostałe miasta kujawsko-pomorskie (Chełmno, Nakło, Brodnica, Tuchola itp.): 10-15 każdy
 // Każdy wpis ma realistyczny kod (np. TORxxx), pełny adres z osiedlem/sklepem i współrzędne do mapy.
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
   // Kilka z innych regionów (dla kompletności)
@@ -57,7 +59,7 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "POZ001", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150, lat: 52.4064, lng: 16.9252 },
   { code: "GDA001", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160, lat: 54.3520, lng: 18.6466 },
 
-  // === ŚWIECIE (13) ===
+  // === ŚWIECIE (25) ===
   { code: "SWI001", address: "ul. Wojska Polskiego 12 (Biedronka)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4128, lng: 18.4525 },
   { code: "SWI002", address: "ul. Wojska Polskiego 76 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4123, lng: 18.4521 },
   { code: "SWI003", address: "ul. Chełmińska 45 (Kaufland)", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4105, lng: 18.4480 },
@@ -71,6 +73,18 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "SWI011", address: "ul. Dworcowa 3 (stacja PKP)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4115, lng: 18.4490 },
   { code: "SWI012", address: "ul. Chełmińska 80", city: "Świecie", hours: "06:00-22:00", distanceKm: 5, lat: 53.4088, lng: 18.4425 },
   { code: "SWI013", address: "ul. Sportowa 10 (osiedle)", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4070, lng: 18.4535 },
+  { code: "SWI014", address: "ul. Wojska Polskiego 130 (Biedronka)", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4150, lng: 18.4555 },
+  { code: "SWI015", address: "ul. 3 Maja 55 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4110, lng: 18.4490 },
+  { code: "SWI016", address: "ul. Bydgoska 60 (Kaufland)", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4135, lng: 18.4515 },
+  { code: "SWI017", address: "ul. Kościuszki 55 (Żabka)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4105, lng: 18.4515 },
+  { code: "SWI018", address: "ul. Rynek 22 (centrum)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4095, lng: 18.4480 },
+  { code: "SWI019", address: "ul. Szkolna 30", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4080, lng: 18.4475 },
+  { code: "SWI020", address: "ul. Dworcowa 18 (osiedle)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4120, lng: 18.4500 },
+  { code: "SWI021", address: "ul. Chełmińska 110", city: "Świecie", hours: "06:00-22:00", distanceKm: 5, lat: 53.4095, lng: 18.4435 },
+  { code: "SWI022", address: "ul. 1 Maja 35 (Biedronka)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4118, lng: 18.4505 },
+  { code: "SWI023", address: "ul. Mickiewicza 18", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4098, lng: 18.4465 },
+  { code: "SWI024", address: "ul. Sportowa 25 (osiedle)", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4065, lng: 18.4545 },
+  { code: "SWI025", address: "ul. Bydgoska 90 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4160, lng: 18.4560 },
 
   // === CHEŁMNO (12) ===
   { code: "CHE001", address: "ul. Rynek 8", city: "Chełmno", hours: "24/7", distanceKm: 18, lat: 53.3480, lng: 18.4250 },
@@ -284,10 +298,12 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "BYD055", address: "ul. Fordońska 95 (Galeria Focus)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1380, lng: 18.0200 },
 
   // ============================================================
-  // TORUŃ — ~60 paczkomatów (równomierne pokrycie osiedli)
+  // TORUŃ — ~89 paczkomatów (bardzo dobre pokrycie całego miasta)
   // ============================================================
-  // Osiedla: Stare Miasto / Centrum, Chełmińskie, Bydgoskie Przedmieście,
-  // Rubinkowo I & II, Mokre, Bielany, Koniuchy, Jar, Na Skarpie, Wrzosy, Podgórze
+  // Osiedla pokryte: Mokre, Rubinkowo I, Rubinkowo II, Na Skarpie, Olsztyńska,
+  // Bielany, Koniuchy, Jar, Wrzosy, Chełmińskie Przedmieście, Centrum,
+  // Stare Miasto, Nowe Miasto, Podgórze i okolice.
+  // Przy Biedronkach, Lidlach, Kauflandach, Żabkach, galeriach i ulicach osiedlowych.
   { code: "TOR001", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.5984 },
   { code: "TOR002", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0155, lng: 18.5900 },
   { code: "TOR003", address: "ul. Chełmińska 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 36, lat: 53.0120, lng: 18.6050 },
@@ -349,6 +365,36 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "TOR058", address: "ul. Sienkiewicza 85 (os. Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0220, lng: 18.6100 },
   { code: "TOR059", address: "pl. Świętej Katarzyny 18 (Centrum)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0138, lng: 18.5988 },
   { code: "TOR060", address: "ul. Legionów 22 (Galeria Copernicus)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0160, lng: 18.6020 },
+  // === Rozszerzone wschodnie osiedla Torunia (Mokre, Rubinkowo I/II, Na Skarpie) ===
+  { code: "TOR061", address: "ul. Rubinkowska 12 (Biedronka, os. Rubinkowo I)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0258, lng: 18.6445 },
+  { code: "TOR062", address: "ul. Szubińska 105 (Lidl, os. Rubinkowo II)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0275, lng: 18.6510 },
+  { code: "TOR063", address: "ul. Włocławska 28 (Kaufland, os. Rubinkowo)", city: "Toruń", hours: "06:00-22:00", distanceKm: 38, lat: 53.0302, lng: 18.6570 },
+  { code: "TOR064", address: "ul. PCK 48 (Biedronka, os. Mokre)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0015, lng: 18.5750 },
+  { code: "TOR065", address: "ul. Łódzka 88 (Lidl, os. Mokre)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 52.9990, lng: 18.5685 },
+  { code: "TOR066", address: "ul. Olsztyńska 42 (Żabka, os. Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0078, lng: 18.5620 },
+  { code: "TOR067", address: "ul. Skarpowa 7 (os. Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0065, lng: 18.5590 },
+  { code: "TOR068", address: "ul. Bydgoska 195 (Biedronka, os. Bielany)", city: "Toruń", hours: "06:00-22:00", distanceKm: 39, lat: 53.0355, lng: 18.5795 },
+  { code: "TOR069", address: "ul. Gagarina 185 (Lidl, os. Bielany)", city: "Toruń", hours: "24/7", distanceKm: 40, lat: 53.0380, lng: 18.5750 },
+  { code: "TOR070", address: "ul. Koniuchy 22 (Biedronka, os. Koniuchy)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0165, lng: 18.6380 },
+  { code: "TOR071", address: "ul. Wschodnia 68 (Żabka, os. Koniuchy)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0195, lng: 18.6435 },
+  { code: "TOR072", address: "ul. Jarowa 28 (Lidl, os. Jar)", city: "Toruń", hours: "06:00-22:00", distanceKm: 34, lat: 53.0100, lng: 18.5650 },
+  { code: "TOR073", address: "ul. Chełmińska 165 (Biedronka, os. Chełmińskie Przedmieście)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0080, lng: 18.6180 },
+  { code: "TOR074", address: "ul. Sienkiewicza 102 (os. Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0235, lng: 18.6135 },
+  { code: "TOR075", address: "ul. Mickiewicza 95 (Biedronka, os. Nowe Miasto)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0185, lng: 18.6070 },
+  { code: "TOR076", address: "ul. Krasińskiego 72 (Lidl, os. Nowe Miasto)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0160, lng: 18.6035 },
+  { code: "TOR077", address: "ul. Kopernika 78 (Kaufland, Centrum)", city: "Toruń", hours: "06:00-23:00", distanceKm: 35, lat: 53.0145, lng: 18.6010 },
+  { code: "TOR078", address: "ul. Żeglarska 55 (os. Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0115, lng: 18.6125 },
+  { code: "TOR079", address: "ul. Szeroka 65 (Żabka, Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0180, lng: 18.5835 },
+  { code: "TOR080", address: "ul. Dąbrowskiego 82 (Biedronka, os. Mokre)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0035, lng: 18.5825 },
+  { code: "TOR081", address: "ul. Leśna 78 (os. Bielany)", city: "Toruń", hours: "24/7", distanceKm: 39, lat: 53.0320, lng: 18.5850 },
+  { code: "TOR082", address: "ul. Reja 95 (Lidl, os. Rubinkowo I)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0260, lng: 18.6390 },
+  { code: "TOR083", address: "ul. Broniewskiego 88 (Biedronka, os. Jar)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0125, lng: 18.5710 },
+  { code: "TOR084", address: "ul. Podgórna 58 (Żabka, os. Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0090, lng: 18.5600 },
+  { code: "TOR085", address: "ul. Legionów 55 (przy Galerii, Centrum)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0150, lng: 18.6050 },
+  { code: "TOR086", address: "ul. Włocławska 55 (Biedronka, os. Rubinkowo II)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0285, lng: 18.6540 },
+  { code: "TOR087", address: "ul. Olsztyńska 68 (Lidl, os. Na Skarpie)", city: "Toruń", hours: "06:00-22:00", distanceKm: 35, lat: 53.0080, lng: 18.5585 },
+  { code: "TOR088", address: "ul. Koniuchy 45 (Kaufland, os. Koniuchy)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0175, lng: 18.6410 },
+  { code: "TOR089", address: "ul. Bydgoska 220 (Biedronka, os. Bielany)", city: "Toruń", hours: "24/7", distanceKm: 40, lat: 53.0370, lng: 18.5810 },
 
   // ============================================================
   // GRUDZIĄDZ — ~53 paczkomatów (lepsze pokrycie osiedli)

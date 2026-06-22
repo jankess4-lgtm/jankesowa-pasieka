@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
+import dynamic from 'next/dynamic';
 import { startStripeCheckout, CheckoutCustomerData } from "@/lib/stripeCheckout";
 
 type DeliveryMethod = "address" | "parcel" | "pickup";
@@ -38,6 +39,8 @@ interface Paczkomat {
   city: string;
   hours: string;
   distanceKm?: number;
+  lat: number;
+  lng: number;
 }
 
 const STORAGE_KEY = "jankesowa_checkout_form";
@@ -45,51 +48,55 @@ const STORAGE_KEY = "jankesowa_checkout_form";
 // Expanded realistic InPost paczkomats - focused on Kujawy region + major cities
 // Includes entries for Świecie, Toruń, Bydgoszcz, Chełmno etc. so local searches work
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
-  // Warszawa
-  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240 },
-  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7", distanceKm: 238 },
+  // Warszawa (for completeness, but focus local)
+  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
+  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7", distanceKm: 238, lat: 52.2319, lng: 21.0067 },
   // Kraków
-  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7", distanceKm: 380 },
-  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7", distanceKm: 382 },
+  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7", distanceKm: 380, lat: 50.0619, lng: 19.9373 },
+  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7", distanceKm: 382, lat: 50.0640, lng: 19.9390 },
   // Wrocław
-  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław", hours: "24/7", distanceKm: 290 },
+  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław", hours: "24/7", distanceKm: 290, lat: 51.1079, lng: 17.0385 },
   // Poznań
-  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150 },
+  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150, lat: 52.4064, lng: 16.9252 },
   // Gdańsk
-  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160 },
-  // Local Kujawy / Pomorze - more entries for better search results (min 6-10 per city)
-  { code: "SWI001", address: "ul. Wojska Polskiego 12", city: "Świecie", hours: "24/7", distanceKm: 8 },
-  { code: "SWI002", address: "ul. 1 Maja 5", city: "Świecie", hours: "24/7", distanceKm: 6 },
-  { code: "SWI003", address: "ul. Chełmińska 20", city: "Świecie", hours: "06:00-22:00", distanceKm: 7 },
-  { code: "SWI004", address: "ul. Bydgoska 8", city: "Świecie", hours: "24/7", distanceKm: 9 },
-  { code: "SWI005", address: "ul. Szkolna 3", city: "Świecie", hours: "24/7", distanceKm: 4 },
-  { code: "SWI006", address: "ul. Kościuszki 10", city: "Świecie", hours: "24/7", distanceKm: 5 },
-  { code: "SWI007", address: "ul. Mickiewicza 2", city: "Świecie", hours: "06:00-22:00", distanceKm: 8 },
-  { code: "SWI008", address: "ul. 3 Maja 15", city: "Świecie", hours: "24/7", distanceKm: 7 },
-  { code: "TOR112", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35 },
-  { code: "TOR113", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33 },
-  { code: "TOR114", address: "ul. Chełmińska 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 36 },
-  { code: "TOR115", address: "ul. Mickiewicza 22", city: "Toruń", hours: "24/7", distanceKm: 34 },
-  { code: "TOR116", address: "ul. Żeglarska 8", city: "Toruń", hours: "24/7", distanceKm: 37 },
-  { code: "TOR117", address: "ul. Szeroka 12", city: "Toruń", hours: "24/7", distanceKm: 35 },
-  { code: "TOR118", address: "ul. Dąbrowskiego 5", city: "Toruń", hours: "06:00-22:00", distanceKm: 33 },
-  { code: "BYD001", address: "ul. Gdańska 50", city: "Bydgoszcz", hours: "24/7", distanceKm: 45 },
-  { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7", distanceKm: 43 },
-  { code: "BYD003", address: "ul. Długa 80", city: "Bydgoszcz", hours: "24/7", distanceKm: 47 },
-  { code: "BYD004", address: "ul. Pomorska 12", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44 },
-  { code: "BYD005", address: "ul. Gdańska 120", city: "Bydgoszcz", hours: "24/7", distanceKm: 46 },
-  { code: "BYD006", address: "ul. Focha 3", city: "Bydgoszcz", hours: "24/7", distanceKm: 41 },
-  { code: "BYD007", address: "ul. Nakielska 55", city: "Bydgoszcz", hours: "24/7", distanceKm: 50 },
-  { code: "BYD008", address: "ul. Marszałka Focha 10", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44 },
-  { code: "CHE001", address: "ul. Rynek 8", city: "Chełmno", hours: "24/7", distanceKm: 18 },
-  { code: "CHE002", address: "ul. Toruńska 18", city: "Chełmno", hours: "24/7", distanceKm: 16 },
-  { code: "CHE003", address: "ul. Świecka 5", city: "Chełmno", hours: "06:00-22:00", distanceKm: 19 },
-  { code: "CHE004", address: "ul. Rynek 25", city: "Chełmno", hours: "24/7", distanceKm: 17 },
-  { code: "CHE005", address: "ul. Wodna 2", city: "Chełmno", hours: "24/7", distanceKm: 15 },
-  { code: "GRU112", address: "ul. Długa 25", city: "Grudziądz", hours: "24/7", distanceKm: 25 },
-  { code: "GRU113", address: "ul. Chełmińska 42", city: "Grudziądz", hours: "24/7", distanceKm: 27 },
-  { code: "GRU114", address: "ul. Tczewska 10", city: "Grudziądz", hours: "24/7", distanceKm: 26 },
-  { code: "GRU115", address: "ul. Rzeźnicka 5", city: "Grudziądz", hours: "24/7", distanceKm: 24 },
+  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160, lat: 54.3520, lng: 18.6466 },
+  // Świecie area (main focus)
+  { code: "SWI001", address: "ul. Wojska Polskiego 12", city: "Świecie", hours: "24/7", distanceKm: 8, lat: 53.4090, lng: 18.4470 },
+  { code: "SWI002", address: "ul. 1 Maja 5", city: "Świecie", hours: "24/7", distanceKm: 6, lat: 53.4125, lng: 18.4500 },
+  { code: "SWI003", address: "ul. Chełmińska 20", city: "Świecie", hours: "06:00-22:00", distanceKm: 7, lat: 53.4080, lng: 18.4400 },
+  { code: "SWI004", address: "ul. Bydgoska 8", city: "Świecie", hours: "24/7", distanceKm: 9, lat: 53.4150, lng: 18.4550 },
+  { code: "SWI005", address: "ul. Szkolna 3", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4075, lng: 18.4485 },
+  { code: "SWI006", address: "ul. Kościuszki 10", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4105, lng: 18.4420 },
+  { code: "SWI007", address: "ul. Mickiewicza 2", city: "Świecie", hours: "06:00-22:00", distanceKm: 8, lat: 53.4060, lng: 18.4510 },
+  { code: "SWI008", address: "ul. 3 Maja 15", city: "Świecie", hours: "24/7", distanceKm: 7, lat: 53.4110, lng: 18.4380 },
+  // Toruń
+  { code: "TOR112", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.5984 },
+  { code: "TOR113", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0155, lng: 18.5900 },
+  { code: "TOR114", address: "ul. Chełmińska 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 36, lat: 53.0120, lng: 18.6050 },
+  { code: "TOR115", address: "ul. Mickiewicza 22", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0145, lng: 18.5950 },
+  { code: "TOR116", address: "ul. Żeglarska 8", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0100, lng: 18.6100 },
+  { code: "TOR117", address: "ul. Szeroka 12", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0170, lng: 18.5850 },
+  { code: "TOR118", address: "ul. Dąbrowskiego 5", city: "Toruń", hours: "06:00-22:00", distanceKm: 33, lat: 53.0090, lng: 18.6000 },
+  // Bydgoszcz
+  { code: "BYD001", address: "ul. Gdańska 50", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1235, lng: 18.0084 },
+  { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1300, lng: 18.0150 },
+  { code: "BYD003", address: "ul. Długa 80", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1200, lng: 18.0000 },
+  { code: "BYD004", address: "ul. Pomorska 12", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44, lat: 53.1250, lng: 17.9950 },
+  { code: "BYD005", address: "ul. Gdańska 120", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1280, lng: 18.0100 },
+  { code: "BYD006", address: "ul. Focha 3", city: "Bydgoszcz", hours: "24/7", distanceKm: 41, lat: 53.1180, lng: 18.0050 },
+  { code: "BYD007", address: "ul. Nakielska 55", city: "Bydgoszcz", hours: "24/7", distanceKm: 50, lat: 53.1350, lng: 17.9800 },
+  { code: "BYD008", address: "ul. Marszałka Focha 10", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44, lat: 53.1220, lng: 18.0120 },
+  // Chełmno
+  { code: "CHE001", address: "ul. Rynek 8", city: "Chełmno", hours: "24/7", distanceKm: 18, lat: 53.3480, lng: 18.4250 },
+  { code: "CHE002", address: "ul. Toruńska 18", city: "Chełmno", hours: "24/7", distanceKm: 16, lat: 53.3500, lng: 18.4300 },
+  { code: "CHE003", address: "ul. Świecka 5", city: "Chełmno", hours: "06:00-22:00", distanceKm: 19, lat: 53.3450, lng: 18.4200 },
+  { code: "CHE004", address: "ul. Rynek 25", city: "Chełmno", hours: "24/7", distanceKm: 17, lat: 53.3475, lng: 18.4280 },
+  { code: "CHE005", address: "ul. Wodna 2", city: "Chełmno", hours: "24/7", distanceKm: 15, lat: 53.3490, lng: 18.4220 },
+  // Grudziądz
+  { code: "GRU112", address: "ul. Długa 25", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4840, lng: 18.7530 },
+  { code: "GRU113", address: "ul. Chełmińska 42", city: "Grudziądz", hours: "24/7", distanceKm: 27, lat: 53.4800, lng: 18.7600 },
+  { code: "GRU114", address: "ul. Tczewska 10", city: "Grudziądz", hours: "24/7", distanceKm: 26, lat: 53.4870, lng: 18.7450 },
+  { code: "GRU115", address: "ul. Rzeźnicka 5", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4820, lng: 18.7550 },
 ];
 
 export default function KoszykPage() {
@@ -601,7 +608,19 @@ export default function KoszykPage() {
                             type="text"
                             value={parcelSearch}
                             onChange={(e) => {
-                              setParcelSearch(e.target.value);
+                              const val = e.target.value;
+                              setParcelSearch(val);
+                              // Immediate update for responsiveness (>=3 chars)
+                              if (val.trim().length >= 3 && deliveryMethod === "parcel") {
+                                const nq = normalize(val.trim());
+                                const results = SAMPLE_PACZKOMATS.filter((p) =>
+                                  normalize(p.code).includes(nq) ||
+                                  normalize(p.city).includes(nq) ||
+                                  normalize(p.address).includes(nq)
+                                );
+                                const sorted = [...results].sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+                                setSearchResults(sorted.slice(0, 10));
+                              }
                             }}
                             onFocus={() => {
                               // Show local starters on focus for parcel
@@ -616,7 +635,7 @@ export default function KoszykPage() {
                           <Search className="absolute left-3.5 top-3 h-4 w-4 text-brand-brown/50" />
                         </div>
                         <p className="text-xs text-brand-brown/60 mt-1">
-                          Wpisz min. 3 znaki nazwy miasta lub kodu paczkomatu. Wybierz z listy.
+                          Wpisz min. 3 znaki (miasto/kod). Pinezki na mapie i lista poniżej — kliknij aby wybrać.
                         </p>
                       </div>
 
@@ -703,26 +722,86 @@ export default function KoszykPage() {
                         )}
                       </AnimatePresence>
 
-                      {/* Simplified map placeholder with pins */}
-                      <div className="mt-2 rounded-xl border border-brand-creamDark bg-[#E8F5E9] p-3">
-                        <div className="h-20 rounded-lg relative bg-gradient-to-br from-emerald-100 to-emerald-200 border border-emerald-300 flex items-center justify-center overflow-hidden">
-                          <div className="text-emerald-700/60 text-xs">Mapa paczkomatów (placeholder)</div>
-                          {/* Pins */}
-                          {(searchResults.length > 0 ? searchResults : SAMPLE_PACZKOMATS.slice(0, 5)).map((p, i) => {
+                      {/* Enhanced interactive map placeholder (clickable pins, green-beige style) */}
+                      <div className="mt-2 rounded-2xl border border-brand-creamDark bg-[#F5EDE4] p-3 shadow-inner">
+                        <div 
+                          className="h-48 rounded-xl relative overflow-hidden border border-emerald-200"
+                          style={{
+                            background: 'linear-gradient(135deg, #d1fae5 0%, #a3e635 20%, #fef3c7 50%, #d1fae5 80%, #a3e635 100%)',
+                            backgroundSize: 'cover'
+                          }}
+                        >
+                          {/* Subtle map texture / fields */}
+                          <div className="absolute inset-0 opacity-30" 
+                               style={{
+                                 backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 16px), repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(139,69,19,0.1) 8px, rgba(139,69,19,0.1) 16px)'
+                               }} />
+
+                          {/* Fake roads */}
+                          <div className="absolute inset-0" style={{
+                            background: 'linear-gradient(90deg, transparent 48%, rgba(139,69,19,0.15) 49%, rgba(139,69,19,0.15) 51%, transparent 52%), linear-gradient(0deg, transparent 48%, rgba(139,69,19,0.12) 49%, rgba(139,69,19,0.12) 51%, transparent 52%)'
+                          }} />
+
+                          {/* Clickable pins from search results or default local */}
+                          {(searchResults.length > 0 ? searchResults : SAMPLE_PACZKOMATS.filter(p => ["Świecie","Toruń","Bydgoszcz","Chełmno","Grudziądz"].includes(p.city)).slice(0,6) ).map((p, i) => {
                             const isSel = selectedPaczkomat?.code === p.code;
+                            // Position based on lat/lng if available, else grid
+                            let left = 20 + (i * 12) % 60;
+                            let top = 25 + ((i * 18) % 50);
+                            if (p.lat && p.lng) {
+                              // Simple projection relative to local area bounds ~53.0-53.5 , 18.0-18.8
+                              const minLat = 53.0, maxLat = 53.5, minLng = 18.0, maxLng = 18.8;
+                              left = 10 + ((p.lng - minLng) / (maxLng - minLng)) * 80;
+                              top = 15 + ((maxLat - p.lat) / (maxLat - minLat)) * 70;
+                            }
                             return (
-                              <MapPin 
-                                key={i} 
-                                className={`absolute h-3 w-3 ${isSel ? 'text-emerald-700 scale-125' : 'text-emerald-600'}`} 
-                                style={{ left: `${20 + i * 15}%`, top: `${30 + (i % 2) * 20}%` }} 
-                              />
+                              <button
+                                key={i}
+                                onClick={() => selectPaczkomat(p)}
+                                className={`absolute flex flex-col items-center -translate-x-1/2 -translate-y-1/2 group transition-all ${isSel ? 'z-20 scale-110' : 'z-10 hover:scale-105'}`}
+                                style={{ left: `${Math.max(5, Math.min(95, left))}%`, top: `${Math.max(5, Math.min(95, top))}%` }}
+                                title={`Wybierz ${p.code} - ${p.address}`}
+                              >
+                                <div className={`relative ${isSel ? 'animate-bounce' : ''}`}>
+                                  <MapPin 
+                                    className={`h-6 w-6 drop-shadow-md transition-colors ${isSel ? 'text-emerald-700' : 'text-brand-brown group-hover:text-brand-gold'}`} 
+                                  />
+                                  {isSel && (
+                                    <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 border border-emerald-500">
+                                      <Check className="h-2.5 w-2.5 text-emerald-700" />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className={`mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium shadow-sm whitespace-nowrap transition-all ${isSel ? 'bg-emerald-700 text-white' : 'bg-white/90 text-brand-brown group-hover:bg-brand-cream'}`}>
+                                  {p.code}
+                                </div>
+                              </button>
                             );
                           })}
+
+                          {/* Center info / zoom simulation */}
+                          <div className="absolute top-2 left-2 bg-white/80 backdrop-blur px-2 py-0.5 rounded text-[10px] text-brand-brown font-medium shadow flex items-center gap-1">
+                            <MapPin className="h-3 w-3" /> {searchResults.length > 0 ? `${searchResults.length} paczkomatów` : 'Kujawy'}
+                          </div>
+
+                          {/* Fake zoom controls */}
+                          <div className="absolute bottom-2 right-2 flex flex-col bg-white/80 backdrop-blur rounded shadow text-brand-brown text-xs">
+                            <button onClick={() => { /* visual only */ }} className="px-1.5 hover:bg-brand-cream active:bg-brand-cream/70 border-b border-white/50 rounded-t">+</button>
+                            <button onClick={() => { /* visual only */ }} className="px-1.5 hover:bg-brand-cream active:bg-brand-cream/70 rounded-b">-</button>
+                          </div>
+
+                          {/* Selected info overlay */}
+                          {selectedPaczkomat && (
+                            <div className="absolute top-2 right-2 bg-emerald-700/90 text-white text-[9px] px-2 py-0.5 rounded shadow">
+                              Wybrano: {selectedPaczkomat.code}
+                            </div>
+                          )}
                         </div>
-                        <p className="text-[10px] text-emerald-700/60 mt-1 text-center">
+                        <p className="text-[10px] text-brand-brown/60 mt-1.5 text-center flex items-center justify-center gap-1">
                           {searchResults.length > 0 
-                            ? `${searchResults.length} wyników w okolicy` 
-                            : "Wpisz min. 3 znaki aby zobaczyć pinezki"}
+                            ? `Kliknij pinezkę na mapie lub w liście aby wybrać paczkomat` 
+                            : "Wpisz min. 3 znaki (miasto np. Świecie) — pinezki pojawią się tutaj"}
+                          <span className="text-[8px] opacity-50">(styl OpenStreetMap)</span>
                         </p>
                       </div>
 

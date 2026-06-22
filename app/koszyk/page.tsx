@@ -2,7 +2,7 @@
 
 import { useCart } from "@/lib/useCart";
 import { Button } from "@/components/ui/Button";
-import { Minus, Plus, Trash2, ArrowLeft, CreditCard, Truck, Package, Search, MapPin } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, CreditCard, Truck, Package, Search, MapPin, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -36,22 +36,29 @@ interface Paczkomat {
   code: string;
   address: string;
   city: string;
+  hours: string;
 }
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Sample realistic InPost paczkomats for demo search (expandable)
+// Expanded realistic InPost paczkomats (12+ for good search results)
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
-  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa" },
-  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa" },
-  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków" },
-  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków" },
-  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław" },
-  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań" },
-  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk" },
-  { code: "LUB234H", address: "ul. Krakowskie Przedmieście 15", city: "Lublin" },
-  { code: "KAT567I", address: "ul. 3 Maja 12", city: "Katowice" },
-  { code: "BIA890J", address: "ul. Sienkiewicza 7", city: "Białystok" },
+  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7" },
+  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7" },
+  { code: "WAW789C", address: "ul. Aleje Jerozolimskie 65", city: "Warszawa", hours: "06:00-22:00" },
+  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7" },
+  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7" },
+  { code: "KRK345E", address: "ul. Podwale 3", city: "Kraków", hours: "06:00-23:00" },
+  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław", hours: "24/7" },
+  { code: "WRO678F", address: "ul. Świdnicka 22", city: "Wrocław", hours: "24/7" },
+  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7" },
+  { code: "POZ901G", address: "ul. Święty Marcin 68", city: "Poznań", hours: "06:00-22:00" },
+  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7" },
+  { code: "GDA234H", address: "ul. Grunwaldzka 98", city: "Gdańsk", hours: "24/7" },
+  { code: "LUB234H", address: "ul. Krakowskie Przedmieście 15", city: "Lublin", hours: "24/7" },
+  { code: "KAT567I", address: "ul. 3 Maja 12", city: "Katowice", hours: "24/7" },
+  { code: "BIA890J", address: "ul. Sienkiewicza 7", city: "Białystok", hours: "06:00-22:00" },
+  { code: "LOD112K", address: "ul. Piotrkowska 45", city: "Łódź", hours: "24/7" },
 ];
 
 export default function KoszykPage() {
@@ -74,6 +81,7 @@ export default function KoszykPage() {
   const [parcelSearch, setParcelSearch] = useState("");
   const [searchResults, setSearchResults] = useState<Paczkomat[]>([]);
   const [selectedPaczkomat, setSelectedPaczkomat] = useState<Paczkomat | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Shipping cost
   const shippingCost = deliveryMethod === "address" ? 16 : 14;
@@ -89,26 +97,43 @@ export default function KoszykPage() {
         if (parsed.deliveryMethod) setDeliveryMethod(parsed.deliveryMethod);
         if (parsed.formData) {
           setFormData(parsed.formData);
-          // Restore selected paczkomat if parcel was chosen
-          if (parsed.deliveryMethod === "parcel" && parsed.formData.parcelLocker) {
-            const found = SAMPLE_PACZKOMATS.find(p => p.code === parsed.formData.parcelLocker);
-            if (found) {
-              setSelectedPaczkomat(found);
-              setParcelSearch(`${found.code} - ${found.city}`);
-            }
+        }
+        // Prefer full selectedPaczkomat object from storage
+        if (parsed.selectedPaczkomat) {
+          setSelectedPaczkomat(parsed.selectedPaczkomat);
+          setParcelSearch(parsed.selectedPaczkomat.code);
+        } else if (parsed.deliveryMethod === "parcel" && parsed.formData?.parcelLocker) {
+          // Fallback for older saved data
+          const found = SAMPLE_PACZKOMATS.find(p => p.code === parsed.formData.parcelLocker);
+          if (found) {
+            setSelectedPaczkomat(found);
+            setParcelSearch(found.code);
           }
+        }
+
+        // Ensure suggestions are visible for parcel method after restore
+        if (parsed.deliveryMethod === "parcel") {
+          setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
         }
       } catch {}
     }
   }, []);
 
-  // Save to localStorage on change
+  // Save to localStorage on change (include selected paczkomat for better persistence)
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ deliveryMethod, formData })
+      JSON.stringify({ deliveryMethod, formData, selectedPaczkomat })
     );
-  }, [deliveryMethod, formData]);
+  }, [deliveryMethod, formData, selectedPaczkomat]);
+
+  // Debounce for search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(parcelSearch);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [parcelSearch]);
 
   const updateField = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -118,41 +143,49 @@ export default function KoszykPage() {
     }
   };
 
-  // InPost-like paczkomat search (client-side demo, very realistic)
-  const performParcelSearch = (query: string) => {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      setSearchResults([]);
-      return;
-    }
-    const results = SAMPLE_PACZKOMATS.filter(
-      (p) =>
+  // Perform search using debounced value - always show good number of realistic results
+  useEffect(() => {
+    const q = debouncedSearch.trim().toLowerCase();
+    let results: Paczkomat[];
+    if (q) {
+      results = SAMPLE_PACZKOMATS.filter((p) =>
         p.code.toLowerCase().includes(q) ||
         p.city.toLowerCase().includes(q) ||
         p.address.toLowerCase().includes(q)
-    ).slice(0, 6);
-    setSearchResults(results);
-  };
+      );
+    } else {
+      // Show popular suggestions when no search term (intuitive for users)
+      results = SAMPLE_PACZKOMATS.slice(0, 8);
+    }
+    setSearchResults(results.slice(0, 10)); // ensure min 8-10 visible
+  }, [debouncedSearch]);
 
   const selectPaczkomat = (paczkomat: Paczkomat) => {
     setSelectedPaczkomat(paczkomat);
-    // Auto-fill the parcel locker number
+    // Auto-fill the parcel locker number with full info
     updateField("parcelLocker", paczkomat.code);
-    // Optionally store address info for display
-    setParcelSearch(`${paczkomat.code} - ${paczkomat.city}`);
-    setSearchResults([]); // hide results after selection
+
+    // Keep search term visible for context, but results stay so user sees the list
+    setParcelSearch(`${paczkomat.code}`);
 
     // Clear error
     if (errors.parcelLocker) {
       setErrors((prev) => ({ ...prev, parcelLocker: undefined }));
     }
+
+    // Optional toast for confirmation
+    toast.success(`Wybrano paczkomat ${paczkomat.code}`, {
+      description: `${paczkomat.address}, ${paczkomat.city}`,
+      duration: 2000,
+    });
   };
 
   const clearSelectedPaczkomat = () => {
     setSelectedPaczkomat(null);
     updateField("parcelLocker", "");
     setParcelSearch("");
-    setSearchResults([]);
+    // Show suggestions again so user can pick another easily
+    setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
   };
 
   const validateForm = (): boolean => {
@@ -197,6 +230,9 @@ export default function KoszykPage() {
     // Reset parcel search state when leaving parcel method
     if (method !== "parcel") {
       clearSelectedPaczkomat();
+    } else {
+      // When switching to parcel, show suggestions immediately
+      setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
     }
   };
 
@@ -486,10 +522,12 @@ export default function KoszykPage() {
                             value={parcelSearch}
                             onChange={(e) => {
                               setParcelSearch(e.target.value);
-                              performParcelSearch(e.target.value);
                             }}
                             onFocus={() => {
-                              if (parcelSearch) performParcelSearch(parcelSearch);
+                              // Show suggestions immediately on focus if no query
+                              if (!debouncedSearch) {
+                                setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
+                              }
                             }}
                             className="w-full rounded-xl border border-brand-creamDark bg-white pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
                             placeholder="Wpisz miasto lub kod (np. Warszawa lub WAW)"
@@ -510,71 +548,122 @@ export default function KoszykPage() {
                             exit={{ opacity: 0, height: 0 }}
                             className="border border-brand-creamDark rounded-xl overflow-hidden bg-white max-h-48 overflow-y-auto"
                           >
-                            {searchResults.map((p, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => selectPaczkomat(p)}
-                                className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-brand-cream/60 border-b border-brand-creamDark last:border-b-0 transition-colors"
-                              >
-                                <MapPin className="h-4 w-4 mt-0.5 text-brand-gold flex-shrink-0" />
-                                <div>
-                                  <div className="font-semibold text-brand-brown">{p.code}</div>
-                                  <div className="text-sm text-brand-brown/70">{p.address}, {p.city}</div>
-                                </div>
-                              </button>
-                            ))}
+                            {searchResults.map((p, idx) => {
+                              const isSelected = selectedPaczkomat?.code === p.code;
+                              return (
+                                <button
+                                  key={idx}
+                                  type="button"
+                                  onClick={() => selectPaczkomat(p)}
+                                  className={`w-full text-left px-4 py-3 flex items-start gap-3 border-b border-brand-creamDark last:border-b-0 transition-all ${
+                                    isSelected 
+                                      ? "bg-emerald-50 border-emerald-500 border-2" 
+                                      : "hover:bg-brand-cream/60"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2 flex-shrink-0 mt-0.5">
+                                    <MapPin className={`h-4 w-4 ${isSelected ? "text-emerald-600" : "text-brand-gold"}`} />
+                                    {isSelected && <Check className="h-4 w-4 text-emerald-600" />}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className={`font-semibold ${isSelected ? "text-emerald-700" : "text-brand-brown"}`}>
+                                      {p.code}
+                                    </div>
+                                    <div className="text-sm text-brand-brown/70">
+                                      {p.address}, {p.city}
+                                    </div>
+                                    <div className="text-[11px] text-brand-brown/50 mt-0.5">
+                                      Godziny: {p.hours}
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
                           </motion.div>
                         )}
                       </AnimatePresence>
 
-                      {/* Selected paczkomat display */}
+                      {/* Selected paczkomat display - prominent green selection */}
                       <AnimatePresence>
                         {selectedPaczkomat && (
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
-                            className="rounded-xl border border-brand-gold bg-brand-cream/30 p-4"
+                            className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-4"
                           >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <div className="flex items-center gap-2 text-sm font-medium text-brand-brown">
-                                  <Package className="h-4 w-4 text-brand-gold" />
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                                  <Check className="h-4 w-4" />
                                   Wybrany paczkomat
                                 </div>
-                                <div className="font-semibold text-lg text-brand-brown mt-0.5">
+                                <div className="font-bold text-xl text-emerald-800 mt-1 tabular-nums">
                                   {selectedPaczkomat.code}
                                 </div>
-                                <div className="text-sm text-brand-brown/70">
-                                  {selectedPaczkomat.address}, {selectedPaczkomat.city}
+                                <div className="text-sm text-emerald-700 mt-0.5">
+                                  {selectedPaczkomat.address}
+                                </div>
+                                <div className="text-sm text-emerald-600">
+                                  {selectedPaczkomat.city}
+                                </div>
+                                <div className="inline-flex items-center mt-2 text-[11px] bg-white px-2 py-0.5 rounded-full text-emerald-600 border border-emerald-200">
+                                  Godziny otwarcia: {selectedPaczkomat.hours}
                                 </div>
                               </div>
                               <button
                                 type="button"
                                 onClick={clearSelectedPaczkomat}
-                                className="text-xs text-brand-brown/60 hover:text-brand-brown underline"
+                                className="text-xs text-emerald-700 hover:text-emerald-900 underline whitespace-nowrap"
                               >
-                                Zmień
+                                Zmień wybór
                               </button>
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
 
-                      {/* Visual map placeholder (elegant demo) */}
-                      <div className="mt-2 rounded-xl border border-brand-creamDark bg-[#F8F4EF] p-3 text-center">
-                        <div className="h-20 flex items-center justify-center bg-gradient-to-br from-brand-cream to-white rounded-lg relative overflow-hidden">
-                          <div className="text-[11px] text-brand-brown/50 flex flex-col items-center">
-                            <MapPin className="h-5 w-5 mb-1 text-brand-gold" />
-                            Mapa paczkomatów InPost
-                            <span className="text-[10px]">(demo – wybierz powyżej)</span>
+                      {/* Interactive map placeholder (professional demo with pins) */}
+                      <div className="mt-2 rounded-xl border border-brand-creamDark bg-[#E8F5E9] p-3 overflow-hidden">
+                        <div className="h-24 rounded-lg relative overflow-hidden bg-[linear-gradient(135deg,#a5d6a7_0%,#81c784_25%,#a5d6a7_50%,#66bb6a_75%,#a5d6a7_100%)] border border-emerald-200">
+                          {/* Fake map grid / roads */}
+                          <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_12px,rgba(255,255,255,0.25)_12px,rgba(255,255,255,0.25)_14px)]" />
+                          <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent,transparent_12px,rgba(255,255,255,0.2)_12px,rgba(255,255,255,0.2)_14px)]" />
+
+                          {/* Location pins */}
+                          {SAMPLE_PACZKOMATS.slice(0, 5).map((p, i) => {
+                            const isThisSelected = selectedPaczkomat?.code === p.code;
+                            return (
+                              <div
+                                key={i}
+                                className={`absolute flex items-center justify-center transition-all ${isThisSelected ? 'z-10 scale-125' : 'opacity-70'}`}
+                                style={{
+                                  left: `${20 + (i % 3) * 25}%`,
+                                  top: `${25 + Math.floor(i / 3) * 35}%`,
+                                }}
+                              >
+                                <MapPin 
+                                  className={`h-4 w-4 drop-shadow ${isThisSelected ? 'text-emerald-700' : 'text-emerald-600'}`} 
+                                />
+                                {isThisSelected && (
+                                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-white text-[9px] px-1.5 py-0 rounded shadow text-emerald-700 font-medium whitespace-nowrap">
+                                    {selectedPaczkomat?.code}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+
+                          {/* Center label */}
+                          <div className="absolute bottom-1 right-2 bg-white/80 text-[9px] px-1.5 py-px rounded text-emerald-700 font-medium">
+                            {selectedPaczkomat ? selectedPaczkomat.city : "Polska"}
                           </div>
-                          {/* Decorative markers */}
-                          <div className="absolute top-3 right-4 w-2 h-2 bg-brand-gold rounded-full animate-pulse" />
-                          <div className="absolute bottom-4 left-6 w-1.5 h-1.5 bg-brand-brown/40 rounded-full" />
                         </div>
-                        <p className="text-[10px] text-brand-brown/50 mt-1.5">Paczkomat zostanie pokazany na mapie przy odbiorze</p>
+                        <p className="text-[10px] text-emerald-700/70 mt-1.5 text-center">
+                          {selectedPaczkomat 
+                            ? `Paczkomat ${selectedPaczkomat.code} zaznaczony na mapie` 
+                            : "Wybierz paczkomat powyżej, aby zobaczyć jego lokalizację"}
+                        </p>
                       </div>
 
                       {errors.parcelLocker && (

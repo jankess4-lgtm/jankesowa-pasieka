@@ -460,7 +460,7 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "WLO042", address: "ul. Dworcowa 10", city: "WĹ‚ocĹ‚awek", hours: "24/7", distanceKm: 69, lat: 52.6485, lng: 19.0620 },
 ];
 export default function KoszykPage() {
-  const { items, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
+  const { items, removeFromCart, updateQuantity, totalPrice, clearCart, isLoaded } = useCart();
 
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("address");
   const [formData, setFormData] = useState<FormData>({
@@ -627,7 +627,7 @@ export default function KoszykPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = "ImiÄ™ i nazwisko jest wymagane";
+    if (!formData.fullName.trim()) newErrors.fullName = "Imię i nazwisko jest wymagane";
     if (!formData.phone.trim()) newErrors.phone = "Numer telefonu jest wymagany";
     if (!formData.email.trim()) {
       newErrors.email = "Adres e-mail jest wymagany";
@@ -678,11 +678,28 @@ export default function KoszykPage() {
   };
 
   const handleCheckout = async () => {
-    if (items.length === 0) return;
+    // Always read the freshest cart state directly from localStorage to avoid any stale React state issues
+    // and ensure the correct items are sent to Stripe checkout
+    let currentItems = items;
+    try {
+      const saved = localStorage.getItem("jankesowa-pasieka-cart");
+      if (saved) {
+        currentItems = JSON.parse(saved);
+        // apply same filter as useCart for consistency
+        currentItems = currentItems.filter((item: any) => !item.name?.toLowerCase().includes("pyłek"));
+      }
+    } catch (e) {
+      console.error("Błąd odczytu koszyka z localStorage:", e);
+    }
+
+    if (!currentItems || currentItems.length === 0) {
+      toast.error("Twój koszyk jest pusty");
+      return;
+    }
 
     if (!validateForm()) {
       toast.error("Uzupełnij wymagane pola", {
-        description: "SprawdĹş formularz i sprĂłbuj ponownie.",
+        description: "Sprawdź formularz i spróbuj ponownie.",
       });
       return;
     }
@@ -710,7 +727,7 @@ export default function KoszykPage() {
           : {}),
       };
 
-      await startStripeCheckout(items, customerData);
+      await startStripeCheckout(currentItems, customerData);
       // Stripe will redirect
     } catch (err: any) {
       toast.error("Błąd płatności", {
@@ -721,15 +738,15 @@ export default function KoszykPage() {
     }
   };
 
-  if (items.length === 0) {
+  if (isLoaded && items.length === 0) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center bg-[#F5EDE4] px-6">
         <div className="text-center max-w-xs">
           <div className="mx-auto w-16 h-16 bg-brand-cream rounded-full flex items-center justify-center mb-6">
             <span className="text-3xl">đźŞ´</span>
           </div>
-          <h1 className="font-serif text-3xl text-brand-brown mb-3">Koszyk jest pusty</h1>
-          <p className="text-brand-brown/70 mb-8">Dodaj wybrane miody ze strony oferty.</p>
+          <h1 className="font-serif text-3xl text-brand-brown mb-3">Twój koszyk jest pusty</h1>
+          <p className="text-brand-brown/70 mb-8">Nie masz jeszcze produktów w koszyku. Dodaj wybrane miody ze strony oferty.</p>
           <Link href="/produkty">
             <Button variant="secondary">Przejdź do oferty</Button>
           </Link>

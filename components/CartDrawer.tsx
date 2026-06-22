@@ -30,6 +30,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const handleCheckout = () => {
     if (items.length === 0) return;
     // Direct users to full checkout form for complete delivery details
+    // Use full navigation to ensure /koszyk page loads with fresh cart state from localStorage
+    setIsCheckingOut(true);
     window.location.href = "/koszyk";
   };
 
@@ -80,8 +82,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="w-20 h-20 rounded-full bg-brand-cream flex items-center justify-center mb-6">
                   <ShoppingBag className="w-9 h-9 text-brand-brown/40" />
                 </div>
-                <p className="text-lg text-brand-brown/80 mb-1">Koszyk jest pusty</p>
-                <p className="text-sm text-brand-brown/60 mb-8">Dodaj wybrane miody i produkty pszczele</p>
+                <p className="text-lg text-brand-brown/80 mb-1">Twój koszyk jest pusty</p>
+                <p className="text-sm text-brand-brown/60 mb-8">Nie masz jeszcze produktów w koszyku. Dodaj wybrane miody i produkty pszczele</p>
                 <Button variant="secondary" onClick={onClose}>
                   Przeglądaj ofertę
                 </Button>

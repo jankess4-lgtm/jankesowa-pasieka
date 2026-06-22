@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   try {
-    const { items } = await request.json();
+    const { items, customer } = await request.json();
 
     // Detailed logging for debugging session creation issues
     console.log("Full cart items received:", JSON.stringify(items, null, 2));
@@ -60,6 +60,25 @@ export async function POST(request: NextRequest) {
 
     console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 
+    // Prepare customer / delivery metadata
+    const deliveryMeta: Record<string, string> = {};
+    if (customer) {
+      deliveryMeta.customer_name = customer.fullName || "";
+      deliveryMeta.customer_phone = customer.phone || "";
+      deliveryMeta.customer_email = customer.email || "";
+      deliveryMeta.delivery_method = customer.deliveryMethod || "";
+
+      if (customer.deliveryMethod === "address") {
+        deliveryMeta.shipping_street = customer.street || "";
+        deliveryMeta.shipping_postal_code = customer.postalCode || "";
+        deliveryMeta.shipping_city = customer.city || "";
+        deliveryMeta.shipping_cost = "16";
+      } else if (customer.deliveryMethod === "parcel") {
+        deliveryMeta.parcel_locker = customer.parcelLocker || "";
+        deliveryMeta.shipping_cost = "14";
+      }
+    }
+
     // Create Checkout Session - MAXIMALLY force Jankesowa Pasieka branding (złoto-miodowy #D97706)
     // Using every possible field to override default white / previous account branding
     const session = await stripe.checkout.sessions.create({
@@ -69,6 +88,9 @@ export async function POST(request: NextRequest) {
       line_items: lineItems,
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
       cancel_url: `${origin}/cancel`,
+
+      // Customer email if provided
+      ...(customer?.email ? { customer_email: customer.email } : {}),
 
       // 1. Top level metadata with ALL branding keys - duplicated many times to maximally override
       metadata: {
@@ -83,9 +105,11 @@ export async function POST(request: NextRequest) {
         company_name: "Jankesowa_Pasieka",
         primary_color: "#D97706",
         company_logo: logoUrl,
+        // Order & customer data
+        ...deliveryMeta,
       },
 
-      // 2. payment_intent_data.metadata - duplicate branding here too
+      // 2. payment_intent_data.metadata - duplicate branding here too + customer info
       payment_intent_data: {
         metadata: {
           business_name: "Jankesowa Pasieka",
@@ -95,6 +119,7 @@ export async function POST(request: NextRequest) {
           accent: "#D97706",
           company: "Jankesowa Pasieka",
           primary_color: "#D97706",
+          ...deliveryMeta,
         },
       },
 

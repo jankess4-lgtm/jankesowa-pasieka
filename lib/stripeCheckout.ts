@@ -3,7 +3,22 @@ import { CartItem } from "./types";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-export async function startStripeCheckout(items: CartItem[] | any[]) {
+export interface CheckoutCustomerData {
+  fullName: string;
+  phone: string;
+  email: string;
+  // For address delivery
+  street?: string;
+  postalCode?: string;
+  city?: string;
+  // For parcel locker
+  parcelLocker?: string;
+}
+
+export async function startStripeCheckout(
+  items: CartItem[] | any[],
+  customerData?: CheckoutCustomerData & { deliveryMethod: 'address' | 'parcel' }
+) {
   if (!items || items.length === 0) {
     throw new Error("Koszyk jest pusty");
   }
@@ -19,6 +34,7 @@ export async function startStripeCheckout(items: CartItem[] | any[]) {
         quantity: item.quantity || 1,
         unit: item.unit,
       })),
+      customer: customerData,
     }),
   });
 

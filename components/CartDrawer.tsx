@@ -27,21 +27,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (items.length === 0) return;
-
-    setIsCheckingOut(true);
-
-    try {
-      await startStripeCheckout(items);
-      // On success payment provider will redirect; cart is cleared on /success
-    } catch (err: any) {
-      toast.error("Błąd płatności", {
-        description: err.message || "Nie udało się rozpocząć płatności.",
-      });
-    } finally {
-      setIsCheckingOut(false);
-    }
+    // Direct users to full checkout form for complete delivery details
+    window.location.href = "/koszyk";
   };
 
   const shippingCost = totalPrice > 150 ? 0 : 14;
@@ -182,12 +171,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </div>
                   </div>
 
-                  {totalPrice < 150 && (
-                    <div className="flex items-center gap-2 text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80">
-                      <Truck className="w-4 h-4 flex-shrink-0" />
-                      <span>Brakuje {150 - totalPrice} zł do darmowej dostawy</span>
-                    </div>
-                  )}
+                  <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80">
+                    Koszt dostawy: 14–16 zł (zależnie od metody). Szczegóły przy finalizacji.
+                  </div>
 
                   <Button
                     onClick={handleCheckout}

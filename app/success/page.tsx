@@ -186,7 +186,78 @@ function SuccessContent() {
           {/* Header / Thank you */}
           <div className="px-8 md:px-12 pt-10 pb-8 text-center border-b border-brand-creamDark bg-[#FBF7F2]">
             <div className="mx-auto w-20 h-20 rounded-full bg-brand-gold/10 flex items-center justify-center mb-6 ring-1 ring-brand-gold/20">
-              <span className="text-5xl">🐝</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 64 64" 
+                className="w-12 h-12 drop-shadow-[0_2px_4px_rgba(146,64,14,0.18)]"
+                aria-hidden="true"
+              >
+                {/* Wings - elegant, soft green-gold with delicate outline for premium feel */}
+                <ellipse 
+                  cx="22" cy="25" rx="12.5" ry="7.5" 
+                  fill="#166534" 
+                  fillOpacity="0.12" 
+                  stroke="#B45309" 
+                  strokeWidth="1.6"
+                  transform="rotate(-30 22 25)"
+                />
+                <ellipse 
+                  cx="42" cy="25" rx="12.5" ry="7.5" 
+                  fill="#166534" 
+                  fillOpacity="0.12" 
+                  stroke="#B45309" 
+                  strokeWidth="1.6"
+                  transform="rotate(30 42 25)"
+                />
+
+                {/* Body - refined honey gold with rich brown definition */}
+                <ellipse 
+                  cx="32" cy="33" rx="9.5" ry="15.5" 
+                  fill="#D97706" 
+                  stroke="#92400E" 
+                  strokeWidth="2.5"
+                  strokeLinejoin="round"
+                />
+
+                {/* Subtle, elegant stripes */}
+                <line x1="24" y1="25" x2="40" y2="25" stroke="#92400E" strokeWidth="2.4" strokeLinecap="round" />
+                <line x1="24.5" y1="32" x2="39.5" y2="32" stroke="#92400E" strokeWidth="2.1" strokeLinecap="round" />
+                <line x1="25.5" y1="39" x2="38.5" y2="39" stroke="#92400E" strokeWidth="1.6" strokeLinecap="round" />
+
+                {/* Head - balanced and sophisticated */}
+                <circle 
+                  cx="32" cy="15.5" r="6" 
+                  fill="#D97706" 
+                  stroke="#92400E" 
+                  strokeWidth="2.2"
+                />
+
+                {/* Fine, elegant antennae */}
+                <path 
+                  d="M28 10 Q23.5 5.5 21 3.5" 
+                  fill="none" 
+                  stroke="#92400E" 
+                  strokeWidth="1.35" 
+                  strokeLinecap="round" 
+                />
+                <circle cx="21" cy="3.5" r="1.25" fill="#B45309" />
+                
+                <path 
+                  d="M36 10 Q40.5 5.5 43 3.5" 
+                  fill="none" 
+                  stroke="#92400E" 
+                  strokeWidth="1.35" 
+                  strokeLinecap="round" 
+                />
+                <circle cx="43" cy="3.5" r="1.25" fill="#B45309" />
+
+                {/* Very subtle highlight for depth and luxury */}
+                <ellipse 
+                  cx="29" cy="27" rx="2.8" ry="4.5" 
+                  fill="#F5EDE4" 
+                  fillOpacity="0.22"
+                />
+              </svg>
             </div>
 
             <h1 className="font-serif text-4xl md:text-5xl text-brand-brown tracking-[-0.5px] leading-tight mb-4">

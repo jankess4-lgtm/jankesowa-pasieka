@@ -44,11 +44,10 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Rozszerzona baza paczkomatów InPost (duża, działająca lista 70-80+ wpisów)
-// - Toruń (Mokre, Rubinkowo, Na Skarpie i wiele innych osiedli)
-// - Bydgoszcz, Świecie, Grudziądz, Inowrocław, Włocławek
-// - Katowice, Gliwice i inne
-// Każdy wpis ma code, address, city (plus hours, distance dla UI)
+// Rozszerzona baza paczkomatów InPost (80-100+ widocznych, z całej Polski)
+// - Toruń (Mokre, Rubinkowo, Na Skarpie i wiele innych)
+// - Bydgoszcz, Świecie, Wrocław, Poznań, Katowice, Gliwice i inne
+// Każdy wpis ma code, address, city (z nazwą sklepu w nawiasie)
 const paczkomaty: Paczkomat[] = [
   // Kilka z innych regionów (dla kompletności)
   { code: "WAW001", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
@@ -232,7 +231,7 @@ const paczkomaty: Paczkomat[] = [
   { code: "MOG003", address: "ul. 3 Maja 7 (Biedronka)", city: "Mogilno", hours: "24/7", distanceKm: 78, lat: 52.6620, lng: 17.9520 },
   { code: "STR001", address: "ul. Rynek 3", city: "Strzelno", hours: "24/7", distanceKm: 72, lat: 52.6280, lng: 18.1720 },
   { code: "STR002", address: "ul. 1 Maja 10", city: "Strzelno", hours: "24/7", distanceKm: 71, lat: 52.6250, lng: 18.1680 },
-  { code: "SEP004", address: "ul. 1 Maja 25", city: "Słpłlno Krajełskie", hours: "24/7", distanceKm: 42, lat: 53.4580, lng: 17.5280 },
+  { code: "SEP004", address: "ul. 1 Maja 25", city: "Sępólno Krajeńskie", hours: "24/7", distanceKm: 42, lat: 53.4580, lng: 17.5280 },
   { code: "ZNI003", address: "ul. 3 Maja 12", city: "Żnin", hours: "24/7", distanceKm: 65, lat: 52.8520, lng: 17.7180 },
 
   // ============================================================
@@ -292,13 +291,13 @@ const paczkomaty: Paczkomat[] = [
   { code: "BYD051", address: "ul. Gdańska 380 (os. Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1420, lng: 18.0100 },
   { code: "BYD052", address: "ul. Dworcowa 95 (Biedronka, os. Śródmieście)", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1290, lng: 17.9950 },
   { code: "BYD053", address: "ul. Pomorska 180 (Żabka, os. Wilczak)", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1185, lng: 17.9750 },
-  { code: "BYD054", address: "ul. Kujawska 160 (Lidl, os. Kapułciska)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1125, lng: 18.0300 },
+  { code: "BYD054", address: "ul. Kujawska 160 (Lidl, os. Kapuściska)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1125, lng: 18.0300 },
   { code: "BYD055", address: "ul. Fordońska 95 (Galeria Focus)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1380, lng: 18.0200 },
 
   // ============================================================
   // TORUŃ — 55 paczkomatów (równomierne pokrycie całego miasta)
   // ============================================================
-  // Szczegłlne pokrycie wschodnich osiedli: Mokre, Rubinkowo I, Rubinkowo II, Na Skarpie, Olsztyńska, Bielany, Koniuchy, Jar, Wrzosy
+  // Szczególne pokrycie wschodnich osiedli: Mokre, Rubinkowo I, Rubinkowo II, Na Skarpie, Olsztyńska, Bielany, Koniuchy, Jar, Wrzosy
   // Paczkomaty przy Biedronkach, Lidlach, Żabkach i głównych ulicach osiedlowych.
   { code: "TOR001", address: "ul. Kopernika 12 (Biedronka, Centrum)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0135, lng: 18.5975 },
   { code: "TOR002", address: "ul. Mickiewicza 18", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0142, lng: 18.5960 },
@@ -593,6 +592,34 @@ const paczkomaty: Paczkomat[] = [
   { code: "GLI010", address: "ul. Kujawska 20 (Lidl)", city: "Gliwice", hours: "24/7", distanceKm: 288, lat: 50.2880, lng: 18.6680 },
   { code: "GLI011", address: "ul. Tarnogórska 80 (Żabka)", city: "Gliwice", hours: "06:00-22:00", distanceKm: 291, lat: 50.3100, lng: 18.6800 },
   { code: "GLI012", address: "ul. Wielicka 12 (Biedronka)", city: "Gliwice", hours: "24/7", distanceKm: 289, lat: 50.2820, lng: 18.6620 },
+
+  // === WROCŁAW (12) ===
+  { code: "WRO001", address: "ul. Świdnicka 15 (Biedronka, Centrum)", city: "Wrocław", hours: "24/7", distanceKm: 180, lat: 51.109, lng: 17.033 },
+  { code: "WRO002", address: "ul. Legnicka 40 (Lidl)", city: "Wrocław", hours: "24/7", distanceKm: 182, lat: 51.115, lng: 17.020 },
+  { code: "WRO003", address: "ul. Piłsudskiego 80 (Żabka, Krzyki)", city: "Wrocław", hours: "06:00-22:00", distanceKm: 178, lat: 51.085, lng: 17.050 },
+  { code: "WRO004", address: "ul. Grabiszyńska 20 (Biedronka)", city: "Wrocław", hours: "24/7", distanceKm: 181, lat: 51.095, lng: 17.010 },
+  { code: "WRO005", address: "pl. Grunwaldzki 10 (Kaufland)", city: "Wrocław", hours: "24/7", distanceKm: 179, lat: 51.110, lng: 17.055 },
+  { code: "WRO006", address: "ul. Borowska 120 (Lidl, Południe)", city: "Wrocław", hours: "24/7", distanceKm: 183, lat: 51.070, lng: 17.040 },
+  { code: "WRO007", address: "ul. Ruska 8 (Żabka, Stare Miasto)", city: "Wrocław", hours: "06:00-22:00", distanceKm: 177, lat: 51.112, lng: 17.025 },
+  { code: "WRO008", address: "ul. Kamienna 50 (Biedronka)", city: "Wrocław", hours: "24/7", distanceKm: 180, lat: 51.100, lng: 17.015 },
+  { code: "WRO009", address: "ul. Traugutta 30 (Lidl)", city: "Wrocław", hours: "24/7", distanceKm: 182, lat: 51.118, lng: 17.035 },
+  { code: "WRO010", address: "ul. Hallera 80 (Żabka)", city: "Wrocław", hours: "06:00-22:00", distanceKm: 179, lat: 51.080, lng: 17.060 },
+  { code: "WRO011", address: "ul. Legnicka 200 (Biedronka, Fabryczna)", city: "Wrocław", hours: "24/7", distanceKm: 184, lat: 51.125, lng: 17.000 },
+  { code: "WRO012", address: "ul. Powstańców Śląskich 15 (Kaufland)", city: "Wrocław", hours: "24/7", distanceKm: 181, lat: 51.105, lng: 17.045 },
+
+  // === POZNAŃ (12) ===
+  { code: "POZ002", address: "ul. Święty Marcin 30 (Biedronka, Centrum)", city: "Poznań", hours: "24/7", distanceKm: 140, lat: 52.406, lng: 16.925 },
+  { code: "POZ003", address: "ul. Głogowska 80 (Lidl)", city: "Poznań", hours: "24/7", distanceKm: 142, lat: 52.395, lng: 16.900 },
+  { code: "POZ004", address: "ul. Dąbrowskiego 50 (Żabka, Jeżyce)", city: "Poznań", hours: "06:00-22:00", distanceKm: 138, lat: 52.420, lng: 16.910 },
+  { code: "POZ005", address: "ul. Hetmańska 20 (Biedronka)", city: "Poznań", hours: "24/7", distanceKm: 141, lat: 52.380, lng: 16.950 },
+  { code: "POZ006", address: "pl. Wielkopolski 5 (Kaufland)", city: "Poznań", hours: "24/7", distanceKm: 139, lat: 52.410, lng: 16.935 },
+  { code: "POZ007", address: "ul. Bukowska 100 (Lidl, Ławica)", city: "Poznań", hours: "24/7", distanceKm: 143, lat: 52.430, lng: 16.880 },
+  { code: "POZ008", address: "ul. Ratajczaka 15 (Żabka)", city: "Poznań", hours: "06:00-22:00", distanceKm: 137, lat: 52.405, lng: 16.920 },
+  { code: "POZ009", address: "ul. Garbary 60 (Biedronka)", city: "Poznań", hours: "24/7", distanceKm: 140, lat: 52.415, lng: 16.945 },
+  { code: "POZ010", address: "ul. Warszawska 40 (Lidl)", city: "Poznań", hours: "24/7", distanceKm: 142, lat: 52.395, lng: 16.960 },
+  { code: "POZ011", address: "ul. Roosevelta 25 (Żabka, Wilda)", city: "Poznań", hours: "06:00-22:00", distanceKm: 138, lat: 52.385, lng: 16.915 },
+  { code: "POZ012", address: "ul. Grunwaldzka 150 (Kaufland)", city: "Poznań", hours: "24/7", distanceKm: 141, lat: 52.425, lng: 16.890 },
+  { code: "POZ013", address: "ul. Polna 80 (Biedronka)", city: "Poznań", hours: "24/7", distanceKm: 139, lat: 52.400, lng: 16.970 },
 ];
 
 export default function KoszykPage() {
@@ -677,7 +704,7 @@ export default function KoszykPage() {
     return match ? match[1] : null;
   };
 
-  // Large list of paczkomats (70-80+), filtered on input
+  // Large list of paczkomats (80-100+ visible), filtered on input
   const paczkomatList = (() => {
     const q = parcelSearch.trim();
     if (q.length >= 1) {
@@ -686,21 +713,21 @@ export default function KoszykPage() {
         normalize(p.code).includes(nq) ||
         normalize(p.address).includes(nq) ||
         normalize(p.city).includes(nq)
-      ).slice(0, 80);
+      ).slice(0, 100);
     }
-    // Default: large visible list (70-80+) balanced from key cities incl. new ones
-    const priority = ["Toruń", "Bydgoszcz", "Świecie", "Katowice", "Gliwice", "Grudziądz", "Inowrocław", "Włocławek"];
+    // Default: large visible list (80-100+) from key cities across Poland
+    const priority = ["Toruń", "Bydgoszcz", "Świecie", "Wrocław", "Poznań", "Katowice", "Gliwice", "Grudziądz", "Inowrocław", "Włocławek"];
     let items: Paczkomat[] = [];
     priority.forEach(city => {
-      const take = (city === "Toruń") ? 15 : 9;
+      const take = (city === "Toruń") ? 18 : 10;
       const cityItems = paczkomaty.filter(p => p.city === city).slice(0, take);
       items = items.concat(cityItems);
     });
-    if (items.length < 70) {
-      const extras = paczkomaty.filter(p => !priority.includes(p.city)).slice(0, 80 - items.length);
+    if (items.length < 80) {
+      const extras = paczkomaty.filter(p => !priority.includes(p.city)).slice(0, 100 - items.length);
       items = items.concat(extras);
     }
-    return items.slice(0, 90);
+    return items.slice(0, 100);
   })();
 
   const selectPaczkomat = (paczkomat: Paczkomat) => {
@@ -974,7 +1001,7 @@ export default function KoszykPage() {
                         <span className="font-medium text-brand-brown">Paczkomat InPost</span>
                         <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">14 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Wybierz punkt blisko Ciebie • odbiór 24/7</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Wybierz paczkomat w swojej okolicy • odbiór 24/7</p>
                     </div>
                   </label>
 
@@ -1122,10 +1149,10 @@ export default function KoszykPage() {
                             }
                           }}
                           className="w-full rounded-xl border-2 border-brand-creamDark bg-white px-4 py-3.5 text-base focus:outline-none focus:border-brand-gold font-mono tracking-[2px]"
-                          placeholder="Wpisz kod paczkomatu (np. SWI001)"
+                          placeholder="Wpisz kod paczkomatu (np. SWI001, TOR045, KAT023, WRO078)"
                         />
                         <p className="text-xs text-brand-brown/60 mt-1.5">
-                          Wpisz kod (np. SWI001) lub wybierz z listy poniżej – lista się filtruje.
+                          Wpisz kod lub nazwę miasta – lista filtruje się automatycznie. Kliknij, aby wybrać.
                         </p>
                       </div>
 
@@ -1156,13 +1183,11 @@ export default function KoszykPage() {
                                 {(() => {
                                   const store = getStoreName(selectedPaczkomat.address);
                                   return store ? (
-                                    <div className="mt-1 inline-block text-xs bg-white border border-brand-gold/40 text-brand-brown px-2 py-0.5 rounded">
-                                      {store}
-                                    </div>
+                                    <div className="mt-1 text-xs text-brand-brown/70">Sklep: {store}</div>
                                   ) : null;
                                 })()}
 
-                                <div className="mt-1 text-brand-brown/80">{selectedPaczkomat.city}</div>
+                                <div className="mt-1 text-brand-brown/80">Miasto: {selectedPaczkomat.city}</div>
 
                                 <div className="mt-2 inline-flex items-center rounded-full bg-white border border-brand-creamDark px-3 py-px text-xs text-brand-brown/70">
                                   Godziny: {selectedPaczkomat.hours}
@@ -1184,10 +1209,10 @@ export default function KoszykPage() {
                       {/* Duża, widoczna lista paczkomatów (70-80+ pozycji) */}
                       <div>
                         <div className="flex items-center justify-between mb-2 px-0.5">
-                          <span className="text-xs font-medium tracking-[1px] text-brand-brown/70 uppercase">Wybierz z listy</span>
+                          <span className="text-xs font-medium tracking-[1px] text-brand-brown/70 uppercase">Wybierz z listy paczkomatów</span>
                           <span className="text-[10px] text-brand-brown/50 tabular-nums">{paczkomatList.length} paczkomatów</span>
                         </div>
-                        <div className="border border-brand-creamDark rounded-2xl bg-white max-h-[480px] overflow-y-auto shadow-inner divide-y divide-brand-creamDark">
+                        <div className="border border-brand-creamDark rounded-2xl bg-white max-h-[500px] overflow-y-auto shadow-inner divide-y divide-brand-creamDark">
                           {paczkomatList.length > 0 ? (
                             paczkomatList.map((p) => {
                               const isSelected = selectedPaczkomat?.code === p.code;
@@ -1220,7 +1245,7 @@ export default function KoszykPage() {
                             <div className="px-4 py-6 text-sm text-brand-brown/60 text-center">Brak wyników.</div>
                           )}
                         </div>
-                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Wpisz kod (np. SWI001) lub miasto – lista się filtruje. Kliknij pozycję, aby wypełnić i zobaczyć podsumowanie.</p>
+                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">80–100 paczkomatów z całej Polski. Wpisz kod lub miasto – lista filtruje się. Kliknij pozycję, aby wybrać.</p>
                       </div>
 
                       {errors.parcelLocker && (

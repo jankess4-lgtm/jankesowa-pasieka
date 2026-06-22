@@ -48,7 +48,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
     } catch (err: any) {
       console.error(err);
       toast.error("Błąd płatności", {
-        description: err.message || "Nie udało się rozpocząć płatności Stripe.",
+        description: err.message || "Nie udało się rozpocząć płatności.",
       });
     } finally {
       setIsStripeLoading(false);
@@ -155,7 +155,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             </Button>
           </div>
 
-          {/* Direct Stripe Checkout button */}
+          {/* Direct payment button */}
           <Button
             onClick={handleStripeCheckout}
             size="sm"
@@ -164,7 +164,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             className="w-full gap-2 text-xs tracking-[0.5px] border-brand-gold/60 text-brand-brown hover:bg-brand-gold/5 active:bg-brand-gold/10"
           >
             <CreditCard className="w-3.5 h-3.5" />
-            {isStripeLoading ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
+            {isStripeLoading ? "Przekierowanie do płatności..." : "Zapłać"}
           </Button>
         </div>
       </div>

@@ -74,7 +74,7 @@ function SuccessContent() {
           cartClearedRef.current = true;
         }
       } catch (err: any) {
-        console.error("Błąd pobierania sesji Stripe:", err);
+        console.error("Błąd pobierania sesji płatności:", err);
         setError(err.message || "Nie udało się potwierdzić płatności. Skontaktuj się z nami.");
       } finally {
         setLoading(false);

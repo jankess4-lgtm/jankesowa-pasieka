@@ -23,7 +23,7 @@ export default function KoszykPage() {
 
     try {
       await startStripeCheckout(items);
-      // Stripe redirects; cart cleared on success page
+      // Payment redirects; cart cleared on success page
     } catch (err: any) {
       toast.error("Błąd płatności", {
         description: err.message || "Nie udało się rozpocząć płatności.",
@@ -137,7 +137,7 @@ export default function KoszykPage() {
                 disabled={isCheckingOut}
               >
                 <CreditCard className="w-4 h-4" />
-                {isCheckingOut ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
+                {isCheckingOut ? "Przekierowanie do płatności..." : "Zapłać"}
               </Button>
 
               <div className="mt-4 text-center text-[10px] leading-snug text-brand-brown/60">

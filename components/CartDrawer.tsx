@@ -34,10 +34,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
     try {
       await startStripeCheckout(items);
-      // On success Stripe will redirect; cart is cleared on /success
+      // On success payment provider will redirect; cart is cleared on /success
     } catch (err: any) {
       toast.error("Błąd płatności", {
-        description: err.message || "Nie udało się rozpocząć płatności Stripe.",
+        description: err.message || "Nie udało się rozpocząć płatności.",
       });
     } finally {
       setIsCheckingOut(false);
@@ -195,7 +195,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     disabled={isCheckingOut}
                   >
                     <CreditCard className="w-4 h-4" />
-                    {isCheckingOut ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
+                    {isCheckingOut ? "Przekierowanie do płatności..." : "Zapłać"}
                   </Button>
 
                   <p className="text-[10px] text-center text-brand-brown/50 leading-snug">

@@ -28,7 +28,7 @@ export default function ProductActions({ product, isAvailable }: ProductActionsP
       } as any]);
     } catch (err: any) {
       console.error(err);
-      alert(err.message || "Nie udało się rozpocząć płatności Stripe. Spróbuj ponownie.");
+      alert(err.message || "Nie udało się rozpocząć płatności. Spróbuj ponownie.");
     } finally {
       setIsStripeLoading(false);
     }
@@ -69,7 +69,7 @@ export default function ProductActions({ product, isAvailable }: ProductActionsP
         className="w-full gap-2 border-brand-gold/70 text-brand-brown hover:bg-brand-gold/5"
       >
         <CreditCard className="w-4 h-4" />
-        {isStripeLoading ? "Przekierowanie do Stripe..." : "Zapłać przez Stripe"}
+        {isStripeLoading ? "Przekierowanie do płatności..." : "Zapłać"}
       </Button>
 
       <p className="text-[10px] text-center text-brand-brown/50">

@@ -655,6 +655,89 @@ const paczkomaty: Paczkomat[] = [
   { code: "POZ011", address: "ul. Roosevelta 25 (Żabka, Wilda)", city: "Poznań", hours: "06:00-22:00", distanceKm: 138, lat: 52.385, lng: 16.915 },
   { code: "POZ012", address: "ul. Grunwaldzka 150 (Kaufland)", city: "Poznań", hours: "24/7", distanceKm: 141, lat: 52.425, lng: 16.890 },
   { code: "POZ013", address: "ul. Polna 80 (Biedronka)", city: "Poznań", hours: "24/7", distanceKm: 139, lat: 52.400, lng: 16.970 },
+
+  // ============================================================
+  // DODATKOWE PACZKOMATY — TYLKO DODANO (Bydgoszcz + woj. kujawsko-pomorskie)
+  // Min. 25-30+ nowych z Bydgoszczy (Fordon, Wyżyny, Kapuściska, Bartodzieje, Szwederowo, Centrum, Leśne, Okole, Błonie itd.)
+  // + dodatkowe z Grudziądza, Inowrocławia, Świecia, Chełmna, Nakła, Brodnicy
+  // ============================================================
+
+  // Bydgoszcz — nowe (30+)
+  { code: "BYD080", address: "ul. Gdańska 12 (Centrum)", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1238, lng: 18.0086 },
+  { code: "BYD081", address: "ul. Dworcowa 45 (Centrum)", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1195, lng: 18.0155 },
+  { code: "BYD082", address: "ul. Szubińska 78 (Biedronka, Szwederowo)", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1198, lng: 17.9982 },
+  { code: "BYD083", address: "ul. Pelplińska 23 (Fordon)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 52, lat: 53.1452, lng: 18.0555 },
+  { code: "BYD084", address: "ul. Twardzickiego 15 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 51, lat: 53.1482, lng: 18.0602 },
+  { code: "BYD085", address: "ul. Kromera 67 (Wyżyny)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1082, lng: 17.9655 },
+  { code: "BYD086", address: "ul. Nakielska 120 (Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 49, lat: 53.1390, lng: 17.9630 },
+  { code: "BYD087", address: "ul. Chodkiewicza 45 (Kapuściska)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1128, lng: 18.0295 },
+  { code: "BYD088", address: "ul. Okolna 18 (Okole)", city: "Bydgoszcz", hours: "24/7", distanceKm: 44, lat: 53.1355, lng: 17.9820 },
+  { code: "BYD089", address: "ul. Leśna 45 (Leśne)", city: "Bydgoszcz", hours: "24/7", distanceKm: 51, lat: 53.1425, lng: 17.9685 },
+  { code: "BYD090", address: "ul. Bartosza 22 (Bartodzieje)", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1348, lng: 18.0370 },
+  { code: "BYD091", address: "ul. Szwedzka 8 (Szwederowo)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1225, lng: 18.0320 },
+  { code: "BYD092", address: "ul. Fordońska 310 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 53, lat: 53.1470, lng: 18.0620 },
+  { code: "BYD093", address: "ul. Kujawska 210 (Kapuściska)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1105, lng: 18.0270 },
+  { code: "BYD094", address: "ul. Kromera 155 (Wyżyny)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1060, lng: 17.9620 },
+  { code: "BYD095", address: "ul. Pelplińska 78 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 52, lat: 53.1465, lng: 18.0575 },
+  { code: "BYD096", address: "ul. Twardzickiego 48 (Fordon)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 51, lat: 53.1490, lng: 18.0635 },
+  { code: "BYD097", address: "ul. Nakielska 165 (Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 50, lat: 53.1405, lng: 17.9600 },
+  { code: "BYD098", address: "ul. Chodkiewicza 88 (Kapuściska)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1115, lng: 18.0330 },
+  { code: "BYD099", address: "ul. Gdańska 210 (Centrum)", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1285, lng: 18.0125 },
+  { code: "BYD100", address: "ul. Dworcowa 82 (Centrum)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 43, lat: 53.1205, lng: 18.0170 },
+  { code: "BYD101", address: "ul. Jagiellońska 195 (Bartodzieje)", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1365, lng: 18.0405 },
+  { code: "BYD102", address: "ul. Grunwaldzka 265 (Szwederowo)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1200, lng: 18.0280 },
+  { code: "BYD103", address: "ul. Pomorska 195 (Okole)", city: "Bydgoszcz", hours: "24/7", distanceKm: 44, lat: 53.1340, lng: 17.9785 },
+  { code: "BYD104", address: "ul. Leśna 72 (Leśne)", city: "Bydgoszcz", hours: "24/7", distanceKm: 50, lat: 53.1440, lng: 17.9650 },
+  { code: "BYD105", address: "ul. Szubińska 195 (Wyżyny)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1075, lng: 17.9680 },
+  { code: "BYD106", address: "ul. Fordońska 175 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 50, lat: 53.1418, lng: 18.0450 },
+  { code: "BYD107", address: "ul. Kujawska 135 (Kapuściska)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 47, lat: 53.1135, lng: 18.0245 },
+  { code: "BYD108", address: "ul. Marszałka Focha 95 (Centrum)", city: "Bydgoszcz", hours: "24/7", distanceKm: 44, lat: 53.1215, lng: 18.0140 },
+  { code: "BYD109", address: "ul. Wojska Polskiego 145 (Błonie)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1370, lng: 17.9720 },
+  { code: "BYD110", address: "ul. Kromera 210 (Wyżyny)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1045, lng: 17.9595 },
+  { code: "BYD111", address: "ul. Pelplińska 115 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 52, lat: 53.1478, lng: 18.0590 },
+  { code: "BYD112", address: "ul. Okolna 55 (Okole)", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1368, lng: 17.9805 },
+  { code: "BYD113", address: "ul. Szwederowska 30 (Szwederowo)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 48, lat: 53.1238, lng: 18.0295 },
+  { code: "BYD114", address: "ul. Bartosza 68 (Bartodzieje)", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1330, lng: 18.0420 },
+  { code: "BYD115", address: "ul. Twardzickiego 82 (Fordon)", city: "Bydgoszcz", hours: "24/7", distanceKm: 51, lat: 53.1505, lng: 18.0650 },
+
+  // Dodatkowe z województwa kujawsko-pomorskiego
+  // Grudziądz
+  { code: "GRU054", address: "ul. Długa 280 (Biedronka, os. Rządz)", city: "Grudziądz", hours: "24/7", distanceKm: 27, lat: 53.4705, lng: 18.7795 },
+  { code: "GRU055", address: "ul. Chełmińska 310 (Lidl)", city: "Grudziądz", hours: "24/7", distanceKm: 28, lat: 53.4690, lng: 18.7820 },
+  { code: "GRU056", address: "ul. Tczewska 145 (os. Wyspa)", city: "Grudziądz", hours: "24/7", distanceKm: 26, lat: 53.4920, lng: 18.7230 },
+  { code: "GRU057", address: "ul. Rzeźnicka 130 (Żabka)", city: "Grudziądz", hours: "06:00-22:00", distanceKm: 25, lat: 53.4755, lng: 18.7555 },
+  { code: "GRU058", address: "ul. 1 Maja 105 (Kaufland, os. Kopernika)", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4830, lng: 18.7450 },
+  { code: "GRU059", address: "ul. Dworcowa 175 (Biedronka)", city: "Grudziądz", hours: "24/7", distanceKm: 23, lat: 53.4870, lng: 18.7355 },
+  { code: "GRU060", address: "ul. Szkolna 82 (os. Śródmieście)", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4845, lng: 18.7435 },
+
+  // Inowrocław
+  { code: "INO054", address: "ul. Solankowa 185 (Biedronka, os. Solanki)", city: "Inowrocław", hours: "24/7", distanceKm: 54, lat: 52.8110, lng: 18.2580 },
+  { code: "INO055", address: "ul. Kujawska 195 (Lidl, os. Rąbin)", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.7865, lng: 18.2395 },
+  { code: "INO056", address: "ul. Toruńska 165 (Kaufland)", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.8120, lng: 18.2780 },
+  { code: "INO057", address: "ul. 3 Maja 85 (Biedronka, Stare Miasto)", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 54, lat: 52.7955, lng: 18.2570 },
+  { code: "INO058", address: "ul. Dworcowa 190 (Żabka)", city: "Inowrocław", hours: "24/7", distanceKm: 53, lat: 52.8025, lng: 18.2475 },
+  { code: "INO059", address: "ul. Poznańska 235 (Lidl, os. Młyny)", city: "Inowrocław", hours: "24/7", distanceKm: 58, lat: 52.7820, lng: 18.2875 },
+  { code: "INO060", address: "ul. Solankowa 95 (os. Piastowskie)", city: "Inowrocław", hours: "24/7", distanceKm: 53, lat: 52.8055, lng: 18.2595 },
+
+  // Świecie (dodatkowe)
+  { code: "SWI026", address: "ul. Wojska Polskiego 165 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4165, lng: 18.4565 },
+  { code: "SWI027", address: "ul. Chełmińska 145 (Biedronka)", city: "Świecie", hours: "06:00-22:00", distanceKm: 5, lat: 53.4075, lng: 18.4410 },
+  { code: "SWI028", address: "ul. Rynek 38 (centrum)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4092, lng: 18.4478 },
+
+  // Chełmno (dodatkowe)
+  { code: "CHE013", address: "ul. Rynek 42 (Biedronka)", city: "Chełmno", hours: "24/7", distanceKm: 17, lat: 53.3468, lng: 18.4295 },
+  { code: "CHE014", address: "ul. Toruńska 82 (Lidl)", city: "Chełmno", hours: "24/7", distanceKm: 15, lat: 53.3535, lng: 18.4370 },
+  { code: "CHE015", address: "ul. Świecka 28", city: "Chełmno", hours: "06:00-22:00", distanceKm: 18, lat: 53.3442, lng: 18.4185 },
+
+  // Nakło nad Notecią (dodatkowe)
+  { code: "NAK013", address: "ul. Bydgoska 115 (Lidl)", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 30, lat: 53.1360, lng: 17.6135 },
+  { code: "NAK014", address: "ul. Kościuszki 55 (Biedronka)", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 29, lat: 53.1405, lng: 17.6010 },
+  { code: "NAK015", address: "ul. Notecka 45", city: "Nakło nad Notecią", hours: "06:00-22:00", distanceKm: 31, lat: 53.1370, lng: 17.6080 },
+
+  // Brodnica (dodatkowe)
+  { code: "BRO013", address: "ul. Kościuszki 65 (Biedronka)", city: "Brodnica", hours: "24/7", distanceKm: 55, lat: 53.2575, lng: 19.3875 },
+  { code: "BRO014", address: "ul. 3 Maja 55 (Lidl)", city: "Brodnica", hours: "24/7", distanceKm: 56, lat: 53.2540, lng: 19.3830 },
+  { code: "BRO015", address: "ul. Zamkowa 28", city: "Brodnica", hours: "06:00-22:00", distanceKm: 54, lat: 53.2615, lng: 19.4045 },
 ];
 
 export default function KoszykPage() {

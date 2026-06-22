@@ -45,8 +45,8 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Expanded realistic InPost paczkomats (50+ entries) - focused on województwo kujawsko-pomorskie
-// Especially detailed for Świecie (Biedronka at Wojska Polskiego 12, Lidl at 76 and many more), Toruń, Bydgoszcz, Chełmno, Grudziądz etc.
+// Expanded realistic InPost paczkomats (80+ entries) - heavily focused on województwo kujawsko-pomorskie
+// Especially detailed for Świecie (Biedronka Wojska Polskiego, Lidl, Kaufland, Rynek, Dworcowa), Toruń (12+), Bydgoszcz (15+), plus Brodnica, Włocławek, Chełmno, Grudziądz, Inowrocław, Nakło, Ciechocinek, Tuchola and many more.
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
   // Warszawa (for completeness)
   { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
@@ -137,6 +137,92 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "CHE007", address: "ul. Toruńska 55", city: "Chełmno", hours: "24/7", distanceKm: 14, lat: 53.3520, lng: 18.4350 },
   { code: "NAK004", address: "ul. Bydgoska 55", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 28, lat: 53.1435, lng: 17.5980 },
   { code: "INO004", address: "ul. Solankowa 20", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 53, lat: 52.8020, lng: 18.2680 },
+
+  // === DODATKOWE — Bydgoszcz (teraz 16+) ===
+  { code: "BYD014", address: "ul. Gdańska 250 (Biedronka)", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1345, lng: 18.0280 },
+  { code: "BYD015", address: "ul. Wojska Polskiego 12", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1255, lng: 17.9985 },
+  { code: "BYD016", address: "ul. Fordońska 140 (Lidl)", city: "Bydgoszcz", hours: "24/7", distanceKm: 49, lat: 53.1400, lng: 18.0350 },
+  { code: "BYD017", address: "ul. Jagiellońska 80 (Kaufland)", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44, lat: 53.1285, lng: 18.0180 },
+  { code: "BYD018", address: "ul. Szubińska 120", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1120, lng: 17.9820 },
+  { code: "BYD019", address: "ul. Pomorska 88", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1230, lng: 17.9880 },
+
+  // === DODATKOWE — Toruń (teraz 13+) ===
+  { code: "TOR122", address: "ul. Broniewskiego 15", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0150, lng: 18.5750 },
+  { code: "TOR123", address: "ul. Reja 22 (Biedronka)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0205, lng: 18.6050 },
+  { code: "TOR124", address: "ul. Krasińskiego 8", city: "Toruń", hours: "06:00-23:00", distanceKm: 35, lat: 53.0095, lng: 18.5920 },
+  { code: "TOR125", address: "pl. Rapackiego 1", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0125, lng: 18.5980 },
+
+  // === DODATKOWE — Świecie (teraz 19) ===
+  { code: "SWI018", address: "ul. 3 Maja 55 (Rossmann)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4090, lng: 18.4485 },
+  { code: "SWI019", address: "ul. Bydgoska 88", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4155, lng: 18.4550 },
+
+  // === BRODNICA (6) ===
+  { code: "BRO001", address: "ul. Kościuszki 15", city: "Brodnica", hours: "24/7", distanceKm: 55, lat: 53.2590, lng: 19.3950 },
+  { code: "BRO002", address: "ul. Zamkowa 5", city: "Brodnica", hours: "24/7", distanceKm: 54, lat: 53.2605, lng: 19.4020 },
+  { code: "BRO003", address: "ul. 3 Maja 28 (Lidl)", city: "Brodnica", hours: "24/7", distanceKm: 56, lat: 53.2550, lng: 19.3850 },
+  { code: "BRO004", address: "ul. Sądowa 10", city: "Brodnica", hours: "06:00-22:00", distanceKm: 53, lat: 53.2620, lng: 19.4080 },
+  { code: "BRO005", address: "ul. Mickiewicza 40", city: "Brodnica", hours: "24/7", distanceKm: 55, lat: 53.2575, lng: 19.3900 },
+  { code: "BRO006", address: "ul. Chopina 3", city: "Brodnica", hours: "24/7", distanceKm: 57, lat: 53.2520, lng: 19.3980 },
+
+  // === WŁOCŁAWEK (teraz 5+) ===
+  { code: "WLO003", address: "ul. Kaliska 30 (Biedronka)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6550, lng: 19.0800 },
+  { code: "WLO004", address: "ul. Żytnia 12", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6420, lng: 19.0550 },
+  { code: "WLO005", address: "ul. Kilińskiego 45", city: "Włocławek", hours: "06:00-22:00", distanceKm: 68, lat: 52.6600, lng: 19.0720 },
+
+  // === CIECHOCINEK (4) ===
+  { code: "CIE001", address: "ul. Zdrojowa 15", city: "Ciechocinek", hours: "24/7", distanceKm: 62, lat: 52.8800, lng: 18.7950 },
+  { code: "CIE002", address: "ul. Kopernika 8", city: "Ciechocinek", hours: "24/7", distanceKm: 61, lat: 52.8820, lng: 18.7850 },
+  { code: "CIE003", address: "ul. Wojska Polskiego 5", city: "Ciechocinek", hours: "06:00-22:00", distanceKm: 63, lat: 52.8785, lng: 18.8020 },
+  { code: "CIE004", address: "pl. Zdrojowy 1", city: "Ciechocinek", hours: "24/7", distanceKm: 62, lat: 52.8795, lng: 18.7920 },
+
+  // === ALEKSANDRÓW KUJAWSKI (3) ===
+  { code: "ALE001", address: "ul. 3 Maja 10", city: "Aleksandrów Kujawski", hours: "24/7", distanceKm: 58, lat: 52.8760, lng: 18.6930 },
+  { code: "ALE002", address: "ul. Kościuszki 25 (Lidl)", city: "Aleksandrów Kujawski", hours: "24/7", distanceKm: 59, lat: 52.8720, lng: 18.6850 },
+  { code: "ALE003", address: "ul. Toruńska 12", city: "Aleksandrów Kujawski", hours: "24/7", distanceKm: 57, lat: 52.8800, lng: 18.7000 },
+
+  // === TUCHOLA (4) ===
+  { code: "TUC001", address: "ul. Kościuszki 20", city: "Tuchola", hours: "24/7", distanceKm: 48, lat: 53.5890, lng: 17.8600 },
+  { code: "TUC002", address: "ul. 1 Maja 8", city: "Tuchola", hours: "24/7", distanceKm: 49, lat: 53.5850, lng: 17.8550 },
+  { code: "TUC003", address: "ul. Bydgoska 30", city: "Tuchola", hours: "06:00-22:00", distanceKm: 47, lat: 53.5920, lng: 17.8720 },
+  { code: "TUC004", address: "pl. Wolności 5", city: "Tuchola", hours: "24/7", distanceKm: 48, lat: 53.5875, lng: 17.8580 },
+
+  // === SĘPÓLNO KRAJEŃSKIE (3) ===
+  { code: "SEP001", address: "ul. Kościuszki 12", city: "Sępólno Krajeńskie", hours: "24/7", distanceKm: 42, lat: 53.4550, lng: 17.5300 },
+  { code: "SEP002", address: "ul. 1 Maja 15 (Biedronka)", city: "Sępólno Krajeńskie", hours: "24/7", distanceKm: 41, lat: 53.4520, lng: 17.5250 },
+  { code: "SEP003", address: "ul. Bydgoska 3", city: "Sępólno Krajeńskie", hours: "24/7", distanceKm: 43, lat: 53.4600, lng: 17.5380 },
+
+  // === LIPNO (3) ===
+  { code: "LIP001", address: "ul. 3 Maja 18", city: "Lipno", hours: "24/7", distanceKm: 75, lat: 52.8450, lng: 19.1800 },
+  { code: "LIP002", address: "ul. Kościuszki 7", city: "Lipno", hours: "24/7", distanceKm: 74, lat: 52.8420, lng: 19.1750 },
+  { code: "LIP003", address: "ul. Toruńska 22", city: "Lipno", hours: "06:00-22:00", distanceKm: 76, lat: 52.8480, lng: 19.1880 },
+
+  // === RYPIN (3) ===
+  { code: "RYP001", address: "ul. 3 Maja 10", city: "Rypin", hours: "24/7", distanceKm: 68, lat: 52.8550, lng: 19.4100 },
+  { code: "RYP002", address: "ul. Kościuszki 30", city: "Rypin", hours: "24/7", distanceKm: 67, lat: 52.8520, lng: 19.4050 },
+  { code: "RYP003", address: "ul. Lipnowska 5", city: "Rypin", hours: "24/7", distanceKm: 69, lat: 52.8580, lng: 19.4180 },
+
+  // === GOLUB-DOBRZYŃ (3) ===
+  { code: "GOL001", address: "ul. Ratuszowa 2", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 52, lat: 53.1100, lng: 19.0500 },
+  { code: "GOL002", address: "ul. 3 Maja 15", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 53, lat: 53.1050, lng: 19.0450 },
+  { code: "GOL003", address: "ul. Bydgoska 8", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 51, lat: 53.1150, lng: 19.0550 },
+
+  // === MOGILNO (2) ===
+  { code: "MOG001", address: "ul. Rynek 4", city: "Mogilno", hours: "24/7", distanceKm: 78, lat: 52.6600, lng: 17.9500 },
+  { code: "MOG002", address: "ul. Kościuszki 18", city: "Mogilno", hours: "24/7", distanceKm: 77, lat: 52.6550, lng: 17.9450 },
+
+  // === UZUPEŁNIENIA — Chełmno, Grudziądz, Inowrocław, Nakło, Koronowo, Solec, Żnin ===
+  { code: "CHE008", address: "ul. Dworcowa 3", city: "Chełmno", hours: "24/7", distanceKm: 16, lat: 53.3485, lng: 18.4320 },
+  { code: "CHE009", address: "ul. 1 Maja 22", city: "Chełmno", hours: "06:00-22:00", distanceKm: 18, lat: 53.3510, lng: 18.4150 },
+  { code: "GRU118", address: "ul. 3 Maja 28 (Kaufland)", city: "Grudziądz", hours: "06:00-22:00", distanceKm: 24, lat: 53.4780, lng: 18.7580 },
+  { code: "GRU119", address: "ul. Chełmińska 120", city: "Grudziądz", hours: "24/7", distanceKm: 26, lat: 53.4750, lng: 18.7650 },
+  { code: "GRU120", address: "ul. Dworcowa 40", city: "Grudziądz", hours: "24/7", distanceKm: 23, lat: 53.4875, lng: 18.7500 },
+  { code: "INO005", address: "ul. Kujawska 30 (Biedronka)", city: "Inowrocław", hours: "24/7", distanceKm: 54, lat: 52.7950, lng: 18.2550 },
+  { code: "INO006", address: "ul. Toruńska 45", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.8050, lng: 18.2750 },
+  { code: "NAK005", address: "ul. 1 Maja 10", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 29, lat: 53.1410, lng: 17.5920 },
+  { code: "NAK006", address: "ul. Poznańska 22", city: "Nakło nad Notecią", hours: "06:00-22:00", distanceKm: 31, lat: 53.1350, lng: 17.6100 },
+  { code: "KOR002", address: "ul. Bydgoska 15", city: "Koronowo", hours: "24/7", distanceKm: 26, lat: 53.3180, lng: 17.9350 },
+  { code: "SOL002", address: "ul. Toruńska 8 (Lidl)", city: "Solec Kujawski", hours: "24/7", distanceKm: 39, lat: 53.0820, lng: 18.2250 },
+  { code: "ZNI002", address: "ul. 1 Maja 5", city: "Żnin", hours: "24/7", distanceKm: 66, lat: 52.8450, lng: 17.7150 },
 ];
 
 export default function KoszykPage() {
@@ -240,7 +326,7 @@ export default function KoszykPage() {
           normalize(p.address).includes(nq)
         );
       }
-      return local.length > 0 ? local.slice(0, 10) : SAMPLE_PACZKOMATS.slice(0, 8);
+      return local.length > 0 ? local.slice(0, 15) : SAMPLE_PACZKOMATS.slice(0, 10);
     }
     const nq = normalize(q);
     let results = SAMPLE_PACZKOMATS.filter((p) =>
@@ -255,7 +341,7 @@ export default function KoszykPage() {
       if (aCity !== bCity) return aCity - bCity;
       return (a.distanceKm ?? 999) - (b.distanceKm ?? 999);
     });
-    return results.slice(0, 10);
+    return results.slice(0, 15);
   };
 
   // Perform search using debounced value - min 3 chars, always results for parcel
@@ -680,7 +766,7 @@ export default function KoszykPage() {
                           <Search className="absolute left-3.5 top-3 h-4 w-4 text-brand-brown/50" />
                         </div>
                         <p className="text-xs text-brand-brown/60 mt-1">
-                          Wpisz nazwę miasta lub kod. Wybierz z listy lub kliknij pinezkę na mapie.
+                          Wpisz nazwę miasta (Świecie, Bydgoszcz, Toruń...) lub kod paczkomatu. Wybierz z listy lub kliknij pinezkę.
                         </p>
                       </div>
 
@@ -696,7 +782,7 @@ export default function KoszykPage() {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="border border-brand-creamDark rounded-2xl overflow-hidden bg-white max-h-[188px] overflow-y-auto shadow-sm"
+                              className="border border-brand-creamDark rounded-2xl overflow-hidden bg-white max-h-[220px] overflow-y-auto shadow-sm"
                             >
                               {searchResults.map((p, idx) => {
                                 const isSelected = selectedPaczkomat?.code === p.code;
@@ -807,14 +893,14 @@ export default function KoszykPage() {
                               if (selectedPaczkomat && !mapPins.some(m => m.code === selectedPaczkomat.code)) {
                                 mapPins = [selectedPaczkomat, ...mapPins];
                               }
-                              if (mapPins.length < 13) {
-                                const localCities = ["Świecie","Toruń","Bydgoszcz","Chełmno","Grudziądz","Nakło nad Notecią"];
+                              if (mapPins.length < 15) {
+                                const localCities = ["Świecie","Toruń","Bydgoszcz","Chełmno","Grudziądz","Nakło nad Notecią","Brodnica","Włocławek"];
                                 const extras = SAMPLE_PACZKOMATS.filter(p => 
                                   localCities.includes(p.city) && !mapPins.some(m => m.code === p.code)
                                 );
-                                mapPins = [...mapPins, ...extras].slice(0, 18);
+                                mapPins = [...mapPins, ...extras].slice(0, 22);
                               }
-                              return mapPins.slice(0, 18).map((p, i) => {
+                              return mapPins.slice(0, 22).map((p, i) => {
                                 const isSel = selectedPaczkomat?.code === p.code;
                                 let left = 18 + (i * 4.7) % 64;
                                 let top = 24 + ((i * 6.3) % 52);
@@ -870,7 +956,7 @@ export default function KoszykPage() {
                           <p className="text-[9px] text-[#5c4033]/65 mt-1.5 text-center">
                             {searchResults.length > 0 
                               ? `Pinezki odpowiadają wynikom • kliknij na mapie lub liście, by wybrać` 
-                              : "Wpisz miasto (Świecie, Toruń, Bydgoszcz...) — pojawią się pinezki do kliknięcia"}
+                              : "Wpisz miasto (Świecie, Toruń, Bydgoszcz, Brodnica...) — pojawią się liczne pinezki"}
                           </p>
                         </div>
                       </div>

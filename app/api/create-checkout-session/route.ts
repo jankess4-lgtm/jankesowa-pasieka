@@ -76,6 +76,9 @@ export async function POST(request: NextRequest) {
       } else if (customer.deliveryMethod === "parcel") {
         deliveryMeta.parcel_locker = customer.parcelLocker || "";
         deliveryMeta.shipping_cost = "14";
+      } else if (customer.deliveryMethod === "pickup") {
+        deliveryMeta.shipping_cost = "0";
+        deliveryMeta.pickup_location = "Topolno nad Wisłą";
       }
     }
 

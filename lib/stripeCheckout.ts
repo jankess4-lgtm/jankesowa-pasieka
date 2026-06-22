@@ -17,7 +17,7 @@ export interface CheckoutCustomerData {
 
 export async function startStripeCheckout(
   items: CartItem[] | any[],
-  customerData?: CheckoutCustomerData & { deliveryMethod: 'address' | 'parcel' }
+  customerData?: CheckoutCustomerData & { deliveryMethod: 'address' | 'parcel' | 'pickup' }
 ) {
   if (!items || items.length === 0) {
     throw new Error("Koszyk jest pusty");

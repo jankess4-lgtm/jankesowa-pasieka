@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { startStripeCheckout, CheckoutCustomerData } from "@/lib/stripeCheckout";
 
-type DeliveryMethod = "address" | "parcel";
+type DeliveryMethod = "address" | "parcel" | "pickup";
 
 interface FormData {
   fullName: string;
@@ -37,28 +37,59 @@ interface Paczkomat {
   address: string;
   city: string;
   hours: string;
+  distanceKm?: number;
 }
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Expanded realistic InPost paczkomats (12+ for good search results)
+// Expanded realistic InPost paczkomats - focused on Kujawy region + major cities
+// Includes entries for Świecie, Toruń, Bydgoszcz, Chełmno etc. so local searches work
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
-  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7" },
-  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7" },
-  { code: "WAW789C", address: "ul. Aleje Jerozolimskie 65", city: "Warszawa", hours: "06:00-22:00" },
-  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7" },
-  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7" },
-  { code: "KRK345E", address: "ul. Podwale 3", city: "Kraków", hours: "06:00-23:00" },
-  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław", hours: "24/7" },
-  { code: "WRO678F", address: "ul. Świdnicka 22", city: "Wrocław", hours: "24/7" },
-  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7" },
-  { code: "POZ901G", address: "ul. Święty Marcin 68", city: "Poznań", hours: "06:00-22:00" },
-  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7" },
-  { code: "GDA234H", address: "ul. Grunwaldzka 98", city: "Gdańsk", hours: "24/7" },
-  { code: "LUB234H", address: "ul. Krakowskie Przedmieście 15", city: "Lublin", hours: "24/7" },
-  { code: "KAT567I", address: "ul. 3 Maja 12", city: "Katowice", hours: "24/7" },
-  { code: "BIA890J", address: "ul. Sienkiewicza 7", city: "Białystok", hours: "06:00-22:00" },
-  { code: "LOD112K", address: "ul. Piotrkowska 45", city: "Łódź", hours: "24/7" },
+  // Warszawa
+  { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240 },
+  { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7", distanceKm: 238 },
+  // Kraków
+  { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7", distanceKm: 380 },
+  { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7", distanceKm: 382 },
+  // Wrocław
+  { code: "WRO345E", address: "ul. Rynek 5", city: "Wrocław", hours: "24/7", distanceKm: 290 },
+  // Poznań
+  { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150 },
+  // Gdańsk
+  { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160 },
+  // Local Kujawy / Pomorze - more entries for better search results (min 6-10 per city)
+  { code: "SWI001", address: "ul. Wojska Polskiego 12", city: "Świecie", hours: "24/7", distanceKm: 8 },
+  { code: "SWI002", address: "ul. 1 Maja 5", city: "Świecie", hours: "24/7", distanceKm: 6 },
+  { code: "SWI003", address: "ul. Chełmińska 20", city: "Świecie", hours: "06:00-22:00", distanceKm: 7 },
+  { code: "SWI004", address: "ul. Bydgoska 8", city: "Świecie", hours: "24/7", distanceKm: 9 },
+  { code: "SWI005", address: "ul. Szkolna 3", city: "Świecie", hours: "24/7", distanceKm: 4 },
+  { code: "SWI006", address: "ul. Kościuszki 10", city: "Świecie", hours: "24/7", distanceKm: 5 },
+  { code: "SWI007", address: "ul. Mickiewicza 2", city: "Świecie", hours: "06:00-22:00", distanceKm: 8 },
+  { code: "SWI008", address: "ul. 3 Maja 15", city: "Świecie", hours: "24/7", distanceKm: 7 },
+  { code: "TOR112", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35 },
+  { code: "TOR113", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33 },
+  { code: "TOR114", address: "ul. Chełmińska 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 36 },
+  { code: "TOR115", address: "ul. Mickiewicza 22", city: "Toruń", hours: "24/7", distanceKm: 34 },
+  { code: "TOR116", address: "ul. Żeglarska 8", city: "Toruń", hours: "24/7", distanceKm: 37 },
+  { code: "TOR117", address: "ul. Szeroka 12", city: "Toruń", hours: "24/7", distanceKm: 35 },
+  { code: "TOR118", address: "ul. Dąbrowskiego 5", city: "Toruń", hours: "06:00-22:00", distanceKm: 33 },
+  { code: "BYD001", address: "ul. Gdańska 50", city: "Bydgoszcz", hours: "24/7", distanceKm: 45 },
+  { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7", distanceKm: 43 },
+  { code: "BYD003", address: "ul. Długa 80", city: "Bydgoszcz", hours: "24/7", distanceKm: 47 },
+  { code: "BYD004", address: "ul. Pomorska 12", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44 },
+  { code: "BYD005", address: "ul. Gdańska 120", city: "Bydgoszcz", hours: "24/7", distanceKm: 46 },
+  { code: "BYD006", address: "ul. Focha 3", city: "Bydgoszcz", hours: "24/7", distanceKm: 41 },
+  { code: "BYD007", address: "ul. Nakielska 55", city: "Bydgoszcz", hours: "24/7", distanceKm: 50 },
+  { code: "BYD008", address: "ul. Marszałka Focha 10", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44 },
+  { code: "CHE001", address: "ul. Rynek 8", city: "Chełmno", hours: "24/7", distanceKm: 18 },
+  { code: "CHE002", address: "ul. Toruńska 18", city: "Chełmno", hours: "24/7", distanceKm: 16 },
+  { code: "CHE003", address: "ul. Świecka 5", city: "Chełmno", hours: "06:00-22:00", distanceKm: 19 },
+  { code: "CHE004", address: "ul. Rynek 25", city: "Chełmno", hours: "24/7", distanceKm: 17 },
+  { code: "CHE005", address: "ul. Wodna 2", city: "Chełmno", hours: "24/7", distanceKm: 15 },
+  { code: "GRU112", address: "ul. Długa 25", city: "Grudziądz", hours: "24/7", distanceKm: 25 },
+  { code: "GRU113", address: "ul. Chełmińska 42", city: "Grudziądz", hours: "24/7", distanceKm: 27 },
+  { code: "GRU114", address: "ul. Tczewska 10", city: "Grudziądz", hours: "24/7", distanceKm: 26 },
+  { code: "GRU115", address: "ul. Rzeźnicka 5", city: "Grudziądz", hours: "24/7", distanceKm: 24 },
 ];
 
 export default function KoszykPage() {
@@ -84,7 +115,7 @@ export default function KoszykPage() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Shipping cost
-  const shippingCost = deliveryMethod === "address" ? 16 : 14;
+  const shippingCost = deliveryMethod === "pickup" ? 0 : (deliveryMethod === "address" ? 16 : 14);
   const productsTotal = totalPrice;
   const grandTotal = productsTotal + shippingCost;
 
@@ -111,9 +142,10 @@ export default function KoszykPage() {
           }
         }
 
-        // Ensure suggestions are visible for parcel method after restore
+        // Ensure suggestions are visible for parcel method after restore (prefer local)
         if (parsed.deliveryMethod === "parcel") {
-          setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
+          const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
+          setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
         }
       } catch {}
     }
@@ -143,22 +175,34 @@ export default function KoszykPage() {
     }
   };
 
-  // Perform search using debounced value - always show good number of realistic results
+  // Normalize for Polish diacritics (so "swiecie" matches "Świecie")
+  const normalize = (str: string) => 
+    str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  // Perform search using debounced value - min 3 chars, always results for parcel
   useEffect(() => {
-    const q = debouncedSearch.trim().toLowerCase();
-    let results: Paczkomat[];
-    if (q) {
-      results = SAMPLE_PACZKOMATS.filter((p) =>
-        p.code.toLowerCase().includes(q) ||
-        p.city.toLowerCase().includes(q) ||
-        p.address.toLowerCase().includes(q)
-      );
-    } else {
-      // Show popular suggestions when no search term (intuitive for users)
-      results = SAMPLE_PACZKOMATS.slice(0, 8);
+    const q = debouncedSearch.trim();
+    if (deliveryMethod !== "parcel") {
+      setSearchResults([]);
+      return;
     }
-    setSearchResults(results.slice(0, 10)); // ensure min 8-10 visible
-  }, [debouncedSearch]);
+    if (q.length >= 3) {
+      const nq = normalize(q);
+      const results = SAMPLE_PACZKOMATS.filter((p) =>
+        normalize(p.code).includes(nq) ||
+        normalize(p.city).includes(nq) ||
+        normalize(p.address).includes(nq)
+      );
+      const sorted = [...results].sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+      setSearchResults(sorted.slice(0, 10));
+    } else {
+      // show local starters for parcel when < 3 chars
+      const local = SAMPLE_PACZKOMATS.filter(p => 
+        ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city)
+      );
+      setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
+    }
+  }, [debouncedSearch, deliveryMethod]);
 
   const selectPaczkomat = (paczkomat: Paczkomat) => {
     setSelectedPaczkomat(paczkomat);
@@ -184,8 +228,9 @@ export default function KoszykPage() {
     setSelectedPaczkomat(null);
     updateField("parcelLocker", "");
     setParcelSearch("");
-    // Show suggestions again so user can pick another easily
-    setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
+    // Show suggestions again so user can pick another easily (prefer local)
+    const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
+    setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
   };
 
   const validateForm = (): boolean => {
@@ -206,10 +251,12 @@ export default function KoszykPage() {
         newErrors.postalCode = "Kod pocztowy w formacie XX-XXX";
       }
       if (!formData.city.trim()) newErrors.city = "Miasto jest wymagane";
-    } else {
+    } else if (deliveryMethod === "parcel") {
       if (!formData.parcelLocker.trim() && !selectedPaczkomat) {
         newErrors.parcelLocker = "Wybierz paczkomat z wyszukiwarki";
       }
+    } else {
+      // pickup - no extra validation
     }
 
     setErrors(newErrors);
@@ -227,12 +274,16 @@ export default function KoszykPage() {
       parcelLocker: undefined,
     }));
 
-    // Reset parcel search state when leaving parcel method
-    if (method !== "parcel") {
+    if (method === "pickup") {
       clearSelectedPaczkomat();
+      setParcelSearch("");
+      setSearchResults([]);
+    } else if (method === "parcel") {
+      // When switching to parcel, show suggestions immediately (prefer local kujawy)
+      const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
+      setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
     } else {
-      // When switching to parcel, show suggestions immediately
-      setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
+      clearSelectedPaczkomat();
     }
   };
 
@@ -260,11 +311,13 @@ export default function KoszykPage() {
               postalCode: formData.postalCode.trim(),
               city: formData.city.trim(),
             }
-          : {
+          : deliveryMethod === "parcel"
+          ? {
               parcelLocker: selectedPaczkomat 
                 ? `${selectedPaczkomat.code} - ${selectedPaczkomat.address}, ${selectedPaczkomat.city}` 
                 : formData.parcelLocker.trim(),
-            }),
+            }
+          : {}),
       };
 
       await startStripeCheckout(items, customerData);
@@ -416,6 +469,33 @@ export default function KoszykPage() {
                       <p className="text-sm text-brand-brown/60 mt-1 pl-8">Odbiór 24/7 • Najwygodniejsza opcja</p>
                     </div>
                   </label>
+
+                  {/* Personal pickup - free */}
+                  <label
+                    className={`group flex items-start gap-4 p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${
+                      deliveryMethod === "pickup"
+                        ? "border-brand-gold bg-brand-cream/50 shadow-sm"
+                        : "border-brand-creamDark hover:border-brand-brown/40 hover:bg-white"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="delivery"
+                      checked={deliveryMethod === "pickup"}
+                      onChange={() => handleDeliveryChange("pickup")}
+                      className="mt-1 accent-brand-gold"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <div className={`p-1.5 rounded-lg ${deliveryMethod === "pickup" ? "bg-brand-gold/10" : "bg-brand-cream"}`}>
+                          <Package className="w-5 h-5 text-brand-brown" />
+                        </div>
+                        <span className="font-medium text-brand-brown">Odbiór osobisty</span>
+                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">0 zł</span>
+                      </div>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">W pasiece Topolno nad Wisłą • uzgodnij termin</p>
+                    </div>
+                  </label>
                 </div>
               </div>
 
@@ -509,7 +589,7 @@ export default function KoszykPage() {
                         </div>
                       </div>
                     </>
-                  ) : (
+                  ) : deliveryMethod === "parcel" ? (
                     /* InPost Paczkomat Search Widget - professional & functional */
                     <div className="space-y-3">
                       <div>
@@ -524,18 +604,19 @@ export default function KoszykPage() {
                               setParcelSearch(e.target.value);
                             }}
                             onFocus={() => {
-                              // Show suggestions immediately on focus if no query
-                              if (!debouncedSearch) {
-                                setSearchResults(SAMPLE_PACZKOMATS.slice(0, 8));
-                              }
+                              // Show local starters on focus for parcel
+                              const local = SAMPLE_PACZKOMATS.filter(p => 
+                                ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city)
+                              );
+                              setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
                             }}
                             className="w-full rounded-xl border border-brand-creamDark bg-white pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                            placeholder="Wpisz miasto lub kod (np. Warszawa lub WAW)"
+                            placeholder="Wpisz min. 3 znaki (np. Świecie, Toruń, Bydgoszcz, Chełmno)"
                           />
                           <Search className="absolute left-3.5 top-3 h-4 w-4 text-brand-brown/50" />
                         </div>
                         <p className="text-xs text-brand-brown/60 mt-1">
-                          Wpisz miasto lub kod paczkomatu. Wybierz z listy poniżej.
+                          Wpisz min. 3 znaki nazwy miasta lub kodu paczkomatu. Wybierz z listy.
                         </p>
                       </div>
 
@@ -550,6 +631,7 @@ export default function KoszykPage() {
                           >
                             {searchResults.map((p, idx) => {
                               const isSelected = selectedPaczkomat?.code === p.code;
+                              const dist = p.distanceKm != null ? `${p.distanceKm} km` : '';
                               return (
                                 <button
                                   key={idx}
@@ -571,9 +653,6 @@ export default function KoszykPage() {
                                     </div>
                                     <div className="text-sm text-brand-brown/70">
                                       {p.address}, {p.city}
-                                    </div>
-                                    <div className="text-[11px] text-brand-brown/50 mt-0.5">
-                                      Godziny: {p.hours}
                                     </div>
                                   </div>
                                 </button>
@@ -606,6 +685,7 @@ export default function KoszykPage() {
                                 </div>
                                 <div className="text-sm text-emerald-600">
                                   {selectedPaczkomat.city}
+                                  {selectedPaczkomat.distanceKm != null && ` • ${selectedPaczkomat.distanceKm} km`}
                                 </div>
                                 <div className="inline-flex items-center mt-2 text-[11px] bg-white px-2 py-0.5 rounded-full text-emerald-600 border border-emerald-200">
                                   Godziny otwarcia: {selectedPaczkomat.hours}
@@ -623,46 +703,26 @@ export default function KoszykPage() {
                         )}
                       </AnimatePresence>
 
-                      {/* Interactive map placeholder (professional demo with pins) */}
-                      <div className="mt-2 rounded-xl border border-brand-creamDark bg-[#E8F5E9] p-3 overflow-hidden">
-                        <div className="h-24 rounded-lg relative overflow-hidden bg-[linear-gradient(135deg,#a5d6a7_0%,#81c784_25%,#a5d6a7_50%,#66bb6a_75%,#a5d6a7_100%)] border border-emerald-200">
-                          {/* Fake map grid / roads */}
-                          <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_12px,rgba(255,255,255,0.25)_12px,rgba(255,255,255,0.25)_14px)]" />
-                          <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent,transparent_12px,rgba(255,255,255,0.2)_12px,rgba(255,255,255,0.2)_14px)]" />
-
-                          {/* Location pins */}
-                          {SAMPLE_PACZKOMATS.slice(0, 5).map((p, i) => {
-                            const isThisSelected = selectedPaczkomat?.code === p.code;
+                      {/* Simplified map placeholder with pins */}
+                      <div className="mt-2 rounded-xl border border-brand-creamDark bg-[#E8F5E9] p-3">
+                        <div className="h-20 rounded-lg relative bg-gradient-to-br from-emerald-100 to-emerald-200 border border-emerald-300 flex items-center justify-center overflow-hidden">
+                          <div className="text-emerald-700/60 text-xs">Mapa paczkomatów (placeholder)</div>
+                          {/* Pins */}
+                          {(searchResults.length > 0 ? searchResults : SAMPLE_PACZKOMATS.slice(0, 5)).map((p, i) => {
+                            const isSel = selectedPaczkomat?.code === p.code;
                             return (
-                              <div
-                                key={i}
-                                className={`absolute flex items-center justify-center transition-all ${isThisSelected ? 'z-10 scale-125' : 'opacity-70'}`}
-                                style={{
-                                  left: `${20 + (i % 3) * 25}%`,
-                                  top: `${25 + Math.floor(i / 3) * 35}%`,
-                                }}
-                              >
-                                <MapPin 
-                                  className={`h-4 w-4 drop-shadow ${isThisSelected ? 'text-emerald-700' : 'text-emerald-600'}`} 
-                                />
-                                {isThisSelected && (
-                                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-white text-[9px] px-1.5 py-0 rounded shadow text-emerald-700 font-medium whitespace-nowrap">
-                                    {selectedPaczkomat?.code}
-                                  </div>
-                                )}
-                              </div>
+                              <MapPin 
+                                key={i} 
+                                className={`absolute h-3 w-3 ${isSel ? 'text-emerald-700 scale-125' : 'text-emerald-600'}`} 
+                                style={{ left: `${20 + i * 15}%`, top: `${30 + (i % 2) * 20}%` }} 
+                              />
                             );
                           })}
-
-                          {/* Center label */}
-                          <div className="absolute bottom-1 right-2 bg-white/80 text-[9px] px-1.5 py-px rounded text-emerald-700 font-medium">
-                            {selectedPaczkomat ? selectedPaczkomat.city : "Polska"}
-                          </div>
                         </div>
-                        <p className="text-[10px] text-emerald-700/70 mt-1.5 text-center">
-                          {selectedPaczkomat 
-                            ? `Paczkomat ${selectedPaczkomat.code} zaznaczony na mapie` 
-                            : "Wybierz paczkomat powyżej, aby zobaczyć jego lokalizację"}
+                        <p className="text-[10px] text-emerald-700/60 mt-1 text-center">
+                          {searchResults.length > 0 
+                            ? `${searchResults.length} wyników w okolicy` 
+                            : "Wpisz min. 3 znaki aby zobaczyć pinezki"}
                         </p>
                       </div>
 
@@ -672,6 +732,12 @@ export default function KoszykPage() {
 
                       {/* Hidden input for parcelLocker value (used in form) */}
                       <input type="hidden" value={formData.parcelLocker} />
+                    </div>
+                  ) : (
+                    /* Pickup info */
+                    <div className="p-4 bg-brand-cream/40 rounded-xl text-sm text-brand-brown/80">
+                      Odbiór osobisty w pasiece w Topolnie nad Wisłą (gm. Pruszcz, pow. świecki).<br />
+                      Po złożeniu zamówienia skontaktujemy się w celu ustalenia terminu odbioru.
                     </div>
                   )}
                 </motion.div>
@@ -688,7 +754,7 @@ export default function KoszykPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-brand-brown/70">
-                      Koszt wysyłki {deliveryMethod === "address" ? "(kurier)" : "(paczkomat)"}
+                      Koszt wysyłki {deliveryMethod === "address" ? "(kurier)" : deliveryMethod === "parcel" ? "(paczkomat)" : "(odbiór osobisty)"}
                     </span>
                     <span className="tabular-nums font-medium">{shippingCost} zł</span>
                   </div>

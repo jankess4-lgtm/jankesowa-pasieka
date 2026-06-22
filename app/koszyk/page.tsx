@@ -45,12 +45,13 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Expanded realistic InPost paczkomats - focused on Kujawy region + major cities
-// Includes entries for Świecie, Toruń, Bydgoszcz, Chełmno etc. so local searches work
+// Expanded realistic InPost paczkomats (50+ entries) - focused on województwo kujawsko-pomorskie
+// Especially detailed for Świecie (incl. Lidl Wojska Polskiego 76), Toruń, Bydgoszcz, Chełmno, Grudziądz etc.
 const SAMPLE_PACZKOMATS: Paczkomat[] = [
-  // Warszawa (for completeness, but focus local)
+  // Warszawa (for completeness)
   { code: "WAW123A", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
   { code: "WAW456B", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7", distanceKm: 238, lat: 52.2319, lng: 21.0067 },
+  { code: "WAW789C", address: "ul. Aleje Jerozolimskie 65", city: "Warszawa", hours: "24/7", distanceKm: 245, lat: 52.2285, lng: 21.0020 },
   // Kraków
   { code: "KRK789C", address: "ul. Floriańska 15", city: "Kraków", hours: "24/7", distanceKm: 380, lat: 50.0619, lng: 19.9373 },
   { code: "KRK012D", address: "ul. Długa 48", city: "Kraków", hours: "24/7", distanceKm: 382, lat: 50.0640, lng: 19.9390 },
@@ -60,15 +61,19 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150, lat: 52.4064, lng: 16.9252 },
   // Gdańsk
   { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160, lat: 54.3520, lng: 18.6466 },
-  // Świecie area (main focus)
-  { code: "SWI001", address: "ul. Wojska Polskiego 12", city: "Świecie", hours: "24/7", distanceKm: 8, lat: 53.4090, lng: 18.4470 },
-  { code: "SWI002", address: "ul. 1 Maja 5", city: "Świecie", hours: "24/7", distanceKm: 6, lat: 53.4125, lng: 18.4500 },
-  { code: "SWI003", address: "ul. Chełmińska 20", city: "Świecie", hours: "06:00-22:00", distanceKm: 7, lat: 53.4080, lng: 18.4400 },
-  { code: "SWI004", address: "ul. Bydgoska 8", city: "Świecie", hours: "24/7", distanceKm: 9, lat: 53.4150, lng: 18.4550 },
-  { code: "SWI005", address: "ul. Szkolna 3", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4075, lng: 18.4485 },
-  { code: "SWI006", address: "ul. Kościuszki 10", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4105, lng: 18.4420 },
-  { code: "SWI007", address: "ul. Mickiewicza 2", city: "Świecie", hours: "06:00-22:00", distanceKm: 8, lat: 53.4060, lng: 18.4510 },
-  { code: "SWI008", address: "ul. 3 Maja 15", city: "Świecie", hours: "24/7", distanceKm: 7, lat: 53.4110, lng: 18.4380 },
+  // ŚWIECIE - many realistic ones, including Lidl Wojska Polskiego 76
+  { code: "SWI001", address: "ul. Wojska Polskiego 12 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4128, lng: 18.4525 },
+  { code: "SWI002", address: "ul. Wojska Polskiego 76 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4123, lng: 18.4521 },
+  { code: "SWI003", address: "ul. Chełmińska 45 (Kaufland)", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4105, lng: 18.4480 },
+  { code: "SWI004", address: "ul. Rynek 5 (centrum)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4098, lng: 18.4472 },
+  { code: "SWI005", address: "ul. Bydgoska 25", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4145, lng: 18.4530 },
+  { code: "SWI006", address: "ul. 1 Maja 8", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4102, lng: 18.4495 },
+  { code: "SWI007", address: "ul. Szkolna 12", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4085, lng: 18.4465 },
+  { code: "SWI008", address: "ul. Kościuszki 22", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4110, lng: 18.4508 },
+  { code: "SWI009", address: "ul. Mickiewicza 4", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4092, lng: 18.4458 },
+  { code: "SWI010", address: "ul. 3 Maja 28 (żabka)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4100, lng: 18.4478 },
+  { code: "SWI011", address: "ul. Wojska Polskiego 150", city: "Świecie", hours: "24/7", distanceKm: 6, lat: 53.4140, lng: 18.4555 },
+  { code: "SWI012", address: "ul. Chełmińska 80", city: "Świecie", hours: "06:00-22:00", distanceKm: 5, lat: 53.4088, lng: 18.4425 },
   // Toruń
   { code: "TOR112", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.5984 },
   { code: "TOR113", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0155, lng: 18.5900 },
@@ -77,6 +82,8 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "TOR116", address: "ul. Żeglarska 8", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0100, lng: 18.6100 },
   { code: "TOR117", address: "ul. Szeroka 12", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0170, lng: 18.5850 },
   { code: "TOR118", address: "ul. Dąbrowskiego 5", city: "Toruń", hours: "06:00-22:00", distanceKm: 33, lat: 53.0090, lng: 18.6000 },
+  { code: "TOR119", address: "ul. Gagarina 40 (Lidl)", city: "Toruń", hours: "24/7", distanceKm: 32, lat: 53.0185, lng: 18.5920 },
+  { code: "TOR120", address: "ul. Leśna 15", city: "Toruń", hours: "24/7", distanceKm: 38, lat: 53.0080, lng: 18.6150 },
   // Bydgoszcz
   { code: "BYD001", address: "ul. Gdańska 50", city: "Bydgoszcz", hours: "24/7", distanceKm: 45, lat: 53.1235, lng: 18.0084 },
   { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7", distanceKm: 43, lat: 53.1300, lng: 18.0150 },
@@ -86,17 +93,38 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "BYD006", address: "ul. Focha 3", city: "Bydgoszcz", hours: "24/7", distanceKm: 41, lat: 53.1180, lng: 18.0050 },
   { code: "BYD007", address: "ul. Nakielska 55", city: "Bydgoszcz", hours: "24/7", distanceKm: 50, lat: 53.1350, lng: 17.9800 },
   { code: "BYD008", address: "ul. Marszałka Focha 10", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 44, lat: 53.1220, lng: 18.0120 },
+  { code: "BYD009", address: "ul. Dworcowa 25 (Lidl)", city: "Bydgoszcz", hours: "24/7", distanceKm: 42, lat: 53.1315, lng: 18.0025 },
+  { code: "BYD010", address: "ul. Grunwaldzka 88", city: "Bydgoszcz", hours: "24/7", distanceKm: 48, lat: 53.1260, lng: 18.0200 },
+  { code: "BYD011", address: "ul. Szubińska 40", city: "Bydgoszcz", hours: "24/7", distanceKm: 46, lat: 53.1150, lng: 17.9900 },
+  { code: "BYD012", address: "ul. Kujawska 15", city: "Bydgoszcz", hours: "06:00-22:00", distanceKm: 43, lat: 53.1190, lng: 18.0150 },
   // Chełmno
   { code: "CHE001", address: "ul. Rynek 8", city: "Chełmno", hours: "24/7", distanceKm: 18, lat: 53.3480, lng: 18.4250 },
   { code: "CHE002", address: "ul. Toruńska 18", city: "Chełmno", hours: "24/7", distanceKm: 16, lat: 53.3500, lng: 18.4300 },
   { code: "CHE003", address: "ul. Świecka 5", city: "Chełmno", hours: "06:00-22:00", distanceKm: 19, lat: 53.3450, lng: 18.4200 },
   { code: "CHE004", address: "ul. Rynek 25", city: "Chełmno", hours: "24/7", distanceKm: 17, lat: 53.3475, lng: 18.4280 },
   { code: "CHE005", address: "ul. Wodna 2", city: "Chełmno", hours: "24/7", distanceKm: 15, lat: 53.3490, lng: 18.4220 },
+  { code: "CHE006", address: "ul. Szkolna 10", city: "Chełmno", hours: "06:00-22:00", distanceKm: 17, lat: 53.3465, lng: 18.4270 },
   // Grudziądz
   { code: "GRU112", address: "ul. Długa 25", city: "Grudziądz", hours: "24/7", distanceKm: 25, lat: 53.4840, lng: 18.7530 },
   { code: "GRU113", address: "ul. Chełmińska 42", city: "Grudziądz", hours: "24/7", distanceKm: 27, lat: 53.4800, lng: 18.7600 },
   { code: "GRU114", address: "ul. Tczewska 10", city: "Grudziądz", hours: "24/7", distanceKm: 26, lat: 53.4870, lng: 18.7450 },
   { code: "GRU115", address: "ul. Rzeźnicka 5", city: "Grudziądz", hours: "24/7", distanceKm: 24, lat: 53.4820, lng: 18.7550 },
+  { code: "GRU116", address: "ul. Dworcowa 15 (Lidl)", city: "Grudziądz", hours: "24/7", distanceKm: 23, lat: 53.4855, lng: 18.7480 },
+  // Inowrocław
+  { code: "INO001", address: "ul. Królowej Jadwigi 15", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7980, lng: 18.2630 },
+  { code: "INO002", address: "ul. Dworcowa 8", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 54, lat: 52.8005, lng: 18.2580 },
+  { code: "INO003", address: "ul. Poznańska 45 (Lidl)", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.7950, lng: 18.2700 },
+  // Nakło nad Notecią
+  { code: "NAK001", address: "ul. Bydgoska 20", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 30, lat: 53.1400, lng: 17.6000 },
+  { code: "NAK002", address: "ul. Kościuszki 5", city: "Nakło nad Notecią", hours: "06:00-22:00", distanceKm: 29, lat: 53.1420, lng: 17.5950 },
+  { code: "NAK003", address: "ul. Notecka 12", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 31, lat: 53.1380, lng: 17.6050 },
+  // Włocławek
+  { code: "WLO001", address: "ul. Toruńska 30", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6480, lng: 19.0680 },
+  { code: "WLO002", address: "ul. Brzeska 15 (Lidl)", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6505, lng: 19.0600 },
+  // Other Kujawsko-Pomorskie
+  { code: "KOR001", address: "ul. 3 Maja 8", city: "Koronowo", hours: "24/7", distanceKm: 25, lat: 53.3200, lng: 17.9300 },
+  { code: "SOL001", address: "ul. Główna 22", city: "Solec Kujawski", hours: "24/7", distanceKm: 40, lat: 53.0800, lng: 18.2300 },
+  { code: "ZNI001", address: "ul. Rynek 3", city: "Żnin", hours: "24/7", distanceKm: 65, lat: 52.8500, lng: 17.7200 },
 ];
 
 export default function KoszykPage() {
@@ -151,8 +179,7 @@ export default function KoszykPage() {
 
         // Ensure suggestions are visible for parcel method after restore (prefer local)
         if (parsed.deliveryMethod === "parcel") {
-          const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
-          setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
+          setSearchResults(searchPaczkomats(""));
         }
       } catch {}
     }
@@ -186,29 +213,47 @@ export default function KoszykPage() {
   const normalize = (str: string) => 
     str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+  const searchPaczkomats = (query: string) => {
+    const q = query.trim();
+    if (q.length < 3) {
+      // For empty/short, prefer Świecie and nearby kujawskie
+      const localCities = ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz", "Nakło nad Notecią", "Inowrocław"];
+      let local = SAMPLE_PACZKOMATS.filter(p => localCities.includes(p.city));
+      // If searching partial, still use local but for <3 show Świecie heavy
+      if (q.length > 0) {
+        const nq = normalize(q);
+        local = local.filter(p =>
+          normalize(p.code).includes(nq) ||
+          normalize(p.city).includes(nq) ||
+          normalize(p.address).includes(nq)
+        );
+      }
+      return local.length > 0 ? local.slice(0, 10) : SAMPLE_PACZKOMATS.slice(0, 8);
+    }
+    const nq = normalize(q);
+    let results = SAMPLE_PACZKOMATS.filter((p) =>
+      normalize(p.code).includes(nq) ||
+      normalize(p.city).includes(nq) ||
+      normalize(p.address).includes(nq)
+    );
+    // Prioritize city matches (esp. Świecie), then by distance
+    results.sort((a, b) => {
+      const aCity = normalize(a.city).includes(nq) ? 0 : 1;
+      const bCity = normalize(b.city).includes(nq) ? 0 : 1;
+      if (aCity !== bCity) return aCity - bCity;
+      return (a.distanceKm ?? 999) - (b.distanceKm ?? 999);
+    });
+    return results.slice(0, 10);
+  };
+
   // Perform search using debounced value - min 3 chars, always results for parcel
   useEffect(() => {
-    const q = debouncedSearch.trim();
     if (deliveryMethod !== "parcel") {
       setSearchResults([]);
       return;
     }
-    if (q.length >= 3) {
-      const nq = normalize(q);
-      const results = SAMPLE_PACZKOMATS.filter((p) =>
-        normalize(p.code).includes(nq) ||
-        normalize(p.city).includes(nq) ||
-        normalize(p.address).includes(nq)
-      );
-      const sorted = [...results].sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
-      setSearchResults(sorted.slice(0, 10));
-    } else {
-      // show local starters for parcel when < 3 chars
-      const local = SAMPLE_PACZKOMATS.filter(p => 
-        ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city)
-      );
-      setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
-    }
+    const results = searchPaczkomats(debouncedSearch);
+    setSearchResults(results);
   }, [debouncedSearch, deliveryMethod]);
 
   const selectPaczkomat = (paczkomat: Paczkomat) => {
@@ -236,8 +281,7 @@ export default function KoszykPage() {
     updateField("parcelLocker", "");
     setParcelSearch("");
     // Show suggestions again so user can pick another easily (prefer local)
-    const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
-    setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
+    setSearchResults(searchPaczkomats(""));
   };
 
   const validateForm = (): boolean => {
@@ -287,8 +331,7 @@ export default function KoszykPage() {
       setSearchResults([]);
     } else if (method === "parcel") {
       // When switching to parcel, show suggestions immediately (prefer local kujawy)
-      const local = SAMPLE_PACZKOMATS.filter(p => ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city));
-      setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
+      setSearchResults(searchPaczkomats(""));
     } else {
       clearSelectedPaczkomat();
     }
@@ -612,22 +655,13 @@ export default function KoszykPage() {
                               setParcelSearch(val);
                               // Immediate update for responsiveness (>=3 chars)
                               if (val.trim().length >= 3 && deliveryMethod === "parcel") {
-                                const nq = normalize(val.trim());
-                                const results = SAMPLE_PACZKOMATS.filter((p) =>
-                                  normalize(p.code).includes(nq) ||
-                                  normalize(p.city).includes(nq) ||
-                                  normalize(p.address).includes(nq)
-                                );
-                                const sorted = [...results].sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
-                                setSearchResults(sorted.slice(0, 10));
+                                const results = searchPaczkomats(val);
+                                setSearchResults(results);
                               }
                             }}
                             onFocus={() => {
                               // Show local starters on focus for parcel
-                              const local = SAMPLE_PACZKOMATS.filter(p => 
-                                ["Świecie", "Toruń", "Bydgoszcz", "Chełmno", "Grudziądz"].includes(p.city)
-                              );
-                              setSearchResults(local.length > 0 ? local.slice(0, 8) : SAMPLE_PACZKOMATS.slice(0, 8));
+                              setSearchResults(searchPaczkomats(""));
                             }}
                             className="w-full rounded-xl border border-brand-creamDark bg-white pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
                             placeholder="Wpisz min. 3 znaki (np. Świecie, Toruń, Bydgoszcz, Chełmno)"
@@ -743,7 +777,7 @@ export default function KoszykPage() {
                           }} />
 
                           {/* Clickable pins from search results or default local */}
-                          {(searchResults.length > 0 ? searchResults : SAMPLE_PACZKOMATS.filter(p => ["Świecie","Toruń","Bydgoszcz","Chełmno","Grudziądz"].includes(p.city)).slice(0,6) ).map((p, i) => {
+                          {(searchResults.length > 0 ? searchResults : searchPaczkomats("")).map((p, i) => {
                             const isSel = selectedPaczkomat?.code === p.code;
                             // Position based on lat/lng if available, else grid
                             let left = 20 + (i * 12) % 60;

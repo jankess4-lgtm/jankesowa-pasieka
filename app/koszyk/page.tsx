@@ -641,6 +641,33 @@ export default function KoszykPage() {
   const normalize = (str: string) => 
     str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+  // Helper: extract store / osiedle name from address like "ul. ... (Biedronka, os. Rubinkowo)"
+  const getStoreName = (address: string): string | null => {
+    const match = address.match(/\(([^)]+)\)/);
+    return match ? match[1] : null;
+  };
+
+  // Live suggested paczkomat from current typed code (for instant preview)
+  const suggestedPaczkomat = (() => {
+    const q = formData.parcelLocker.trim();
+    if (!q || q.length < 2) return null;
+    const nq = normalize(q);
+
+    // 1. Exact code match (best)
+    let m = SAMPLE_PACZKOMATS.find(p => normalize(p.code) === nq);
+    if (m) return m;
+
+    // 2. Code prefix match
+    m = SAMPLE_PACZKOMATS.find(p => normalize(p.code).startsWith(nq));
+    if (m) return m;
+
+    // 3. Match in code or full address
+    m = SAMPLE_PACZKOMATS.find(p =>
+      normalize(p.code).includes(nq) || normalize(p.address).includes(nq)
+    );
+    return m || null;
+  })();
+
   // Long scrollable list – always show many (60-70+) by default
   const displayPaczkomats = (() => {
     const q = parcelSearch.trim();
@@ -1071,6 +1098,20 @@ export default function KoszykPage() {
                             const val = e.target.value.toUpperCase().trim();
                             updateField("parcelLocker", val);
                             setParcelSearch(val);
+
+                            // Auto-select when user types a strong match (exact code or good prefix)
+                            if (val.length >= 3) {
+                              const nq = normalize(val);
+                              let match = SAMPLE_PACZKOMATS.find(p => normalize(p.code) === nq);
+                              if (!match && val.length >= 4) {
+                                match = SAMPLE_PACZKOMATS.find(p => normalize(p.code).startsWith(nq));
+                              }
+                              if (match) {
+                                setSelectedPaczkomat(match);
+                                updateField("parcelLocker", match.code); // set clean full code
+                                setParcelSearch(""); // keep the full long list visible
+                              }
+                            }
                           }}
                           className="w-full rounded-xl border-2 border-brand-creamDark bg-white px-4 py-3.5 text-base focus:outline-none focus:border-brand-gold font-mono tracking-[2px]"
                           placeholder="Wpisz kod paczkomatu (np. SWI001)"
@@ -1078,6 +1119,30 @@ export default function KoszykPage() {
                         <p className="text-xs text-brand-brown/60 mt-1.5">
                           Wpisz kod (np. SWI001) lub wybierz z listy — wypełni się automatycznie.
                         </p>
+
+                        {/* Live preview: full details appear automatically while typing */}
+                        {suggestedPaczkomat && (!selectedPaczkomat || selectedPaczkomat.code !== suggestedPaczkomat.code) && (
+                          <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm">
+                            <div className="text-emerald-700 text-xs font-medium tracking-wide mb-0.5">ZNALEZIONO PACZKOMAT</div>
+                            <div className="font-semibold text-emerald-900 text-base tabular-nums">{suggestedPaczkomat.code}</div>
+                            <div className="text-emerald-800 mt-0.5 leading-snug">{suggestedPaczkomat.address}</div>
+                            {(() => {
+                              const store = getStoreName(suggestedPaczkomat.address);
+                              return store ? <div className="text-xs text-emerald-600 mt-0.5">{store}</div> : null;
+                            })()}
+                            <div className="text-emerald-700">{suggestedPaczkomat.city}</div>
+                            {suggestedPaczkomat.distanceKm != null && (
+                              <div className="text-xs mt-0.5 text-emerald-600">ok. {suggestedPaczkomat.distanceKm} km od pasieki</div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => selectPaczkomat(suggestedPaczkomat)}
+                              className="mt-2 text-xs font-medium text-emerald-700 hover:text-emerald-900 underline"
+                            >
+                              Wybierz ten paczkomat
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       {/* Długa przewijana lista (min. 50 pozycji) */}
@@ -1095,17 +1160,17 @@ export default function KoszykPage() {
                                   key={idx}
                                   type="button"
                                   onClick={() => selectPaczkomat(p)}
-                                  className={`w-full text-left px-4 py-3.5 flex items-start gap-3 transition-colors hover:bg-brand-cream/60 active:bg-brand-cream ${isSelected ? "bg-brand-cream/90 border-l-[5px] border-brand-gold" : ""}`}
+                                  className={`w-full text-left px-4 py-3.5 flex items-start gap-3 transition-colors hover:bg-brand-cream/60 active:bg-brand-cream ${isSelected ? "bg-emerald-50/80 border-l-[5px] border-emerald-600" : ""}`}
                                 >
                                   <div className="flex-shrink-0 mt-0.5">
-                                    <MapPin className={`h-4 w-4 ${isSelected ? "text-brand-gold" : "text-brand-brown/50"}`} />
+                                    <MapPin className={`h-4 w-4 ${isSelected ? "text-emerald-700" : "text-brand-brown/50"}`} />
                                   </div>
                                   <div className="flex-1 min-w-0 text-sm leading-tight">
                                     <div className="font-semibold tabular-nums tracking-tight text-brand-brown">{p.code}</div>
                                     <div className="text-brand-brown/80 mt-0.5 leading-snug">{p.address}, {p.city}</div>
                                     <div className="text-[11px] text-brand-brown/55 mt-1">Godziny: {p.hours}</div>
                                   </div>
-                                  {isSelected && <Check className="h-4 w-4 text-brand-gold flex-shrink-0 mt-1" />}
+                                  {isSelected && <Check className="h-4 w-4 text-emerald-700 flex-shrink-0 mt-1" />}
                                 </button>
                               );
                             })
@@ -1113,37 +1178,59 @@ export default function KoszykPage() {
                             <div className="px-4 py-6 text-sm text-brand-brown/60 text-center">Brak wyników.</div>
                           )}
                         </div>
-                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Lista zawiera 70+ lokalizacji (Toruń z Mokrym, Rubinkowem, Na Skarpie i inne).</p>
+                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Wybierz z listy lub wpisz kod powyżej — szczegóły pojawią się automatycznie.</p>
                       </div>
 
-                      {/* Ładna karta podsumowująca wybrany paczkomat */}
+                      {/* Ładna karta podsumowująca wybrany paczkomat (zielona ramka) */}
                       <AnimatePresence>
                         {selectedPaczkomat && (
                           <motion.div
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 6 }}
-                            className="rounded-2xl border-2 border-brand-gold bg-brand-cream px-5 py-4"
+                            className="rounded-2xl border-2 border-emerald-600 bg-emerald-50 px-5 py-4"
                           >
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
-                                <div className="uppercase text-[10px] tracking-[1.5px] font-medium text-brand-gold mb-0.5 flex items-center gap-1.5">
-                                  <Check className="h-3.5 w-3.5" /> Wybrany paczkomat
+                                <div className="flex items-center gap-2 text-emerald-700 text-sm font-semibold mb-1">
+                                  <Check className="h-4 w-4" />
+                                  Wybrany paczkomat
                                 </div>
-                                <div className="font-semibold text-[22px] tabular-nums tracking-[-0.3px] text-brand-brown leading-none">
+
+                                <div className="font-semibold text-[22px] tabular-nums tracking-[-0.3px] text-emerald-900 leading-none">
                                   {selectedPaczkomat.code}
                                 </div>
-                                <div className="mt-2 text-[15px] text-brand-brown/90 leading-tight">
-                                  {selectedPaczkomat.address}<br />{selectedPaczkomat.city}
+
+                                <div className="mt-2 text-[15px] text-emerald-800 leading-tight">
+                                  {selectedPaczkomat.address}
                                 </div>
-                                <div className="mt-2.5 inline-flex items-center rounded-full bg-white/80 border border-brand-creamDark px-3 py-px text-xs text-brand-brown/70">
+
+                                {(() => {
+                                  const store = getStoreName(selectedPaczkomat.address);
+                                  return store ? (
+                                    <div className="mt-1 inline-block text-xs bg-white border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded">
+                                      {store}
+                                    </div>
+                                  ) : null;
+                                })()}
+
+                                <div className="mt-1 text-emerald-700">{selectedPaczkomat.city}</div>
+
+                                {selectedPaczkomat.distanceKm != null && (
+                                  <div className="mt-1 text-xs text-emerald-600">
+                                    ok. {selectedPaczkomat.distanceKm} km od pasieki
+                                  </div>
+                                )}
+
+                                <div className="mt-2 inline-flex items-center rounded-full bg-white border border-emerald-200 px-3 py-px text-xs text-emerald-700">
                                   Godziny: {selectedPaczkomat.hours}
                                 </div>
                               </div>
+
                               <button
                                 type="button"
                                 onClick={clearSelectedPaczkomat}
-                                className="text-xs font-medium text-brand-brown/70 hover:text-brand-brown underline self-start mt-1 whitespace-nowrap"
+                                className="text-xs font-medium text-emerald-700 hover:text-emerald-900 underline self-start mt-1 whitespace-nowrap"
                               >
                                 Zmień paczkomat
                               </button>

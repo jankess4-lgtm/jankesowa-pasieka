@@ -74,8 +74,14 @@ export async function POST(request: NextRequest) {
         deliveryMeta.shipping_city = customer.city || "";
         deliveryMeta.shipping_cost = "16";
       } else if (customer.deliveryMethod === "parcel") {
-        deliveryMeta.parcel_locker = customer.parcelLocker || "";
+        const lockerStr = customer.parcelLocker || "";
+        deliveryMeta.parcel_locker = lockerStr;
         deliveryMeta.shipping_cost = "14";
+
+        // Extract code and full address for shipping_details / metadata (no real address fields)
+        const parts = lockerStr.split(/[–-]/).map((s: string) => s.trim());
+        deliveryMeta.locker_code = parts[0] || "";
+        deliveryMeta.locker_full_address = parts.length > 1 ? parts.slice(1).join(" - ") : lockerStr;
       } else if (customer.deliveryMethod === "pickup") {
         deliveryMeta.shipping_cost = "0";
         deliveryMeta.pickup_location = "Topolno nad Wisłą";
@@ -133,16 +139,21 @@ export async function POST(request: NextRequest) {
         }
       },
 
-      // 4. Force address collection + other UI fields for consistent branded experience
-      billing_address_collection: "auto",
-      shipping_address_collection: {
-        allowed_countries: ["PL"],
-      },
-
-      // 5. Locale + force customer + other settings
+      // 4. Locale + force customer + other settings
       locale: "pl",
       customer_creation: "always",
       submit_type: "pay",
+
+      // 5. Conditionally collect shipping/billing address ONLY for courier ("Dostawa kurierem na adres").
+      // For "Paczkomat InPost" or pickup: do NOT include shipping_address_collection so Stripe
+      // checkout page does NOT show address fields (line1, postal_code, city etc.).
+      // Delivery info (locker code + full_address from DB) is passed via metadata only.
+      ...(customer?.deliveryMethod === "address" ? {
+        billing_address_collection: "auto",
+        shipping_address_collection: {
+          allowed_countries: ["PL"],
+        },
+      } : {}),
     });
 
     return NextResponse.json({ sessionId: session.id });

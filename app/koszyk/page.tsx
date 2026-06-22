@@ -1235,7 +1235,7 @@ export default function KoszykPage() {
 
                   {/* Address fields - COMPLETELY HIDDEN for Paczkomat using isPaczkomat + hidden class.
                       Only visible for "Dostawa kurierem na adres". Use display:none via Tailwind hidden. */}
-                  <div className={isPaczkomat || deliveryMethod === "pickup" ? "hidden" : ""}>
+                  <div className={isPaczkomat ? "hidden" : (deliveryMethod === "address" ? "" : "hidden")}>
                     <div>
                       <label className="block text-sm font-medium text-brand-brown mb-1.5">Ulica i nr domu/mieszkania *</label>
                       <input

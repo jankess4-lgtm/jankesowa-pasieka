@@ -606,7 +606,7 @@ export default function KoszykPage() {
 
     // Optional toast for confirmation
     toast.success(`Wybrano paczkomat ${paczkomat.code}`, {
-      description: `${paczkomat.address}, ${paczkomat.city} â€” dziÄ™kujemy!`,
+      description: `${paczkomat.address}, ${paczkomat.city} — dziękujemy!`,
       duration: 1800,
     });
   };
@@ -681,7 +681,7 @@ export default function KoszykPage() {
     if (items.length === 0) return;
 
     if (!validateForm()) {
-      toast.error("UzupeĹ‚nij wymagane pola", {
+      toast.error("Uzupełnij wymagane pola", {
         description: "SprawdĹş formularz i sprĂłbuj ponownie.",
       });
       return;
@@ -704,7 +704,7 @@ export default function KoszykPage() {
           : deliveryMethod === "parcel"
           ? {
               parcelLocker: selectedPaczkomat 
-                ? `${selectedPaczkomat.code} â€“ ${selectedPaczkomat.address}, ${selectedPaczkomat.city}` 
+                ? `${selectedPaczkomat.code} – ${selectedPaczkomat.address}, ${selectedPaczkomat.city}` 
                 : formData.parcelLocker.trim(),
             }
           : {}),
@@ -713,8 +713,8 @@ export default function KoszykPage() {
       await startStripeCheckout(items, customerData);
       // Stripe will redirect
     } catch (err: any) {
-      toast.error("BĹ‚Ä…d pĹ‚atnoĹ›ci", {
-        description: err.message || "Nie udaĹ‚o siÄ™ rozpoczÄ…Ä‡ pĹ‚atnoĹ›ci.",
+      toast.error("Błąd płatności", {
+        description: err.message || "Nie udało się rozpocząć płatności.",
       });
     } finally {
       setIsCheckingOut(false);
@@ -731,7 +731,7 @@ export default function KoszykPage() {
           <h1 className="font-serif text-3xl text-brand-brown mb-3">Koszyk jest pusty</h1>
           <p className="text-brand-brown/70 mb-8">Dodaj wybrane miody ze strony oferty.</p>
           <Link href="/produkty">
-            <Button variant="secondary">PrzejdĹş do oferty</Button>
+            <Button variant="secondary">Przejdź do oferty</Button>
           </Link>
         </div>
       </div>
@@ -743,12 +743,12 @@ export default function KoszykPage() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center gap-4 mb-8">
           <Link href="/produkty" className="text-sm text-brand-brown/70 hover:text-brand-brown flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" /> PowrĂłt do oferty
+            <ArrowLeft className="w-4 h-4" /> Powrót do oferty
           </Link>
         </div>
 
-        <h1 className="font-serif text-5xl text-brand-brown tracking-tight mb-2">Finalizacja zamĂłwienia</h1>
-        <p className="text-brand-brown/70 mb-8">SprawdĹş koszyk i uzupeĹ‚nij dane do dostawy</p>
+        <h1 className="font-serif text-5xl text-brand-brown tracking-tight mb-2">Finalizacja zamówienia</h1>
+        <p className="text-brand-brown/70 mb-8">Sprawdź koszyk i uzupełnij dane do dostawy</p>
 
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Items list */}
@@ -790,7 +790,7 @@ export default function KoszykPage() {
                     </div>
 
                     <div className="text-right">
-                      <div className="text-xl font-semibold tabular-nums text-brand-brown">{item.price * item.quantity} zĹ‚</div>
+                      <div className="text-xl font-semibold tabular-nums text-brand-brown">{item.price * item.quantity} zł</div>
                     </div>
                   </div>
                 </div>
@@ -827,9 +827,9 @@ export default function KoszykPage() {
                           <Truck className="w-5 h-5 text-brand-brown" />
                         </div>
                         <span className="font-medium text-brand-brown">Dostawa kurierem na adres</span>
-                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">16 zĹ‚</span>
+                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">16 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">InPost / DPD â€˘ 1â€“3 dni robocze</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">InPost / DPD • 1–3 dni robocze</p>
                     </div>
                   </label>
 
@@ -854,9 +854,9 @@ export default function KoszykPage() {
                           <Package className="w-5 h-5 text-brand-brown" />
                         </div>
                         <span className="font-medium text-brand-brown">Paczkomat InPost</span>
-                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">14 zĹ‚</span>
+                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">14 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Wybierz dogodny punkt w Twojej okolicy â€˘ odbiĂłr 24/7</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">Wybierz dogodny punkt w Twojej okolicy • odbiór 24/7</p>
                     </div>
                   </label>
 
@@ -880,10 +880,10 @@ export default function KoszykPage() {
                         <div className={`p-1.5 rounded-lg ${deliveryMethod === "pickup" ? "bg-brand-gold/10" : "bg-brand-cream"}`}>
                           <Package className="w-5 h-5 text-brand-brown" />
                         </div>
-                        <span className="font-medium text-brand-brown">OdbiĂłr osobisty</span>
-                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">0 zĹ‚</span>
+                        <span className="font-medium text-brand-brown">Odbiór osobisty</span>
+                        <span className="ml-auto text-sm font-semibold text-brand-brown tabular-nums">0 zł</span>
                       </div>
-                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">W naszej pasiece nad WisĹ‚Ä… w Topolnie â€˘ uzgodnimy termin</p>
+                      <p className="text-sm text-brand-brown/60 mt-1 pl-8">W naszej pasiece nad Wisłą w Topolnie • uzgodnimy termin</p>
                     </div>
                   </label>
                 </div>
@@ -902,7 +902,7 @@ export default function KoszykPage() {
                 >
                   {/* Common fields */}
                   <div>
-                    <label className="block text-sm font-medium text-brand-brown mb-1.5">ImiÄ™ i nazwisko *</label>
+                    <label className="block text-sm font-medium text-brand-brown mb-1.5">Imię i nazwisko *</label>
                     <input
                       type="text"
                       value={formData.fullName}
@@ -949,7 +949,7 @@ export default function KoszykPage() {
                           value={formData.street}
                           onChange={(e) => updateField("street", e.target.value)}
                           className="w-full rounded-xl border border-brand-creamDark bg-white px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                          placeholder="ul. LeĹ›na 12/3"
+                          placeholder="ul. Leśna 12/3"
                         />
                         {errors.street && <p className="text-red-600 text-xs mt-1">{errors.street}</p>}
                       </div>
@@ -980,7 +980,7 @@ export default function KoszykPage() {
                       </div>
                     </>
                   ) : deliveryMethod === "parcel" ? (
-                    /* InPost Paczkomat â€” elegancka, ciepĹ‚a sekcja */
+                    /* InPost Paczkomat — elegancka, ciepła sekcja */
                     <div className="space-y-4">
                       {/* Search */}
                       <div>
@@ -1003,22 +1003,22 @@ export default function KoszykPage() {
                               setSearchResults(searchPaczkomats(""));
                             }}
                             className="w-full rounded-xl border border-brand-creamDark bg-white pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold"
-                            placeholder="np. Ĺšwiecie, ToruĹ„, Bydgoszcz, CheĹ‚mno lub kod paczkomatu"
+                            placeholder="np. Świecie, Toruń, Bydgoszcz, Chełmno lub kod paczkomatu"
                           />
                           <Search className="absolute left-3.5 top-3 h-4 w-4 text-brand-brown/50" />
                         </div>
                         <p className="text-xs text-brand-brown/60 mt-1">
-                          Wpisz nazwÄ™ miasta (Ĺšwiecie, Bydgoszcz, ToruĹ„...) lub kod paczkomatu. Wybierz z listy lub kliknij pinezkÄ™.
+                          Wpisz nazwę miasta (Świecie, Bydgoszcz, Toruń...) lub kod paczkomatu. Wybierz z listy lub kliknij pinezkę.
                         </p>
                       </div>
 
-                      {/* Wyniki wyszukiwania â€” wyraĹşne oddzielenie */}
+                      {/* Wyniki wyszukiwania — wyraźne oddzielenie */}
                       <AnimatePresence>
                         {searchResults.length > 0 && (
                           <div>
                             <div className="flex items-center justify-between mb-1.5 px-0.5">
                               <span className="text-xs font-medium tracking-wide text-brand-brown/70 uppercase">Wyniki wyszukiwania</span>
-                              <span className="text-[10px] text-brand-brown/50">{searchResults.length} paczkomatĂłw</span>
+                              <span className="text-[10px] text-brand-brown/50">{searchResults.length} paczkomatów</span>
                             </div>
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
@@ -1062,7 +1062,7 @@ export default function KoszykPage() {
                         )}
                       </AnimatePresence>
 
-                      {/* Wybrany paczkomat â€” ciepĹ‚a karta podsumowania (spĂłjna z listÄ…) */}
+                      {/* Wybrany paczkomat — ciepła karta podsumowania (spójna z listą) */}
                       <AnimatePresence>
                         {selectedPaczkomat && (
                           <motion.div
@@ -1095,18 +1095,18 @@ export default function KoszykPage() {
                                 onClick={clearSelectedPaczkomat}
                                 className="text-xs text-brand-brown/70 hover:text-brand-brown underline whitespace-nowrap"
                               >
-                                ZmieĹ„
+                                Zmień
                               </button>
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
 
-                      {/* Mapa â€” elegancka, stonowana, premium */}
+                      {/* Mapa — elegancka, stonowana, premium */}
                       <div>
                         <div className="flex items-center justify-between mb-1.5 px-0.5">
-                          <span className="text-xs font-medium tracking-wide text-brand-brown/70 uppercase">Mapa paczkomatĂłw</span>
-                          <span className="text-[10px] text-brand-brown/50">Kliknij pinezkÄ™, by wybraÄ‡</span>
+                          <span className="text-xs font-medium tracking-wide text-brand-brown/70 uppercase">Mapa paczkomatów</span>
+                          <span className="text-[10px] text-brand-brown/50">Kliknij pinezkę, by wybrać</span>
                         </div>
 
                         <div className="rounded-2xl border border-brand-creamDark bg-[#E8DFCF] p-2 shadow-sm">
@@ -1122,13 +1122,13 @@ export default function KoszykPage() {
                                 backgroundSize: 'cover'
                               }}
                             >
-                              {/* Subtelna, ziemista tekstura pĂłl i drĂłg */}
+                              {/* Subtelna, ziemista tekstura pól i dróg */}
                               <div className="absolute inset-0 opacity-[0.12]" 
                                    style={{
                                      backgroundImage: 'repeating-linear-gradient(28deg, transparent, transparent 7px, rgba(92,64,51,0.22) 7px, rgba(92,64,51,0.22) 11px), repeating-linear-gradient(-32deg, transparent, transparent 11px, rgba(92,64,51,0.13) 11px, rgba(92,64,51,0.13) 19px)'
                                    }} />
 
-                              {/* Bardzo subtelna siatka drĂłg i podziaĹ‚Ăłw */}
+                              {/* Bardzo subtelna siatka dróg i podziałów */}
                               <div className="absolute inset-0 opacity-[0.10]" style={{
                                 background: 'linear-gradient(90deg, transparent 48%, rgba(92,64,51,0.28) 49%, rgba(92,64,51,0.28) 51%, transparent 52%), linear-gradient(0deg, transparent 48%, rgba(92,64,51,0.22) 49%, rgba(92,64,51,0.22) 51%, transparent 52%)'
                               }} />
@@ -1166,7 +1166,7 @@ export default function KoszykPage() {
                                       onClick={() => selectPaczkomat(p)}
                                       className={`absolute flex flex-col items-center -translate-x-1/2 -translate-y-1/2 group transition-all duration-150 focus:outline-none ${isSel ? 'z-30 scale-[1.22]' : 'z-10 hover:scale-110'}`}
                                       style={{ left: `${left}%`, top: `${top}%` }}
-                                      title={`Wybierz ${p.code} â€” ${p.address}, ${p.city}`}
+                                      title={`Wybierz ${p.code} — ${p.address}, ${p.city}`}
                                     >
                                       <div className="relative">
                                         <MapPin 
@@ -1199,7 +1199,7 @@ export default function KoszykPage() {
                                 type="button"
                                 onClick={zoomIn} 
                                 className="px-1.5 py-0.5 hover:bg-[#EDE4D6] active:bg-[#d4c5a9] leading-none border-b border-[#8B7355]/20 font-medium"
-                                aria-label="PrzybliĹĽ mapÄ™"
+                                aria-label="Przybliż mapę"
                               >
                                 +
                               </button>
@@ -1207,9 +1207,9 @@ export default function KoszykPage() {
                                 type="button"
                                 onClick={zoomOut} 
                                 className="px-1.5 py-0.5 hover:bg-[#EDE4D6] active:bg-[#d4c5a9] leading-none border-b border-[#8B7355]/20 font-medium"
-                                aria-label="Oddal mapÄ™"
+                                aria-label="Oddal mapę"
                               >
-                                â’
+                                −
                               </button>
                               <button 
                                 type="button"
@@ -1229,8 +1229,8 @@ export default function KoszykPage() {
 
                           <p className="text-[9px] text-[#5c4033]/65 mt-1.5 text-center">
                             {searchResults.length > 0 
-                              ? `Pinezki odpowiadajÄ… wynikom â€˘ kliknij na mapie lub liĹ›cie, by wybraÄ‡` 
-                              : "Wpisz miasto (Ĺšwiecie, ToruĹ„, Bydgoszcz...) â€” liczne pinezki do klikniÄ™cia"}
+                              ? `Pinezki odpowiadają wynikom • kliknij na mapie lub liście, by wybrać` 
+                              : "Wpisz miasto (Świecie, Toruń, Bydgoszcz...) — liczne pinezki do kliknięcia"}
                           </p>
                         </div>
                       </div>
@@ -1245,8 +1245,8 @@ export default function KoszykPage() {
                   ) : (
                     /* Pickup info */
                     <div className="p-5 bg-brand-cream/60 rounded-2xl text-sm text-brand-brown/90 leading-relaxed border border-brand-creamDark">
-                      OdbiĂłr osobisty w naszej pasiece nad WisĹ‚Ä… w Topolnie (gm. Pruszcz).<br />
-                      Po zĹ‚oĹĽeniu zamĂłwienia zadzwonimy lub napiszemy, by ustaliÄ‡ dogodny termin odbioru. Zapraszamy!
+                      Odbiór osobisty w naszej pasiece nad Wisłą w Topolnie (gm. Pruszcz).<br />
+                      Po złożeniu zamówienia zadzwonimy lub napiszemy, by ustalić dogodny termin odbioru. Zapraszamy!
                     </div>
                   )}
                 </motion.div>
@@ -1258,22 +1258,22 @@ export default function KoszykPage() {
 
                 <div className="space-y-3 text-sm mb-5">
                   <div className="flex justify-between">
-                    <span className="text-brand-brown/70">WartoĹ›Ä‡ produktĂłw</span>
-                    <span className="tabular-nums font-medium">{productsTotal} zĹ‚</span>
+                    <span className="text-brand-brown/70">Wartość produktów</span>
+                    <span className="tabular-nums font-medium">{productsTotal} zł</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-brand-brown/70">
-                      Koszt wysyĹ‚ki {deliveryMethod === "address" ? "(kurier)" : deliveryMethod === "parcel" ? "(paczkomat)" : "(odbiĂłr osobisty)"}
+                      Koszt wysyłki {deliveryMethod === "address" ? "(kurier)" : deliveryMethod === "parcel" ? "(paczkomat)" : "(odbiór osobisty)"}
                     </span>
-                    <span className="tabular-nums font-medium">{shippingCost} zĹ‚</span>
+                    <span className="tabular-nums font-medium">{shippingCost} zł</span>
                   </div>
                 </div>
 
                 <div className="border-t border-brand-creamDark pt-4">
                   <div className="flex justify-between items-baseline">
-                    <span className="text-lg text-brand-brown">Razem do zapĹ‚aty</span>
+                    <span className="text-lg text-brand-brown">Razem do zapłaty</span>
                     <span className="text-4xl font-semibold tabular-nums text-brand-brown">
-                      {grandTotal} <span className="text-xl font-normal">zĹ‚</span>
+                      {grandTotal} <span className="text-xl font-normal">zł</span>
                     </span>
                   </div>
                 </div>
@@ -1284,11 +1284,11 @@ export default function KoszykPage() {
                   disabled={isCheckingOut}
                 >
                   <CreditCard className="w-4 h-4" />
-                  {isCheckingOut ? "Przekierowanie do pĹ‚atnoĹ›ci..." : "PrzejdĹş do pĹ‚atnoĹ›ci"}
+                  {isCheckingOut ? "Przekierowanie do płatności..." : "Przejdź do płatności"}
                 </Button>
 
                 <div className="mt-4 text-center text-[10px] leading-snug text-brand-brown/60">
-                  Bezpieczna pĹ‚atnoĹ›Ä‡ kartÄ…, BLIK lub Przelewy24
+                  Bezpieczna płatność kartą, BLIK lub Przelewy24
                 </div>
               </div>
             </div>
@@ -1297,7 +1297,7 @@ export default function KoszykPage() {
 
         <div className="mt-8 text-center">
           <button onClick={clearCart} className="text-xs text-red-600/70 hover:text-red-600">
-            WyczyĹ›Ä‡ koszyk
+            Wyczyść koszyk
           </button>
         </div>
       </div>

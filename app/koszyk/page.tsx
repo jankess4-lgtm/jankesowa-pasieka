@@ -61,9 +61,10 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "POZ678F", address: "ul. Półwiejska 27", city: "Poznań", hours: "24/7", distanceKm: 150, lat: 52.4064, lng: 16.9252 },
   // Gdańsk
   { code: "GDA901G", address: "ul. Długa 41", city: "Gdańsk", hours: "24/7", distanceKm: 160, lat: 54.3520, lng: 18.6466 },
-  // ŚWIECIE - many realistic ones, including Lidl Wojska Polskiego 76
-  { code: "SWI001", address: "ul. Wojska Polskiego 12 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4128, lng: 18.4525 },
+  // ŚWIECIE - realistic paczkomats (Biedronka at Wojska Polskiego 12, Lidl at 76, Kaufland, center, etc.)
+  { code: "SWI001", address: "ul. Wojska Polskiego 12 (Biedronka)", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4128, lng: 18.4525 },
   { code: "SWI002", address: "ul. Wojska Polskiego 76 (Lidl)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4123, lng: 18.4521 },
+  { code: "SWI017", address: "ul. Chełmińska 120 (żabka)", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4082, lng: 18.4350 },
   { code: "SWI003", address: "ul. Chełmińska 45 (Kaufland)", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4105, lng: 18.4480 },
   { code: "SWI004", address: "ul. Rynek 5 (centrum)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4098, lng: 18.4472 },
   { code: "SWI005", address: "ul. Bydgoska 25", city: "Świecie", hours: "24/7", distanceKm: 5, lat: 53.4145, lng: 18.4530 },
@@ -71,9 +72,12 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "SWI007", address: "ul. Szkolna 12", city: "Świecie", hours: "06:00-22:00", distanceKm: 4, lat: 53.4085, lng: 18.4465 },
   { code: "SWI008", address: "ul. Kościuszki 22", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4110, lng: 18.4508 },
   { code: "SWI009", address: "ul. Mickiewicza 4", city: "Świecie", hours: "24/7", distanceKm: 3, lat: 53.4092, lng: 18.4458 },
-  { code: "SWI010", address: "ul. 3 Maja 28 (żabka)", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4100, lng: 18.4478 },
+  { code: "SWI010", address: "ul. 3 Maja 28", city: "Świecie", hours: "24/7", distanceKm: 1, lat: 53.4100, lng: 18.4478 },
   { code: "SWI011", address: "ul. Wojska Polskiego 150", city: "Świecie", hours: "24/7", distanceKm: 6, lat: 53.4140, lng: 18.4555 },
   { code: "SWI012", address: "ul. Chełmińska 80", city: "Świecie", hours: "06:00-22:00", distanceKm: 5, lat: 53.4088, lng: 18.4425 },
+  { code: "SWI013", address: "ul. Dworcowa 3 (stacja PKP)", city: "Świecie", hours: "24/7", distanceKm: 2, lat: 53.4115, lng: 18.4490 },
+  { code: "SWI014", address: "ul. Poznańska 22", city: "Świecie", hours: "06:00-22:00", distanceKm: 7, lat: 53.4132, lng: 18.4405 },
+  { code: "SWI015", address: "ul. Sportowa 10 (osiedle)", city: "Świecie", hours: "24/7", distanceKm: 4, lat: 53.4070, lng: 18.4535 },
   // Toruń
   { code: "TOR112", address: "ul. Kopernika 15", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.5984 },
   { code: "TOR113", address: "ul. Bydgoska 45", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0155, lng: 18.5900 },
@@ -125,6 +129,14 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "KOR001", address: "ul. 3 Maja 8", city: "Koronowo", hours: "24/7", distanceKm: 25, lat: 53.3200, lng: 17.9300 },
   { code: "SOL001", address: "ul. Główna 22", city: "Solec Kujawski", hours: "24/7", distanceKm: 40, lat: 53.0800, lng: 18.2300 },
   { code: "ZNI001", address: "ul. Rynek 3", city: "Żnin", hours: "24/7", distanceKm: 65, lat: 52.8500, lng: 17.7200 },
+  // Dodatkowe realistyczne w regionie
+  { code: "TOR121", address: "ul. Lecha i Marii Kaczyńskich 10", city: "Toruń", hours: "24/7", distanceKm: 31, lat: 53.0220, lng: 18.6100 },
+  { code: "BYD013", address: "ul. Gdańska 180 (Biedronka)", city: "Bydgoszcz", hours: "24/7", distanceKm: 47, lat: 53.1320, lng: 18.0220 },
+  { code: "SWI016", address: "ul. 1 Maja 45", city: "Świecie", hours: "06:00-22:00", distanceKm: 2, lat: 53.4095, lng: 18.4502 },
+  { code: "GRU117", address: "ul. Długa 88", city: "Grudziądz", hours: "24/7", distanceKm: 22, lat: 53.4890, lng: 18.7620 },
+  { code: "CHE007", address: "ul. Toruńska 55", city: "Chełmno", hours: "24/7", distanceKm: 14, lat: 53.3520, lng: 18.4350 },
+  { code: "NAK004", address: "ul. Bydgoska 55", city: "Nakło nad Notecią", hours: "24/7", distanceKm: 28, lat: 53.1435, lng: 17.5980 },
+  { code: "INO004", address: "ul. Solankowa 20", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 53, lat: 52.8020, lng: 18.2680 },
 ];
 
 export default function KoszykPage() {
@@ -756,86 +768,92 @@ export default function KoszykPage() {
                         )}
                       </AnimatePresence>
 
-                      {/* Enhanced interactive map placeholder (clickable pins, green-beige style) */}
-                      <div className="mt-2 rounded-2xl border border-brand-creamDark bg-[#F5EDE4] p-3 shadow-inner">
+                      {/* Ulepszona elegancka mapa paczkomatów (placeholder, naturalny styl pasieki) */}
+                      <div className="mt-1 mb-1 text-xs font-medium text-brand-brown">
+                        {selectedPaczkomat 
+                          ? `Wybrany: ${selectedPaczkomat.code} — ${selectedPaczkomat.address}, ${selectedPaczkomat.city}` 
+                          : 'Mapa poglądowa (klikaj pinezki, aby wybrać paczkomat)'}
+                      </div>
+                      <div className="mt-1 rounded-2xl border border-brand-creamDark bg-[#EDE4D6] p-2 shadow-sm">
                         <div 
-                          className="h-48 rounded-xl relative overflow-hidden border border-emerald-200"
+                          className="h-48 rounded-xl relative overflow-hidden border border-[#8B7355]"
                           style={{
-                            background: 'linear-gradient(135deg, #d1fae5 0%, #a3e635 20%, #fef3c7 50%, #d1fae5 80%, #a3e635 100%)',
+                            background: 'linear-gradient(135deg, #3a5a3a 0%, #5c7a5c 25%, #e6d9c0 55%, #b89b7e 80%, #3a5a3a 100%)',
                             backgroundSize: 'cover'
                           }}
                         >
-                          {/* Subtle map texture / fields */}
-                          <div className="absolute inset-0 opacity-30" 
+                          {/* Subtelna tekstura pól i dróg (naturalna, ziemista) */}
+                          <div className="absolute inset-0 opacity-20" 
                                style={{
-                                 backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 16px), repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(139,69,19,0.1) 8px, rgba(139,69,19,0.1) 16px)'
+                                 backgroundImage: 'repeating-linear-gradient(30deg, transparent, transparent 6px, rgba(139,69,19,0.12) 6px, rgba(139,69,19,0.12) 10px), repeating-linear-gradient(-30deg, transparent, transparent 10px, rgba(101,67,33,0.08) 10px, rgba(101,67,33,0.08) 18px)'
                                }} />
 
-                          {/* Fake roads */}
-                          <div className="absolute inset-0" style={{
-                            background: 'linear-gradient(90deg, transparent 48%, rgba(139,69,19,0.15) 49%, rgba(139,69,19,0.15) 51%, transparent 52%), linear-gradient(0deg, transparent 48%, rgba(139,69,19,0.12) 49%, rgba(139,69,19,0.12) 51%, transparent 52%)'
+                          {/* Delikatna siatka dróg */}
+                          <div className="absolute inset-0 opacity-15" style={{
+                            background: 'linear-gradient(90deg, transparent 49%, rgba(101,67,33,0.25) 50%, rgba(101,67,33,0.25) 51%, transparent 52%), linear-gradient(0deg, transparent 49%, rgba(101,67,33,0.2) 50%, rgba(101,67,33,0.2) 51%, transparent 52%)'
                           }} />
 
-                          {/* Clickable pins from search results or default local */}
-                          {(searchResults.length > 0 ? searchResults : searchPaczkomats("")).map((p, i) => {
-                            const isSel = selectedPaczkomat?.code === p.code;
-                            // Position based on lat/lng if available, else grid
-                            let left = 20 + (i * 12) % 60;
-                            let top = 25 + ((i * 18) % 50);
-                            if (p.lat && p.lng) {
-                              // Simple projection relative to local area bounds ~53.0-53.5 , 18.0-18.8
-                              const minLat = 53.0, maxLat = 53.5, minLng = 18.0, maxLng = 18.8;
-                              left = 10 + ((p.lng - minLng) / (maxLng - minLng)) * 80;
-                              top = 15 + ((maxLat - p.lat) / (maxLat - minLat)) * 70;
+                          {/* Klikalne pinezki (12-15 rozproszonych realistycznie) */}
+                          {(() => {
+                            let mapPins = searchResults.length > 0 ? searchResults : [];
+                            if (mapPins.length < 12) {
+                              const localCities = ["Świecie","Toruń","Bydgoszcz","Chełmno","Grudziądz","Nakło nad Notecią"];
+                              const extras = SAMPLE_PACZKOMATS.filter(p => 
+                                localCities.includes(p.city) && !mapPins.some(m => m.code === p.code)
+                              ).slice(0, 15 - mapPins.length);
+                              mapPins = [...mapPins, ...extras];
                             }
-                            return (
-                              <button
-                                key={i}
-                                onClick={() => selectPaczkomat(p)}
-                                className={`absolute flex flex-col items-center -translate-x-1/2 -translate-y-1/2 group transition-all ${isSel ? 'z-20 scale-110' : 'z-10 hover:scale-105'}`}
-                                style={{ left: `${Math.max(5, Math.min(95, left))}%`, top: `${Math.max(5, Math.min(95, top))}%` }}
-                                title={`Wybierz ${p.code} - ${p.address}`}
-                              >
-                                <div className={`relative ${isSel ? 'animate-bounce' : ''}`}>
-                                  <MapPin 
-                                    className={`h-6 w-6 drop-shadow-md transition-colors ${isSel ? 'text-emerald-700' : 'text-brand-brown group-hover:text-brand-gold'}`} 
-                                  />
-                                  {isSel && (
-                                    <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 border border-emerald-500">
-                                      <Check className="h-2.5 w-2.5 text-emerald-700" />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className={`mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium shadow-sm whitespace-nowrap transition-all ${isSel ? 'bg-emerald-700 text-white' : 'bg-white/90 text-brand-brown group-hover:bg-brand-cream'}`}>
-                                  {p.code}
-                                </div>
-                              </button>
-                            );
-                          })}
+                            return mapPins.slice(0, 15).map((p, i) => {
+                              const isSel = selectedPaczkomat?.code === p.code;
+                              let left = 18 + (i * 5) % 65;
+                              let top = 22 + ((i * 7) % 55);
+                              if (p.lat && p.lng) {
+                                const minLat = 52.7, maxLat = 53.6, minLng = 17.5, maxLng = 19.0;
+                                left = 8 + ((p.lng - minLng) / (maxLng - minLng)) * 84;
+                                top = 12 + ((maxLat - p.lat) / (maxLat - minLat)) * 76;
+                              }
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => selectPaczkomat(p)}
+                                  className={`absolute flex flex-col items-center -translate-x-1/2 -translate-y-1/2 group transition-all duration-150 ${isSel ? 'z-30 scale-125' : 'z-10 hover:scale-110'}`}
+                                  style={{ left: `${Math.max(4, Math.min(96, left))}%`, top: `${Math.max(4, Math.min(96, top))}%` }}
+                                  title={`Wybierz ${p.code} - ${p.address}`}
+                                >
+                                  <div className="relative">
+                                    <MapPin 
+                                      className={`h-[18px] w-[18px] drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)] transition-colors ${isSel ? 'text-[#D97706]' : 'text-[#5c4033] group-hover:text-[#8B7355]'}`} 
+                                      style={{ filter: isSel ? 'drop-shadow(0 3px 4px rgba(217,119,6,0.4))' : 'drop-shadow(0 2px 2px rgba(0,0,0,0.35))' }}
+                                    />
+                                    {isSel && (
+                                      <div className="absolute -top-0.5 -right-0.5 bg-white rounded-full p-[1px] border border-[#D97706]">
+                                        <Check className="h-2 w-2 text-[#D97706]" />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className={`mt-px px-1 py-px rounded-sm text-[8px] font-semibold shadow-sm whitespace-nowrap leading-none transition-all ${isSel ? 'bg-[#5c4033] text-[#F5EDE4]' : 'bg-[#F5EDE4]/90 text-[#5c4033] group-hover:bg-[#EDE4D6]'}`}>
+                                    {p.code}
+                                  </div>
+                                </button>
+                              );
+                            });
+                          })()}
 
-                          {/* Center info / zoom simulation */}
-                          <div className="absolute top-2 left-2 bg-white/80 backdrop-blur px-2 py-0.5 rounded text-[10px] text-brand-brown font-medium shadow flex items-center gap-1">
-                            <MapPin className="h-3 w-3" /> {searchResults.length > 0 ? `${searchResults.length} paczkomatów` : 'Kujawy'}
+                          {/* Subtelna etykieta obszaru */}
+                          <div className="absolute top-2 left-2 bg-[#F5EDE4]/85 backdrop-blur-sm px-1.5 py-0.5 rounded text-[9px] text-[#5c4033] font-medium shadow-sm border border-[#8B7355]/30 flex items-center gap-1">
+                            <MapPin className="h-2.5 w-2.5" /> Kujawy / Pomorze
                           </div>
 
-                          {/* Fake zoom controls */}
-                          <div className="absolute bottom-2 right-2 flex flex-col bg-white/80 backdrop-blur rounded shadow text-brand-brown text-xs">
-                            <button onClick={() => { /* visual only */ }} className="px-1.5 hover:bg-brand-cream active:bg-brand-cream/70 border-b border-white/50 rounded-t">+</button>
-                            <button onClick={() => { /* visual only */ }} className="px-1.5 hover:bg-brand-cream active:bg-brand-cream/70 rounded-b">-</button>
+                          {/* Delikatne kontrolki zoom (wizualne) */}
+                          <div className="absolute bottom-2 right-2 flex flex-col bg-[#F5EDE4]/80 backdrop-blur-sm rounded text-[#5c4033] text-[10px] shadow-sm border border-[#8B7355]/30 overflow-hidden">
+                            <button onClick={() => {}} className="px-1 hover:bg-[#EDE4D6] active:bg-[#d4c5a9] leading-none border-b border-[#8B7355]/20">+</button>
+                            <button onClick={() => {}} className="px-1 hover:bg-[#EDE4D6] active:bg-[#d4c5a9] leading-none">-</button>
                           </div>
-
-                          {/* Selected info overlay */}
-                          {selectedPaczkomat && (
-                            <div className="absolute top-2 right-2 bg-emerald-700/90 text-white text-[9px] px-2 py-0.5 rounded shadow">
-                              Wybrano: {selectedPaczkomat.code}
-                            </div>
-                          )}
                         </div>
-                        <p className="text-[10px] text-brand-brown/60 mt-1.5 text-center flex items-center justify-center gap-1">
+                        <p className="text-[9px] text-[#5c4033]/70 mt-1 text-center">
                           {searchResults.length > 0 
-                            ? `Kliknij pinezkę na mapie lub w liście aby wybrać paczkomat` 
-                            : "Wpisz min. 3 znaki (miasto np. Świecie) — pinezki pojawią się tutaj"}
-                          <span className="text-[8px] opacity-50">(styl OpenStreetMap)</span>
+                            ? `Kliknij pinezkę na mapie lub pozycję na liście • ${searchResults.length} wyników` 
+                            : "Wpisz miasto (np. Świecie) — pinezki się pojawią i będą klikalne"}
                         </p>
                       </div>
 

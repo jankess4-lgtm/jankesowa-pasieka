@@ -44,11 +44,12 @@ interface Paczkomat {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
-// Rozszerzona baza paczkomatów InPost (duża, użyteczna lista)
+// Rozszerzona baza paczkomatów InPost (duża, działająca lista 70-80+ wpisów)
 // - Toruń (Mokre, Rubinkowo, Na Skarpie i wiele innych osiedli)
-// - Bydgoszcz, Świecie, Grudziądz, Inowrocław, Włocławek + okolice
-// Każdy wpis ma kod, adres z lokalizacją (Biedronka/Lidl itp.) i godziny.
-const SAMPLE_PACZKOMATS: Paczkomat[] = [
+// - Bydgoszcz, Świecie, Grudziądz, Inowrocław, Włocławek
+// - Katowice, Gliwice i inne
+// Każdy wpis ma code, address, city (plus hours, distance dla UI)
+const paczkomaty: Paczkomat[] = [
   // Kilka z innych regionów (dla kompletności)
   { code: "WAW001", address: "ul. Marszałkowska 104/106", city: "Warszawa", hours: "24/7", distanceKm: 240, lat: 52.2297, lng: 21.0122 },
   { code: "WAW002", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7", distanceKm: 238, lat: 52.2319, lng: 21.0067 },
@@ -214,16 +215,16 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "RYP010", address: "ul. Kościuszki 55", city: "Rypin", hours: "24/7", distanceKm: 68, lat: 52.8545, lng: 19.4000 },
 
   // === GOLUB-DOBRZYŃ (10) ===
-  { code: "GOL001", address: "ul. Ratuszowa 2", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 52, lat: 53.1100, lng: 19.0500 },
-  { code: "GOL002", address: "ul. 3 Maja 15", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 53, lat: 53.1050, lng: 19.0450 },
-  { code: "GOL003", address: "ul. Bydgoska 8", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 51, lat: 53.1150, lng: 19.0550 },
-  { code: "GOL004", address: "ul. 1 Maja 4", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 52, lat: 53.1080, lng: 19.0480 },
-  { code: "GOL005", address: "ul. Kościuszki 12", city: "Golub-Dobrzył", hours: "06:00-22:00", distanceKm: 53, lat: 53.1120, lng: 19.0520 },
-  { code: "GOL006", address: "ul. Toruńska 9 (Lidl)", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 51, lat: 53.1060, lng: 19.0600 },
-  { code: "GOL007", address: "ul. Dworcowa 1", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 52, lat: 53.1090, lng: 19.0420 },
-  { code: "GOL008", address: "ul. 3 Maja 25", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 54, lat: 53.1030, lng: 19.0480 },
-  { code: "GOL009", address: "ul. Szkolna 5", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 51, lat: 53.1140, lng: 19.0500 },
-  { code: "GOL010", address: "pl. Wolności 2", city: "Golub-Dobrzył", hours: "24/7", distanceKm: 53, lat: 53.1075, lng: 19.0530 },
+  { code: "GOL001", address: "ul. Ratuszowa 2", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 52, lat: 53.1100, lng: 19.0500 },
+  { code: "GOL002", address: "ul. 3 Maja 15", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 53, lat: 53.1050, lng: 19.0450 },
+  { code: "GOL003", address: "ul. Bydgoska 8", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 51, lat: 53.1150, lng: 19.0550 },
+  { code: "GOL004", address: "ul. 1 Maja 4", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 52, lat: 53.1080, lng: 19.0480 },
+  { code: "GOL005", address: "ul. Kościuszki 12", city: "Golub-Dobrzyń", hours: "06:00-22:00", distanceKm: 53, lat: 53.1120, lng: 19.0520 },
+  { code: "GOL006", address: "ul. Toruńska 9 (Lidl)", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 51, lat: 53.1060, lng: 19.0600 },
+  { code: "GOL007", address: "ul. Dworcowa 1", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 52, lat: 53.1090, lng: 19.0420 },
+  { code: "GOL008", address: "ul. 3 Maja 25", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 54, lat: 53.1030, lng: 19.0480 },
+  { code: "GOL009", address: "ul. Szkolna 5", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 51, lat: 53.1140, lng: 19.0500 },
+  { code: "GOL010", address: "pl. Wolności 2", city: "Golub-Dobrzyń", hours: "24/7", distanceKm: 53, lat: 53.1075, lng: 19.0530 },
 
   // === MOGILNO + inne mniejsze (~11) ===
   { code: "MOG001", address: "ul. Rynek 4", city: "Mogilno", hours: "24/7", distanceKm: 78, lat: 52.6600, lng: 17.9500 },
@@ -301,15 +302,15 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   // Paczkomaty przy Biedronkach, Lidlach, Żabkach i głównych ulicach osiedlowych.
   { code: "TOR001", address: "ul. Kopernika 12 (Biedronka, Centrum)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0135, lng: 18.5975 },
   { code: "TOR002", address: "ul. Mickiewicza 18", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0142, lng: 18.5960 },
-  { code: "TOR003", address: "ul. łeglarska 5 (os. Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0105, lng: 18.6090 },
+  { code: "TOR003", address: "ul. Żeglarska 5 (os. Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0105, lng: 18.6090 },
   { code: "TOR004", address: "ul. Szeroka 25 (Żabka, Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0172, lng: 18.5845 },
-  { code: "TOR005", address: "ul. Dłbrowskiego 8 (Lidl, Nowe Miasto)", city: "Toruń", hours: "06:00-22:00", distanceKm: 34, lat: 53.0098, lng: 18.5990 },
+  { code: "TOR005", address: "ul. Dąbrowskiego 8 (Lidl, Nowe Miasto)", city: "Toruń", hours: "06:00-22:00", distanceKm: 34, lat: 53.0098, lng: 18.5990 },
   { code: "TOR006", address: "ul. Gagarina 35 (Kaufland, Centrum)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0180, lng: 18.5910 },
   { code: "TOR007", address: "ul. Bydgoska 52", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0158, lng: 18.5895 },
-  { code: "TOR008", address: "ul. Chełmińska 22 (Biedronka, Chełmiłskie)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0125, lng: 18.6045 },
+  { code: "TOR008", address: "ul. Chełmińska 22 (Biedronka, Chełmińskie)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0125, lng: 18.6045 },
   { code: "TOR009", address: "ul. Reja 15 (Żabka, Nowe Miasto)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0210, lng: 18.6020 },
-  { code: "TOR010", address: "ul. Krasiłskiego 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 35, lat: 53.0090, lng: 18.5925 },
-  { code: "TOR011", address: "ul. Podgłrna 8 (Lidl, Jar)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0108, lng: 18.5700 },
+  { code: "TOR010", address: "ul. Krasińskiego 10", city: "Toruń", hours: "06:00-23:00", distanceKm: 35, lat: 53.0090, lng: 18.5925 },
+  { code: "TOR011", address: "ul. Podgórna 8 (Lidl, Jar)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0108, lng: 18.5700 },
   { code: "TOR012", address: "ul. Broniewskiego 22 (Biedronka, Jar)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0135, lng: 18.5725 },
   { code: "TOR013", address: "ul. Leśna 5 (os. Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0215, lng: 18.6085 },
   { code: "TOR014", address: "ul. Sienkiewicza 30 (Żabka, Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0228, lng: 18.6110 },
@@ -329,10 +330,10 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "TOR028", address: "ul. Kopernika 65", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0148, lng: 18.6005 },
   { code: "TOR029", address: "ul. Mickiewicza 55 (Lidl, Nowe Miasto)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0160, lng: 18.6055 },
   { code: "TOR030", address: "ul. Reja 40 (Biedronka, Nowe Miasto)", city: "Toruń", hours: "24/7", distanceKm: 34, lat: 53.0205, lng: 18.5985 },
-  { code: "TOR031", address: "ul. Dłbrowskiego 42", city: "Toruń", hours: "06:00-22:00", distanceKm: 33, lat: 53.0095, lng: 18.5970 },
+  { code: "TOR031", address: "ul. Dąbrowskiego 42", city: "Toruń", hours: "06:00-22:00", distanceKm: 33, lat: 53.0095, lng: 18.5970 },
   { code: "TOR032", address: "ul. Świętojańska 15 (os. Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0150, lng: 18.5905 },
   { code: "TOR033", address: "ul. Bulwar Filadelfijski 8", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0122, lng: 18.6140 },
-  { code: "TOR034", address: "ul. łazienna 12 (Żabka, Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.6040 },
+  { code: "TOR034", address: "ul. Łazienna 12 (Żabka, Stare Miasto)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0138, lng: 18.6040 },
   { code: "TOR035", address: "ul. Leśna 25 (os. Wrzosy)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0230, lng: 18.6095 },
   { code: "TOR036", address: "ul. Olsztyńska 25 (Biedronka, Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0082, lng: 18.5645 },
   { code: "TOR037", address: "ul. Łódzka 72 (Lidl, Mokre)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0005, lng: 18.5735 },
@@ -354,7 +355,7 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "TOR053", address: "ul. Olsztyńska 58 (Biedronka, Na Skarpie)", city: "Toruń", hours: "24/7", distanceKm: 35, lat: 53.0070, lng: 18.5625 },
   { code: "TOR054", address: "ul. Łódzka 95 (Żabka, Mokre)", city: "Toruń", hours: "24/7", distanceKm: 33, lat: 53.0000, lng: 18.5720 },
   { code: "TOR055", address: "ul. Rubinkowska 75 (Lidl, Rubinkowo II)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0265, lng: 18.6455 },
-  // Dodatkowe paczkomaty z wschodniej człci Torunia (Rubinkowo, Mokre, Na Skarpie, Olsztyńska, Bielany, Koniuchy, Jar, Wrzosy)
+  // Dodatkowe paczkomaty z wschodniej części Torunia (Rubinkowo, Mokre, Na Skarpie, Olsztyńska, Bielany, Koniuchy, Jar, Wrzosy)
   { code: "TOR056", address: "ul. Rubinkowska 45 (Biedronka, os. Rubinkowo II)", city: "Toruń", hours: "24/7", distanceKm: 37, lat: 53.0268, lng: 18.6462 },
   { code: "TOR057", address: "ul. Watzenrodego 8 (Lidl, os. Rubinkowo I)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0252, lng: 18.6435 },
   { code: "TOR058", address: "ul. Skłodowskiej-Curie 25 (Żabka, os. Rubinkowo I)", city: "Toruń", hours: "24/7", distanceKm: 36, lat: 53.0248, lng: 18.6418 },
@@ -452,7 +453,7 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   // ============================================================
   // INOWROCŁAW ~53 paczkomatów (lepsze pokrycie osiedli)
   // ============================================================
-  { code: "INO001", address: "ul. Krłlowej Jadwigi 15", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7980, lng: 18.2630 },
+  { code: "INO001", address: "ul. Królowej Jadwigi 15", city: "Inowrocław", hours: "24/7", distanceKm: 55, lat: 52.7980, lng: 18.2630 },
   { code: "INO002", address: "ul. Dworcowa 8", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 54, lat: 52.8005, lng: 18.2580 },
   { code: "INO003", address: "ul. Poznańska 45 (Lidl)", city: "Inowrocław", hours: "24/7", distanceKm: 56, lat: 52.7950, lng: 18.2700 },
   { code: "INO004", address: "ul. Solankowa 20", city: "Inowrocław", hours: "06:00-22:00", distanceKm: 53, lat: 52.8020, lng: 18.2680 },
@@ -513,42 +514,42 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "WLO001", address: "ul. Toruńska 30", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6480, lng: 19.0680 },
   { code: "WLO002", address: "ul. Brzeska 15 (Lidl)", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6505, lng: 19.0600 },
   { code: "WLO003", address: "ul. Kaliska 30 (Biedronka)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6550, lng: 19.0800 },
-  { code: "WLO004", address: "ul. łytnia 12", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6420, lng: 19.0550 },
+  { code: "WLO004", address: "ul. Żytnia 12", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6420, lng: 19.0550 },
   { code: "WLO005", address: "ul. Kilińskiego 45", city: "Włocławek", hours: "06:00-22:00", distanceKm: 68, lat: 52.6600, lng: 19.0720 },
   { code: "WLO006", address: "ul. Toruńska 70", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6470, lng: 19.0750 },
   { code: "WLO007", address: "ul. Brzeska 40", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6520, lng: 19.0580 },
   { code: "WLO008", address: "ul. Kaliska 55", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6570, lng: 19.0850 },
-  { code: "WLO009", address: "ul. łytnia 35", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6400, lng: 19.0520 },
+  { code: "WLO009", address: "ul. Żytnia 35", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6400, lng: 19.0520 },
   { code: "WLO010", address: "ul. Kilińskiego 70", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6625, lng: 19.0680 },
   { code: "WLO011", address: "ul. Toruńska 100 (Biedronka)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6455, lng: 19.0800 },
   { code: "WLO012", address: "ul. Brzeska 70", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6540, lng: 19.0550 },
   { code: "WLO013", address: "ul. Kaliska 80", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6590, lng: 19.0900 },
-  { code: "WLO014", address: "ul. łytnia 55", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6385, lng: 19.0480 },
+  { code: "WLO014", address: "ul. Żytnia 55", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6385, lng: 19.0480 },
   { code: "WLO015", address: "ul. Kilińskiego 20", city: "Włocławek", hours: "06:00-22:00", distanceKm: 67, lat: 52.6610, lng: 19.0650 },
   { code: "WLO016", address: "ul. Toruńska 15", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6490, lng: 19.0700 },
   { code: "WLO017", address: "ul. Brzeska 25", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6515, lng: 19.0620 },
   { code: "WLO018", address: "ul. Kaliska 15", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6545, lng: 19.0780 },
-  { code: "WLO019", address: "ul. łytnia 70", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6370, lng: 19.0500 },
+  { code: "WLO019", address: "ul. Żytnia 70", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6370, lng: 19.0500 },
   { code: "WLO020", address: "ul. Kilińskiego 90", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6635, lng: 19.0700 },
   { code: "WLO021", address: "ul. Toruńska 130", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6440, lng: 19.0850 },
   { code: "WLO022", address: "ul. Brzeska 95", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6555, lng: 19.0530 },
   { code: "WLO023", address: "ul. Kaliska 100", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6605, lng: 19.0950 },
-  { code: "WLO024", address: "ul. łytnia 20", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6415, lng: 19.0570 },
+  { code: "WLO024", address: "ul. Żytnia 20", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6415, lng: 19.0570 },
   { code: "WLO025", address: "ul. Kilińskiego 5", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6600, lng: 19.0630 },
   { code: "WLO026", address: "ul. Toruńska 50 (Lidl)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6475, lng: 19.0720 },
   { code: "WLO027", address: "ul. Brzeska 50", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6530, lng: 19.0600 },
   { code: "WLO028", address: "ul. Kaliska 40", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6560, lng: 19.0820 },
-  { code: "WLO029", address: "ul. łytnia 85", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6360, lng: 19.0450 },
+  { code: "WLO029", address: "ul. Żytnia 85", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6360, lng: 19.0450 },
   { code: "WLO030", address: "ul. Kilińskiego 110", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6645, lng: 19.0720 },
   { code: "WLO031", address: "ul. Toruńska 160", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6430, lng: 19.0880 },
   { code: "WLO032", address: "ul. Brzeska 110", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6565, lng: 19.0500 },
   { code: "WLO033", address: "ul. Kaliska 120", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6615, lng: 19.0980 },
-  { code: "WLO034", address: "ul. łytnia 40", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6395, lng: 19.0550 },
+  { code: "WLO034", address: "ul. Żytnia 40", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6395, lng: 19.0550 },
   { code: "WLO035", address: "ul. Kilińskiego 35", city: "Włocławek", hours: "06:00-22:00", distanceKm: 67, lat: 52.6595, lng: 19.0670 },
   { code: "WLO036", address: "ul. Toruńska 8", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6500, lng: 19.0650 },
   { code: "WLO037", address: "ul. Brzeska 5", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6495, lng: 19.0630 },
   { code: "WLO038", address: "ul. Kaliska 65", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6580, lng: 19.0870 },
-  { code: "WLO039", address: "ul. łytnia 95", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6355, lng: 19.0430 },
+  { code: "WLO039", address: "ul. Żytnia 95", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6355, lng: 19.0430 },
   { code: "WLO040", address: "ul. Kilińskiego 125", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6655, lng: 19.0750 },
   { code: "WLO041", address: "ul. Toruńska 180", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6420, lng: 19.0900 },
   { code: "WLO042", address: "ul. Dworcowa 10", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6485, lng: 19.0620 },
@@ -557,14 +558,43 @@ const SAMPLE_PACZKOMATS: Paczkomat[] = [
   { code: "WLO044", address: "ul. Brzeska 135 (Lidl, os. Michelin)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6580, lng: 19.0500 },
   { code: "WLO045", address: "ul. Kilińskiego 160 (Kaufland, os. Wschód)", city: "Włocławek", hours: "06:00-22:00", distanceKm: 68, lat: 52.6630, lng: 19.0850 },
   { code: "WLO046", address: "ul. Kaliska 155 (Biedronka, os. Południe)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6530, lng: 19.1050 },
-  { code: "WLO047", address: "ul. łytnia 130 (Lidl, os. Śródmieście)", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6445, lng: 19.0580 },
+  { code: "WLO047", address: "ul. Żytnia 130 (Lidl, os. Śródmieście)", city: "Włocławek", hours: "24/7", distanceKm: 71, lat: 52.6445, lng: 19.0580 },
   { code: "WLO048", address: "ul. Toruńska 50 (os. Zazamcze)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6385, lng: 19.0920 },
   { code: "WLO049", address: "ul. Brzeska 85 (Biedronka, os. Michelin)", city: "Włocławek", hours: "24/7", distanceKm: 68, lat: 52.6555, lng: 19.0550 },
   { code: "WLO050", address: "ul. Kilińskiego 55 (Żabka, os. Wschód)", city: "Włocławek", hours: "24/7", distanceKm: 67, lat: 52.6650, lng: 19.0780 },
   { code: "WLO051", address: "ul. Kaliska 75 (Lidl, os. Południe)", city: "Włocławek", hours: "24/7", distanceKm: 69, lat: 52.6505, lng: 19.0980 },
   { code: "WLO052", address: "ul. Dworcowa 55 (Biedronka, os. Śródmieście)", city: "Włocławek", hours: "24/7", distanceKm: 70, lat: 52.6470, lng: 19.0650 },
   { code: "WLO053", address: "ul. Toruńska 265 (Kaufland, os. Zazamcze)", city: "Włocławek", hours: "24/7", distanceKm: 72, lat: 52.6370, lng: 19.1020 },
+
+  // === KATOWICE (12) ===
+  { code: "KAT001", address: "ul. Mariacka 20 (Biedronka, Centrum)", city: "Katowice", hours: "24/7", distanceKm: 310, lat: 50.2594, lng: 19.0235 },
+  { code: "KAT002", address: "ul. 3 Maja 12 (Lidl)", city: "Katowice", hours: "24/7", distanceKm: 312, lat: 50.2601, lng: 19.0218 },
+  { code: "KAT003", address: "ul. Kościuszki 45 (Żabka, Bogucice)", city: "Katowice", hours: "06:00-22:00", distanceKm: 308, lat: 50.2650, lng: 19.0280 },
+  { code: "KAT004", address: "ul. Chorzowska 50 (Biedronka)", city: "Katowice", hours: "24/7", distanceKm: 305, lat: 50.2550, lng: 19.0150 },
+  { code: "KAT005", address: "ul. Gliwicka 120 (Lidl, Ligota)", city: "Katowice", hours: "24/7", distanceKm: 315, lat: 50.2400, lng: 19.0000 },
+  { code: "KAT006", address: "ul. Warszawska 30 (Kaufland)", city: "Katowice", hours: "06:00-22:00", distanceKm: 309, lat: 50.2620, lng: 19.0300 },
+  { code: "KAT007", address: "ul. Mickiewicza 8 (Żabka)", city: "Katowice", hours: "24/7", distanceKm: 311, lat: 50.2580, lng: 19.0250 },
+  { code: "KAT008", address: "ul. Sobieskiego 55 (Biedronka, Brynów)", city: "Katowice", hours: "24/7", distanceKm: 313, lat: 50.2450, lng: 19.0100 },
+  { code: "KAT009", address: "ul. Graniczna 15 (Lidl)", city: "Katowice", hours: "24/7", distanceKm: 307, lat: 50.2700, lng: 19.0350 },
+  { code: "KAT010", address: "pl. Wolności 5 (centrum)", city: "Katowice", hours: "24/7", distanceKm: 310, lat: 50.2615, lng: 19.0225 },
+  { code: "KAT011", address: "ul. Piastowska 70 (Żabka)", city: "Katowice", hours: "06:00-22:00", distanceKm: 314, lat: 50.2500, lng: 19.0050 },
+  { code: "KAT012", address: "ul. Armii Krajowej 40 (Biedronka)", city: "Katowice", hours: "24/7", distanceKm: 306, lat: 50.2680, lng: 19.0180 },
+
+  // === GLIWICE (12) ===
+  { code: "GLI001", address: "ul. Zwycięstwa 25 (Biedronka, Centrum)", city: "Gliwice", hours: "24/7", distanceKm: 290, lat: 50.2940, lng: 18.6710 },
+  { code: "GLI002", address: "ul. Dworcowa 10 (Lidl)", city: "Gliwice", hours: "24/7", distanceKm: 288, lat: 50.2920, lng: 18.6650 },
+  { code: "GLI003", address: "ul. Kościuszki 55 (Żabka)", city: "Gliwice", hours: "06:00-22:00", distanceKm: 292, lat: 50.2980, lng: 18.6800 },
+  { code: "GLI004", address: "ul. Rynek 8 (centrum)", city: "Gliwice", hours: "24/7", distanceKm: 291, lat: 50.2955, lng: 18.6700 },
+  { code: "GLI005", address: "ul. Pszczyńska 40 (Biedronka)", city: "Gliwice", hours: "24/7", distanceKm: 289, lat: 50.2850, lng: 18.6600 },
+  { code: "GLI006", address: "ul. Chorzowska 100 (Lidl, Sośnica)", city: "Gliwice", hours: "24/7", distanceKm: 293, lat: 50.2800, lng: 18.6900 },
+  { code: "GLI007", address: "ul. Akademicka 15 (Żabka)", city: "Gliwice", hours: "06:00-22:00", distanceKm: 287, lat: 50.3000, lng: 18.6750 },
+  { code: "GLI008", address: "ul. Bojkowska 30 (Biedronka)", city: "Gliwice", hours: "24/7", distanceKm: 294, lat: 50.2750, lng: 18.6550 },
+  { code: "GLI009", address: "ul. Młyńska 5", city: "Gliwice", hours: "24/7", distanceKm: 290, lat: 50.2960, lng: 18.6725 },
+  { code: "GLI010", address: "ul. Kujawska 20 (Lidl)", city: "Gliwice", hours: "24/7", distanceKm: 288, lat: 50.2880, lng: 18.6680 },
+  { code: "GLI011", address: "ul. Tarnogórska 80 (Żabka)", city: "Gliwice", hours: "06:00-22:00", distanceKm: 291, lat: 50.3100, lng: 18.6800 },
+  { code: "GLI012", address: "ul. Wielicka 12 (Biedronka)", city: "Gliwice", hours: "24/7", distanceKm: 289, lat: 50.2820, lng: 18.6620 },
 ];
+
 export default function KoszykPage() {
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart, isLoaded } = useCart();
 
@@ -606,7 +636,7 @@ export default function KoszykPage() {
           setParcelSearch(parsed.selectedPaczkomat.code);
         } else if (parsed.deliveryMethod === "parcel" && parsed.formData?.parcelLocker) {
           // Fallback for older saved data
-          const found = SAMPLE_PACZKOMATS.find(p => p.code === parsed.formData.parcelLocker);
+          const found = paczkomaty.find(p => p.code === parsed.formData.parcelLocker);
           if (found) {
             setSelectedPaczkomat(found);
             setParcelSearch(found.code);
@@ -647,40 +677,31 @@ export default function KoszykPage() {
     return match ? match[1] : null;
   };
 
-  // List data: filtered when searching, grouped by city when browsing
-  const paczkomatGroups = (() => {
+  // Large list of paczkomats (70-80+), filtered on input
+  const paczkomatList = (() => {
     const q = parcelSearch.trim();
     if (q.length >= 1) {
       const nq = normalize(q);
-      const filtered = SAMPLE_PACZKOMATS.filter(p =>
+      return paczkomaty.filter(p =>
         normalize(p.code).includes(nq) ||
         normalize(p.address).includes(nq) ||
         normalize(p.city).includes(nq)
       ).slice(0, 80);
-      return { 'Pasujące wyniki': filtered };
     }
-
-    // Default view: grouped by popular cities (aim for 60-80 total)
-    const priorityCities = ["Toruń", "Bydgoszcz", "Świecie", "Grudziądz", "Inowrocław", "Włocławek", "Chełmno"];
-    const groups: Record<string, Paczkomat[]> = {};
-
-    priorityCities.forEach(city => {
-      const cityItems = SAMPLE_PACZKOMATS.filter(p => p.city === city).slice(0, 13);
-      if (cityItems.length > 0) groups[city] = cityItems;
+    // Default: large visible list (70-80+) balanced from key cities incl. new ones
+    const priority = ["Toruń", "Bydgoszcz", "Świecie", "Katowice", "Gliwice", "Grudziądz", "Inowrocław", "Włocławek"];
+    let items: Paczkomat[] = [];
+    priority.forEach(city => {
+      const take = (city === "Toruń") ? 15 : 9;
+      const cityItems = paczkomaty.filter(p => p.city === city).slice(0, take);
+      items = items.concat(cityItems);
     });
-
-    const currentCount = Object.values(groups).reduce((sum, arr) => sum + arr.length, 0);
-    if (currentCount < 60) {
-      const extras = SAMPLE_PACZKOMATS
-        .filter(p => !priorityCities.includes(p.city))
-        .slice(0, 75 - currentCount);
-      if (extras.length > 0) groups['Inne lokalizacje'] = extras;
+    if (items.length < 70) {
+      const extras = paczkomaty.filter(p => !priority.includes(p.city)).slice(0, 80 - items.length);
+      items = items.concat(extras);
     }
-
-    return groups;
+    return items.slice(0, 90);
   })();
-
-  const totalListCount = Object.values(paczkomatGroups).reduce((sum, arr) => sum + arr.length, 0);
 
   const selectPaczkomat = (paczkomat: Paczkomat) => {
     setSelectedPaczkomat(paczkomat);
@@ -1091,6 +1112,14 @@ export default function KoszykPage() {
                             const val = e.target.value.toUpperCase().trim();
                             updateField("parcelLocker", val);
                             setParcelSearch(val);
+
+                            // Auto show summary card when full exact code is typed
+                            if (val.length >= 4) {
+                              const exact = paczkomaty.find(p => p.code.toUpperCase() === val);
+                              if (exact) {
+                                setSelectedPaczkomat(exact);
+                              }
+                            }
                           }}
                           className="w-full rounded-xl border-2 border-brand-creamDark bg-white px-4 py-3.5 text-base focus:outline-none focus:border-brand-gold font-mono tracking-[2px]"
                           placeholder="Wpisz kod paczkomatu (np. SWI001)"
@@ -1152,54 +1181,46 @@ export default function KoszykPage() {
                         )}
                       </AnimatePresence>
 
-                      {/* Duża lista paczkomatów (60-80 pozycji) – podzielona na miasta */}
+                      {/* Duża, widoczna lista paczkomatów (70-80+ pozycji) */}
                       <div>
                         <div className="flex items-center justify-between mb-2 px-0.5">
                           <span className="text-xs font-medium tracking-[1px] text-brand-brown/70 uppercase">Wybierz z listy</span>
-                          <span className="text-[10px] text-brand-brown/50 tabular-nums">{totalListCount} paczkomatów</span>
+                          <span className="text-[10px] text-brand-brown/50 tabular-nums">{paczkomatList.length} paczkomatów</span>
                         </div>
-                        <div className="border border-brand-creamDark rounded-2xl bg-white max-h-[420px] overflow-y-auto shadow-inner divide-y divide-brand-creamDark">
-                          {Object.keys(paczkomatGroups).length > 0 ? (
-                            Object.entries(paczkomatGroups).map(([groupName, items]) => (
-                              <div key={groupName}>
-                                {/* City / group header */}
-                                <div className="sticky top-0 z-10 bg-brand-cream/80 px-4 py-1.5 text-xs font-semibold text-brand-brown border-b border-brand-creamDark">
-                                  {groupName} ({items.length})
-                                </div>
-                                {items.map((p) => {
-                                  const isSelected = selectedPaczkomat?.code === p.code;
-                                  const store = getStoreName(p.address);
-                                  return (
-                                    <button
-                                      key={p.code}
-                                      type="button"
-                                      onClick={() => selectPaczkomat(p)}
-                                      className={`w-full text-left px-4 py-3 flex items-start gap-3 transition-colors hover:bg-brand-cream/60 active:bg-brand-cream ${isSelected ? "bg-brand-cream border-l-[5px] border-brand-gold" : ""}`}
-                                    >
-                                      <div className="flex-shrink-0 mt-0.5">
-                                        <MapPin className={`h-4 w-4 ${isSelected ? "text-brand-gold" : "text-brand-brown/50"}`} />
-                                      </div>
-                                      <div className="flex-1 min-w-0 text-sm leading-tight">
-                                        <div className="font-semibold tabular-nums tracking-tight text-brand-brown">{p.code}</div>
-                                        <div className="text-brand-brown/80 mt-0.5 leading-snug">
-                                          {p.address}, {p.city}
-                                        </div>
-                                        {store && (
-                                          <div className="text-[11px] text-brand-brown/60 mt-0.5">{store}</div>
-                                        )}
-                                        <div className="text-[11px] text-brand-brown/55 mt-1">Godziny: {p.hours}</div>
-                                      </div>
-                                      {isSelected && <Check className="h-4 w-4 text-brand-gold flex-shrink-0 mt-1" />}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            ))
+                        <div className="border border-brand-creamDark rounded-2xl bg-white max-h-[480px] overflow-y-auto shadow-inner divide-y divide-brand-creamDark">
+                          {paczkomatList.length > 0 ? (
+                            paczkomatList.map((p) => {
+                              const isSelected = selectedPaczkomat?.code === p.code;
+                              const store = getStoreName(p.address);
+                              return (
+                                <button
+                                  key={p.code}
+                                  type="button"
+                                  onClick={() => selectPaczkomat(p)}
+                                  className={`w-full text-left px-4 py-3 flex items-start gap-3 transition-colors hover:bg-brand-cream/60 active:bg-brand-cream ${isSelected ? "bg-brand-cream border-l-[5px] border-brand-gold" : ""}`}
+                                >
+                                  <div className="flex-shrink-0 mt-0.5">
+                                    <MapPin className={`h-4 w-4 ${isSelected ? "text-brand-gold" : "text-brand-brown/50"}`} />
+                                  </div>
+                                  <div className="flex-1 min-w-0 text-sm leading-tight">
+                                    <div className="font-semibold tabular-nums tracking-tight text-brand-brown">{p.code}</div>
+                                    <div className="text-brand-brown/80 mt-0.5 leading-snug">
+                                      {p.address}, {p.city}
+                                    </div>
+                                    {store && (
+                                      <div className="text-[11px] text-brand-brown/60 mt-0.5">{store}</div>
+                                    )}
+                                    <div className="text-[11px] text-brand-brown/55 mt-1">Godziny: {p.hours}</div>
+                                  </div>
+                                  {isSelected && <Check className="h-4 w-4 text-brand-gold flex-shrink-0 mt-1" />}
+                                </button>
+                              );
+                            })
                           ) : (
                             <div className="px-4 py-6 text-sm text-brand-brown/60 text-center">Brak wyników.</div>
                           )}
                         </div>
-                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Wpisz kod powyżej, aby przefiltrować listę. Kliknij pozycję, aby wybrać.</p>
+                        <p className="text-[10px] text-brand-brown/50 mt-1.5 px-1">Wpisz kod (np. SWI001) lub miasto – lista się filtruje. Kliknij pozycję, aby wypełnić i zobaczyć podsumowanie.</p>
                       </div>
 
                       {errors.parcelLocker && (

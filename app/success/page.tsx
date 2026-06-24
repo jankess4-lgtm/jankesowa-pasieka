@@ -114,10 +114,17 @@ function SuccessContent() {
   // Compute nice values from session + metadata
   const orderNumber = orderFromQuery || sessionData?.orderRef || (sessionData ? `JP-${sessionData.id.slice(-8).toUpperCase()}` : "JP-XXXXXXXX");
 
-  const lineItems = sessionData?.line_items || [];
-  const productsTotalCents = lineItems.reduce((sum, item) => sum + (item.amount_total || 0), 0);
+  const allLineItems = sessionData?.line_items || [];
+  // Separate products from shipping line items (shipping added as separate line in Stripe)
+  const productLineItems = allLineItems.filter(item => 
+    !item.description?.toLowerCase().includes('dostawa') && 
+    !item.description?.toLowerCase().includes('paczkomat')
+  );
+  const productsTotalCents = productLineItems.reduce((sum, item) => sum + (item.amount_total || 0), 0);
+
   const shippingCost = sessionData?.shippingCost ?? 0;
-  const grandTotalCents = (sessionData?.amount_total || productsTotalCents) + (shippingCost * 100);
+  const fullTotalFromStripe = sessionData?.amount_total || 0;
+  const grandTotalCents = fullTotalFromStripe > 0 ? fullTotalFromStripe : (productsTotalCents + shippingCost * 100);
 
   const deliveryMethod = sessionData?.deliveryMethod || "address";
   const customerName = sessionData?.customerName || sessionData?.metadata?.customer_name || "";
@@ -341,8 +348,8 @@ function SuccessContent() {
 
               <div className="bg-[#F8F4EF] rounded-2xl p-6 border border-brand-creamDark/60">
                 <div className="space-y-3 text-[15px]">
-                  {lineItems.length > 0 ? (
-                    lineItems.map((item, index) => (
+                  {productLineItems.length > 0 ? (
+                    productLineItems.map((item, index) => (
                       <div key={index} className="flex justify-between items-start gap-4 text-brand-brown/90">
                         <div className="leading-tight">
                           <span className="font-medium">{item.quantity} × </span>
@@ -473,6 +480,24 @@ function SuccessContent() {
                 Przejdź na stronę główną
               </Button>
             </Link>
+          </div>
+        </div>
+
+        {/* Security & legal notice */}
+        <div className="mx-8 md:mx-12 mb-8 rounded-2xl bg-brand-cream/60 border border-brand-creamDark px-6 py-5 text-sm">
+          <div className="flex items-start gap-3 text-brand-brown/85">
+            <div className="mt-0.5">🔒</div>
+            <div>
+              <p className="font-medium text-brand-brown mb-1">Bezpieczna płatność</p>
+              <p>
+                Płatność realizowana jest przez Stripe – światowego lidera bezpiecznych płatności online. 
+                Twoje dane karty nie są przechowywane przez nasz sklep.
+              </p>
+              <p className="mt-2 text-xs">
+                Dane osobowe przetwarzamy zgodnie z <Link href="/polityka-prywatnosci" className="underline hover:text-brand-gold transition-colors">Polityką Prywatności</Link> (RODO). 
+                Szczegóły znajdziesz w <Link href="/regulamin" className="underline hover:text-brand-gold transition-colors">Regulaminie</Link>.
+              </p>
+            </div>
           </div>
         </div>
 

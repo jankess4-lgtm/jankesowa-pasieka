@@ -58,10 +58,11 @@ export async function POST(request: NextRequest) {
       quantity: item.quantity || 1,
     }));
 
-    console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
-
     // Prepare customer / delivery metadata
     const deliveryMeta: Record<string, string> = {};
+    let shippingCost = 0;
+    let shippingName = "";
+
     if (customer) {
       deliveryMeta.customer_name = customer.fullName || "";
       deliveryMeta.customer_phone = customer.phone || "";
@@ -73,10 +74,14 @@ export async function POST(request: NextRequest) {
         deliveryMeta.shipping_postal_code = customer.postalCode || "";
         deliveryMeta.shipping_city = customer.city || "";
         deliveryMeta.shipping_cost = "16";
+        shippingCost = 16;
+        shippingName = "Dostawa kurierem na adres";
       } else if (customer.deliveryMethod === "parcel") {
         const lockerStr = customer.parcelLocker || "";
         deliveryMeta.parcel_locker = lockerStr;
         deliveryMeta.shipping_cost = "14";
+        shippingCost = 14;
+        shippingName = "Dostawa do Paczkomatu InPost";
 
         // Extract code and full address for shipping_details / metadata (no real address fields)
         const parts = lockerStr.split(/[–-]/).map((s: string) => s.trim());
@@ -85,8 +90,26 @@ export async function POST(request: NextRequest) {
       } else if (customer.deliveryMethod === "pickup") {
         deliveryMeta.shipping_cost = "0";
         deliveryMeta.pickup_location = "Topolno nad Wisłą";
+        shippingCost = 0;
       }
     }
+
+    // Add fixed shipping cost as a line item so Stripe charges the correct total (products + shipping)
+    if (shippingCost > 0 && shippingName) {
+      lineItems.push({
+        price_data: {
+          currency: "pln",
+          unit_amount: shippingCost * 100,
+          product_data: {
+            name: shippingName,
+            description: "Koszt dostawy",
+          },
+        },
+        quantity: 1,
+      });
+    }
+
+    console.log("Prepared lineItems for Stripe (products + shipping):", JSON.stringify(lineItems, null, 2));
 
     // Create Checkout Session - MAXIMALLY force Jankesowa Pasieka branding (złoto-miodowy #D97706)
     // Using every possible field to override default white / previous account branding

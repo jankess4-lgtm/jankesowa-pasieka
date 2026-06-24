@@ -94,14 +94,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Add fixed shipping cost as a line item so Stripe charges the correct total (products + shipping)
+        // Add fixed shipping cost as a line item so Stripe charges the correct total (products + shipping)
     if (shippingCost > 0 && shippingName) {
       const shippingProductData: Stripe.Checkout.SessionCreateParams.LineItem.PriceData.ProductData = {
         name: shippingName,
         description: "Koszt dostawy",
         images: ["https://jankesowapasieka.pl/logo.png"],
       };
-
       lineItems.push({
         price_data: {
           currency: "pln",
@@ -111,8 +110,6 @@ export async function POST(request: NextRequest) {
         quantity: 1,
       });
     }
-
-    console.log("Prepared lineItems for Stripe (products + shipping):", JSON.stringify(lineItems, null, 2));
 
     // Create Checkout Session - MAXIMALLY force Jankesowa Pasieka branding (złoto-miodowy #D97706)
     // Using every possible field to override default white / previous account branding

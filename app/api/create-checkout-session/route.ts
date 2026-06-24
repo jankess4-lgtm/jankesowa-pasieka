@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     // Prepare line items for Stripe Checkout - prices MUST be in grosze (cents)
     // Force Jankesowa Pasieka logo images on every product for strong visual branding
-    const lineItems = items.map((item: any) => ({
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map((item: any) => ({
       price_data: {
         currency: "pln",
         unit_amount: Math.round(item.price * 100), // Ensure integer grosze
@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
           product_data: {
             name: shippingName,
             description: "Koszt dostawy",
+            images: ["https://jankesowapasieka.pl/logo.png"],
           },
         },
         quantity: 1,

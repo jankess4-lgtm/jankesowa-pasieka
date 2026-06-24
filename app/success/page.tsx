@@ -185,77 +185,81 @@ function SuccessContent() {
         <div className="bg-white rounded-3xl border border-brand-creamDark shadow-sm overflow-hidden">
           {/* Header / Thank you */}
           <div className="px-8 md:px-12 pt-10 pb-8 text-center border-b border-brand-creamDark bg-[#FBF7F2]">
-            <div className="mx-auto w-20 h-20 rounded-full bg-brand-gold/10 flex items-center justify-center mb-6 ring-1 ring-brand-gold/20">
+            <div className="mx-auto w-24 h-24 rounded-full bg-[#F5EDE4] flex items-center justify-center mb-6 shadow-[0_2px_8px_rgba(146,64,14,0.1)] border border-[#EDE0D0]">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 64 64" 
-                className="w-12 h-12 drop-shadow-[0_2px_4px_rgba(146,64,14,0.18)]"
+                className="w-14 h-14 drop-shadow-[0_3px_5px_rgba(60,40,20,0.22)]"
                 aria-hidden="true"
               >
-                {/* Wings - elegant, soft green-gold with delicate outline for premium feel */}
+                {/* Elegant wings - soft warm tone with delicate dark outline */}
                 <ellipse 
-                  cx="22" cy="25" rx="12.5" ry="7.5" 
-                  fill="#166534" 
-                  fillOpacity="0.12" 
-                  stroke="#B45309" 
-                  strokeWidth="1.6"
-                  transform="rotate(-30 22 25)"
+                  cx="21" cy="26" rx="12" ry="7.5" 
+                  fill="#F5EDE4" 
+                  fillOpacity="0.9" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.5"
+                  transform="rotate(-27 21 26)"
                 />
                 <ellipse 
-                  cx="42" cy="25" rx="12.5" ry="7.5" 
-                  fill="#166534" 
-                  fillOpacity="0.12" 
-                  stroke="#B45309" 
-                  strokeWidth="1.6"
-                  transform="rotate(30 42 25)"
+                  cx="43" cy="26" rx="12" ry="7.5" 
+                  fill="#F5EDE4" 
+                  fillOpacity="0.9" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.5"
+                  transform="rotate(27 43 26)"
                 />
 
-                {/* Body - refined honey gold with rich brown definition */}
+                {/* Body - deep warm golden honey tone */}
                 <ellipse 
-                  cx="32" cy="33" rx="9.5" ry="15.5" 
-                  fill="#D97706" 
-                  stroke="#92400E" 
-                  strokeWidth="2.5"
+                  cx="32" cy="33" rx="10" ry="16" 
+                  fill="#B45309" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="2.8"
                   strokeLinejoin="round"
                 />
 
-                {/* Subtle, elegant stripes */}
-                <line x1="24" y1="25" x2="40" y2="25" stroke="#92400E" strokeWidth="2.4" strokeLinecap="round" />
-                <line x1="24.5" y1="32" x2="39.5" y2="32" stroke="#92400E" strokeWidth="2.1" strokeLinecap="round" />
-                <line x1="25.5" y1="39" x2="38.5" y2="39" stroke="#92400E" strokeWidth="1.6" strokeLinecap="round" />
+                {/* Subtle black stripes - elegant and refined */}
+                <line x1="23" y1="24" x2="41" y2="24" stroke="#3F2A1E" strokeWidth="2.3" strokeLinecap="round" />
+                <line x1="23.5" y1="31.5" x2="40.5" y2="31.5" stroke="#3F2A1E" strokeWidth="2.1" strokeLinecap="round" />
+                <line x1="24.5" y1="38.5" x2="39.5" y2="38.5" stroke="#3F2A1E" strokeWidth="1.7" strokeLinecap="round" />
 
-                {/* Head - balanced and sophisticated */}
+                {/* Head - clean, balanced proportions */}
                 <circle 
-                  cx="32" cy="15.5" r="6" 
-                  fill="#D97706" 
-                  stroke="#92400E" 
-                  strokeWidth="2.2"
+                  cx="32" cy="15" r="6.8" 
+                  fill="#B45309" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="2.5"
                 />
 
-                {/* Fine, elegant antennae */}
+                {/* Delicate, minimal eyes */}
+                <ellipse cx="29" cy="14.5" rx="1.15" ry="1.5" fill="#3F2A1E" />
+                <ellipse cx="35" cy="14.5" rx="1.15" ry="1.5" fill="#3F2A1E" />
+
+                {/* Fine antennae with small golden tips */}
                 <path 
-                  d="M28 10 Q23.5 5.5 21 3.5" 
+                  d="M27.8 9.8 Q22.5 4.8 19.5 2.8" 
                   fill="none" 
-                  stroke="#92400E" 
-                  strokeWidth="1.35" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.4" 
                   strokeLinecap="round" 
                 />
-                <circle cx="21" cy="3.5" r="1.25" fill="#B45309" />
+                <circle cx="19.5" cy="2.8" r="1.5" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.6" />
                 
                 <path 
-                  d="M36 10 Q40.5 5.5 43 3.5" 
+                  d="M36.2 9.8 Q41.5 4.8 44.5 2.8" 
                   fill="none" 
-                  stroke="#92400E" 
-                  strokeWidth="1.35" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.4" 
                   strokeLinecap="round" 
                 />
-                <circle cx="43" cy="3.5" r="1.25" fill="#B45309" />
+                <circle cx="44.5" cy="2.8" r="1.5" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.6" />
 
-                {/* Very subtle highlight for depth and luxury */}
+                {/* Soft natural highlight on body */}
                 <ellipse 
-                  cx="29" cy="27" rx="2.8" ry="4.5" 
+                  cx="28.5" cy="27.5" rx="2.6" ry="4.2" 
                   fill="#F5EDE4" 
-                  fillOpacity="0.22"
+                  fillOpacity="0.18"
                 />
               </svg>
             </div>

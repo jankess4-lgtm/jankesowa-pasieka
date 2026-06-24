@@ -505,8 +505,8 @@ function SuccessContent() {
         <div className="mt-9 text-center">
           <p className="text-sm text-brand-brown/60">
             Masz pytania? Napisz do nas:{" "}
-            <a href="mailto:jankesowapasieka@gmail.com" className="underline hover:text-brand-gold transition-colors">
-              jankesowapasieka@gmail.com
+            <a href="mailto:jankesowa.pasieka@gmail.com" className="underline hover:text-brand-gold transition-colors">
+              jankesowa.pasieka@gmail.com
             </a>{" "}
             lub zadzwoń{" "}
             <a href="tel:+48514070298" className="underline hover:text-brand-gold transition-colors">+48 514 070 298</a>

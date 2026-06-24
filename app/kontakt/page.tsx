@@ -78,9 +78,9 @@ export default function KontaktPage() {
                   </div>
                 </a>
 
-                <a href="mailto:jankesowapasieka@gmail.com" className="flex gap-4 group">
+                <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-4 group">
                   <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0 group-hover:scale-110 transition" />
-                  <div>jankesowapasieka@gmail.com</div>
+                  <div>jankesowa.pasieka@gmail.com</div>
                 </a>
 
                 <div className="flex gap-4 pt-2 border-t border-brand-creamDark">

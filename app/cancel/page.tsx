@@ -30,7 +30,7 @@ export default function CancelPage() {
 
         <p className="mt-10 text-sm text-brand-brown/50">
           Jeśli napotkałeś problem, skontaktuj się z nami:<br />
-          <a href="mailto:jankesowapasieka@gmail.com" className="underline hover:text-brand-gold">jankesowapasieka@gmail.com</a>
+          <a href="mailto:jankesowa.pasieka@gmail.com" className="underline hover:text-brand-gold">jankesowa.pasieka@gmail.com</a>
         </p>
       </div>
     </div>

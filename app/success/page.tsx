@@ -189,77 +189,118 @@ function SuccessContent() {
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 64 64" 
-                className="w-14 h-14 drop-shadow-[0_3px_5px_rgba(60,40,20,0.22)]"
+                className="w-14 h-14 drop-shadow-[0_4px_6px_rgba(60,40,20,0.25)]"
                 aria-hidden="true"
               >
-                {/* Elegant wings - soft warm tone with delicate dark outline */}
+                {/* Wings - translucent with subtle sheen and delicate dark veins */}
+                <defs>
+                  <linearGradient id="wingSheen" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#F5EDE4" stopOpacity="0.75" />
+                    <stop offset="50%" stopColor="#EDE0D0" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#F5EDE4" stopOpacity="0.75" />
+                  </linearGradient>
+                </defs>
+
+                {/* Left upper wing */}
                 <ellipse 
-                  cx="21" cy="26" rx="12" ry="7.5" 
-                  fill="#F5EDE4" 
-                  fillOpacity="0.9" 
+                  cx="20" cy="24" rx="13" ry="8" 
+                  fill="url(#wingSheen)" 
                   stroke="#3F2A1E" 
-                  strokeWidth="1.5"
-                  transform="rotate(-27 21 26)"
+                  strokeWidth="1.2" 
+                  strokeOpacity="0.7"
+                  transform="rotate(-25 20 24)"
                 />
+                {/* Left lower wing */}
                 <ellipse 
-                  cx="43" cy="26" rx="12" ry="7.5" 
-                  fill="#F5EDE4" 
-                  fillOpacity="0.9" 
+                  cx="19" cy="32" rx="10" ry="6" 
+                  fill="url(#wingSheen)" 
                   stroke="#3F2A1E" 
-                  strokeWidth="1.5"
-                  transform="rotate(27 43 26)"
+                  strokeWidth="1.1" 
+                  strokeOpacity="0.65"
+                  transform="rotate(-18 19 32)"
                 />
 
-                {/* Body - deep warm golden honey tone */}
+                {/* Right upper wing */}
                 <ellipse 
-                  cx="32" cy="33" rx="10" ry="16" 
+                  cx="44" cy="24" rx="13" ry="8" 
+                  fill="url(#wingSheen)" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.2" 
+                  strokeOpacity="0.7"
+                  transform="rotate(25 44 24)"
+                />
+                {/* Right lower wing */}
+                <ellipse 
+                  cx="45" cy="32" rx="10" ry="6" 
+                  fill="url(#wingSheen)" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="1.1" 
+                  strokeOpacity="0.65"
+                  transform="rotate(18 45 32)"
+                />
+
+                {/* Thorax (middle section) */}
+                <ellipse 
+                  cx="32" cy="28" rx="7" ry="6.5" 
                   fill="#B45309" 
                   stroke="#3F2A1E" 
-                  strokeWidth="2.8"
-                  strokeLinejoin="round"
+                  strokeWidth="1.8"
                 />
 
-                {/* Subtle black stripes - elegant and refined */}
-                <line x1="23" y1="24" x2="41" y2="24" stroke="#3F2A1E" strokeWidth="2.3" strokeLinecap="round" />
-                <line x1="23.5" y1="31.5" x2="40.5" y2="31.5" stroke="#3F2A1E" strokeWidth="2.1" strokeLinecap="round" />
-                <line x1="24.5" y1="38.5" x2="39.5" y2="38.5" stroke="#3F2A1E" strokeWidth="1.7" strokeLinecap="round" />
+                {/* Abdomen - deep honey gold with elegant segmentation and depth */}
+                <ellipse 
+                  cx="32" cy="38" rx="9.5" ry="14" 
+                  fill="#B45309" 
+                  stroke="#3F2A1E" 
+                  strokeWidth="2"
+                />
 
-                {/* Head - clean, balanced proportions */}
+                {/* Subtle black stripes on abdomen - refined and mature */}
+                <line x1="23.5" y1="31" x2="40.5" y2="31" stroke="#1C1917" strokeWidth="1.6" strokeLinecap="round" strokeOpacity="0.9" />
+                <line x1="23.8" y1="35" x2="40.2" y2="35" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.85" />
+                <line x1="24.2" y1="39.5" x2="39.8" y2="39.5" stroke="#1C1917" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.8" />
+                <line x1="25" y1="44" x2="39" y2="44" stroke="#1C1917" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.75" />
+
+                {/* Head - proportional and elegant */}
                 <circle 
-                  cx="32" cy="15" r="6.8" 
+                  cx="32" cy="16.5" r="6.2" 
                   fill="#B45309" 
                   stroke="#3F2A1E" 
-                  strokeWidth="2.5"
+                  strokeWidth="2"
                 />
 
-                {/* Delicate, minimal eyes */}
-                <ellipse cx="29" cy="14.5" rx="1.15" ry="1.5" fill="#3F2A1E" />
-                <ellipse cx="35" cy="14.5" rx="1.15" ry="1.5" fill="#3F2A1E" />
+                {/* Delicate compound eyes - subtle, not cartoonish */}
+                <ellipse cx="28.5" cy="16" rx="1.8" ry="2.2" fill="#1C1917" fillOpacity="0.85" />
+                <ellipse cx="35.5" cy="16" rx="1.8" ry="2.2" fill="#1C1917" fillOpacity="0.85" />
 
-                {/* Fine antennae with small golden tips */}
-                <path 
-                  d="M27.8 9.8 Q22.5 4.8 19.5 2.8" 
-                  fill="none" 
-                  stroke="#3F2A1E" 
-                  strokeWidth="1.4" 
-                  strokeLinecap="round" 
-                />
-                <circle cx="19.5" cy="2.8" r="1.5" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.6" />
+                {/* Realistic antennae */}
+                <path d="M28 11 Q23 5.5 20 3.5" fill="none" stroke="#1C1917" strokeWidth="1.1" strokeLinecap="round" />
+                <circle cx="20" cy="3.5" r="1.1" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.7" />
                 
-                <path 
-                  d="M36.2 9.8 Q41.5 4.8 44.5 2.8" 
-                  fill="none" 
-                  stroke="#3F2A1E" 
-                  strokeWidth="1.4" 
-                  strokeLinecap="round" 
-                />
-                <circle cx="44.5" cy="2.8" r="1.5" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.6" />
+                <path d="M36 11 Q41 5.5 44 3.5" fill="none" stroke="#1C1917" strokeWidth="1.1" strokeLinecap="round" />
+                <circle cx="44" cy="3.5" r="1.1" fill="#B45309" stroke="#3F2A1E" strokeWidth="0.7" />
 
-                {/* Soft natural highlight on body */}
+                {/* Delicate legs (3 per side) - realistic and proportional */}
+                {/* Left legs */}
+                <path d="M26 29 Q20 33 17 38" fill="none" stroke="#3F2A1E" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.85" />
+                <path d="M25 33 Q18 36 16 40" fill="none" stroke="#3F2A1E" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.8" />
+                <path d="M27 37 Q20 42 18 46" fill="none" stroke="#3F2A1E" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.75" />
+
+                {/* Right legs */}
+                <path d="M38 29 Q44 33 47 38" fill="none" stroke="#3F2A1E" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.85" />
+                <path d="M39 33 Q46 36 48 40" fill="none" stroke="#3F2A1E" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.8" />
+                <path d="M37 37 Q44 42 46 46" fill="none" stroke="#3F2A1E" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.75" />
+
+                {/* Subtle 3D highlight and depth on body */}
                 <ellipse 
-                  cx="28.5" cy="27.5" rx="2.6" ry="4.2" 
+                  cx="29" cy="30" rx="3" ry="5" 
                   fill="#F5EDE4" 
-                  fillOpacity="0.18"
+                  fillOpacity="0.12"
+                />
+                <ellipse 
+                  cx="29" cy="36" rx="2.5" ry="4" 
+                  fill="#F5EDE4" 
+                  fillOpacity="0.1"
                 />
               </svg>
             </div>

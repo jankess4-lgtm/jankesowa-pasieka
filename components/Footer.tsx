@@ -1,22 +1,34 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
+  const [visitCount, setVisitCount] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/visits')
+      .then(res => res.json())
+      .then(data => setVisitCount(data.visits || 0))
+      .catch(() => setVisitCount(0));
+  }, []);
+
   return (
     <footer className="bg-brand-green text-white/90 pt-14 pb-8">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-y-12">
         {/* Brand */}
         <div className="md:col-span-5">
           <Link href="/" className="flex items-center gap-2 mb-3" aria-label="Jankesowa Pasieka - Strona główna">
-            <Image 
-              src="/logo.png" 
-              alt="Jankesowa Pasieka" 
-              width={160} 
-              height={48} 
-              className="h-12 w-auto object-contain" 
+            <Image
+              src="/logo.png"
+              alt="Jankesowa Pasieka"
+              width={160}
+              height={48}
+              className="h-12 w-auto object-contain"
             />
-            <span 
+            <span
               className="text-[#78350F] text-base md:text-lg tracking-[0.5px] font-normal"
               style={{ fontFamily: "'Kristen ITC', cursive" }}
             >
@@ -24,7 +36,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="max-w-sm text-sm text-white/70 leading-relaxed">
-            Rodzinna pasieka na malowniczych terenach nadwiślańskich Kujaw. 
+            Rodzinna pasieka na malowniczych terenach nadwiślańskich Kujaw.
             Dbamy o pszczoły i produkujemy najczystsze, niepasteryzowane miody oraz produkty pszczele.
           </p>
         </div>
@@ -65,8 +77,14 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Licznik odwiedzin + dolna belka */}
       <div className="mt-14 border-t border-white/15 pt-6 text-xs text-white/50 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-y-2 md:items-center md:justify-between">
         <div>© {new Date().getFullYear()} Jankesowa Pasieka. Wszelkie prawa zastrzeżone.</div>
+        
+        <div className="text-center md:text-right">
+          Odwiedziło nas już <span className="font-semibold text-white">{visitCount.toLocaleString('pl-PL')}</span> osób
+        </div>
+
         <div>Tradycja • Natura • Jakość</div>
       </div>
     </footer>

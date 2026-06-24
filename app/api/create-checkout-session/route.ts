@@ -96,15 +96,17 @@ export async function POST(request: NextRequest) {
 
     // Add fixed shipping cost as a line item so Stripe charges the correct total (products + shipping)
     if (shippingCost > 0 && shippingName) {
+      const shippingProductData: Stripe.Checkout.SessionCreateParams.LineItem.PriceData.ProductData = {
+        name: shippingName,
+        description: "Koszt dostawy",
+        images: ["https://jankesowapasieka.pl/logo.png"],
+      };
+
       lineItems.push({
         price_data: {
           currency: "pln",
           unit_amount: shippingCost * 100,
-          product_data: {
-            name: shippingName,
-            description: "Koszt dostawy",
-            images: ["https://jankesowapasieka.pl/logo.png"],
-          },
+          product_data: shippingProductData,
         },
         quantity: 1,
       });

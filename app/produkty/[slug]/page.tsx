@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false;
 
-// Product details
+// Product details - pełne tabele dla wszystkich miodów
 function getProductDetails(product: Product): ProductDetails {
   const nameLower = product.name.toLowerCase();
 
@@ -43,20 +43,110 @@ function getProductDetails(product: Product): ProductDetails {
         { label: "Aromat", value: "Lekki, czysty, świeży, miodowy z nutą mniszka" },
         { label: "Krystalizacja", value: "Szybka – drobna, kremowa konsystencja" },
         { label: "Zastosowanie", value: "Herbata, kanapki, naleśniki, deserki dla dzieci" },
-        { label: "Właściwości zdrowotne", value: "Bogaty w glukozę, wspiera energię i pracę serca" },
-        { label: "Okres dostępności", value: "Wczesna wiosna" },
+        { label: "Właściwości zdrowotne", value: "Bogaty w glukozę, wspiera energię i pracę serca, łagodny dla żołądka" },
+        { label: "Okres dostępności", value: "Wczesna wiosna (maj-czerwiec)" },
       ],
       whyBuy: "Idealny wybór na co dzień. Delikatny miód, który zachwyca zarówno dorosłych, jak i dzieci.",
     };
   }
 
-  // Fallback dla pozostałych produktów
+  if (nameLower.includes("lipowy")) {
+    return {
+      richDescription: "Miód lipowy to klasyka polskiej apiterapii. Pozyskiwany z nektaru pięknych, starych lip rosnących wzdłuż Wisły. Posiada intensywny, mentolowy i korzenny smak oraz wyraźny aromat kwitnącej lipy.",
+      specs: [
+        { label: "Smak", value: "Intensywny, mentolowy, z wyraźną korzenną nutą" },
+        { label: "Aromat", value: "Wyraźny, świeży, kwitnącej lipy" },
+        { label: "Krystalizacja", value: "Średnia – drobna lub grudkowata" },
+        { label: "Zastosowanie", value: "Herbata z cytryną, przeziębienia, wieczorny relaks" },
+        { label: "Właściwości zdrowotne", value: "Działa rozgrzewająco, wspiera odporność i uspokaja" },
+        { label: "Okres dostępności", value: "Czerwiec–lipiec" },
+      ],
+      whyBuy: "Prawdziwy eliksir zdrowia z nadwiślańskich lip. Tradycyjny wybór na przeziębienia i wieczorne chwile relaksu.",
+    };
+  }
+
+  if (nameLower.includes("wielokwiatowy")) {
+    return {
+      richDescription: "Miód wielokwiatowy to najbardziej uniwersalny miód w naszej ofercie. Zbierany z bogatej, zróżnicowanej bazy pożytkowej terenów nadwiślańskich Kujaw.",
+      specs: [
+        { label: "Smak", value: "Delikatny, kwiatowy, złożony i zrównoważony" },
+        { label: "Aromat", value: "Przyjemny, wielo-kwiatowy, świeży" },
+        { label: "Krystalizacja", value: "Średnia – drobna lub średnioziarnista" },
+        { label: "Zastosowanie", value: "Uniwersalny – herbata, kanapki, deser, gotowanie" },
+        { label: "Właściwości zdrowotne", value: "Bogaty w enzymy, mikroelementy i naturalne substancje aktywne" },
+        { label: "Okres dostępności", value: "Lato" },
+      ],
+      whyBuy: "Najlepszy wybór „na co dzień”. Delikatny, wszechstronny i pełen naturalnych dobrodziejstw.",
+    };
+  }
+
+  if (nameLower.includes("gryczany")) {
+    return {
+      richDescription: "Miód gryczany to jeden z najcenniejszych i najbardziej intensywnych miodów. Charakteryzuje się głęboką, ciemną barwą i wyrazistym, lekko pikantnym smakiem.",
+      specs: [
+        { label: "Smak", value: "Ciemny, intensywny, lekko pikantny z przyjemną goryczką" },
+        { label: "Aromat", value: "Głęboki, charakterystyczny, ziemisty" },
+        { label: "Krystalizacja", value: "Szybka – drobnoziarnista, twarda" },
+        { label: "Zastosowanie", value: "Do mięs, sosów, pierników, diety wzmacniającej" },
+        { label: "Właściwości zdrowotne", value: "Bogaty w rutynę, żelazo i silne antyoksydanty" },
+        { label: "Okres dostępności", value: "Lato (lipiec-sierpień)" },
+      ],
+      whyBuy: "Miód dla wymagających. Wyjątkowa siła i charakter.",
+    };
+  }
+
+  if (nameLower.includes("akacjowy") && !nameLower.includes("spadziowy")) {
+    return {
+      richDescription: "Miód akacjowy z robinii akacjowej to jeden z najdelikatniejszych i najjaśniejszych miodów na świecie. Subtelny kwiatowy aromat i bardzo łagodny smak.",
+      specs: [
+        { label: "Smak", value: "Bardzo delikatny, łagodny, kwiatowy" },
+        { label: "Aromat", value: "Subtelny, słodki, kwiatowy" },
+        { label: "Krystalizacja", value: "Bardzo wolna – pozostaje płynny nawet rok" },
+        { label: "Zastosowanie", value: "Herbata, deser, naleśniki, dla dzieci i alergików" },
+        { label: "Właściwości zdrowotne", value: "Delikatny dla żołądka, polecany dla dzieci i seniorów" },
+        { label: "Okres dostępności", value: "Maj–czerwiec" },
+      ],
+      whyBuy: "Najdelikatniejszy miód w naszej ofercie. Długo pozostaje płynny.",
+    };
+  }
+
+  if (nameLower.includes("akacjowo-spadziowy")) {
+    return {
+      richDescription: "Miód akacjowo-spadziowy to rzadki i ceniony skarb naszej pasieki. Powstaje z harmonijnego połączenia nektaru kwitnącej akacji i leśnej spadzi.",
+      specs: [
+        { label: "Smak", value: "Złożony – delikatny kwiatowy z żywiczną, leśną głębią" },
+        { label: "Aromat", value: "Unikalny, akacjowo-leśny, z nutą żywicy" },
+        { label: "Krystalizacja", value: "Średnia – elegancka, drobnoziarnista" },
+        { label: "Zastosowanie", value: "Dla koneserów, do serów, deserów, wieczornej herbaty" },
+        { label: "Właściwości zdrowotne", value: "Wyjątkowo bogaty w minerały i związki bioaktywne" },
+        { label: "Okres dostępności", value: "Ograniczona – wczesne lato" },
+      ],
+      whyBuy: "Prawdziwa rzadkość. Połączenie dwóch światów – kwiatów i lasu.",
+    };
+  }
+
+  if (nameLower.includes("nawłociowy") || nameLower.includes("nawlociowy")) {
+    return {
+      richDescription: "Miód nawłociowy pozyskiwany jest późnym latem i jesienią z nektaru nawłoci pospolitej. Charakteryzuje się piękną, złocistą barwą i intensywnym, ziołowo-kwiatowym aromatem.",
+      specs: [
+        { label: "Smak", value: "Złocisty, ziołowo-kwiatowy, lekko słodki" },
+        { label: "Aromat", value: "Intensywny, ziołowy, przyjemny" },
+        { label: "Krystalizacja", value: "Średnia" },
+        { label: "Zastosowanie", value: "Wspieranie odporności, herbata, codzienne spożycie" },
+        { label: "Właściwości zdrowotne", value: "Wspiera odporność i naturalne procesy oczyszczania" },
+        { label: "Okres dostępności", value: "Wrzesień–grudzień" },
+      ],
+      whyBuy: "Późnoletni dar natury. Wspiera odporność w trudniejszym okresie roku.",
+    };
+  }
+
+  // Fallback dla plastrów i świec
   return {
     richDescription: product.longDescription || "Szczegółowy opis produktu wkrótce.",
     specs: [
       { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
-      { label: "Jakość", value: "Niepasteryzowany, surowy miód" },
-      { label: "Opakowanie", value: "Szklane, ekologiczne" },
+      { label: "Jakość", value: "Niepasteryzowany, surowy miód / 100% naturalny" },
+      { label: "Opakowanie", value: "Szklane / naturalny wosk" },
     ],
     whyBuy: "Wybierz produkt z naszej rodzinnej pasieki – pełen naturalnych wartości i tradycji.",
   };
@@ -153,7 +243,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </p>
             </div>
 
-            {/* Charakterystyka - tabela zostaje zachowana */}
+            {/* Charakterystyka */}
             <div>
               <h2 className="font-medium text-lg mb-4 text-brand-brown tracking-tight">Charakterystyka</h2>
               <div className="overflow-hidden rounded-2xl border border-brand-creamDark bg-white">

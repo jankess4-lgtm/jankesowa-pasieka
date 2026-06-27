@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { 
-  apiVersion: "2024-06-20" 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2024-06-20",
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
-    console.error("Webhook signature verification failed:", err.message);
+    console.error("❌ Webhook signature verification failed:", err.message);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         : null,
     };
 
-    console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", orderInfo);
+    console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
 
     await sendAdminEmail(orderInfo);
   }
@@ -46,12 +46,13 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-// Profesjonalny email do Ciebie
+// Ostateczna wersja
 async function sendAdminEmail(order: any) {
   try {
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: "Jankesowa Pasieka <zamowienia@jankesowapasieka.pl>",
       to: "jankesowa.pasieka@gmail.com",
+      replyTo: "jankesowa.pasieka@gmail.com",
       subject: `Nowe zamówienie #${order.orderId} — ${order.totalAmount} zł`,
       html: `
         <h2>Nowe zamówienie w Jankesowej Pasiece</h2>
@@ -78,8 +79,9 @@ async function sendAdminEmail(order: any) {
       `,
     });
 
-    console.log("📧 Email do sprzedawcy wysłany pomyślnie na jankesowa.pasieka@gmail.com");
+    console.log(`📧 Email wysłany pomyślnie! ID: ${result.data?.id || 'brak ID'}`);
   } catch (error: any) {
-    console.error("Błąd wysyłania emaila:", error.message);
+    console.error("❌ BŁĄD WYSYŁANIA EMAILA:", error.message);
+    console.error("Pełny obiekt błędu:", JSON.stringify(error, null, 2));
   }
 }

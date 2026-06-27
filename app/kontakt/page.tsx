@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
@@ -12,6 +11,7 @@ export default function KontaktPage() {
     phone: "",
     message: "",
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -25,17 +25,18 @@ export default function KontaktPage() {
 
     setIsSubmitting(true);
 
-    // Simulate API call
+    // Symulacja wysyłania
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-      toast.success("Wiadomość wysłana", {
-        description: "Dziękujemy! Odpowiemy w ciągu 48 godzin.",
+      
+      toast.success("Wiadomość wysłana pomyślnie", {
+        description: "Dziękujemy! Odpowiemy w ciągu 1-2 dni roboczych.",
       });
 
-      // Reset form
+      // Reset formularza
       setFormData({ name: "", email: "", phone: "", message: "" });
-
+      
       setTimeout(() => setSubmitted(false), 4200);
     }, 1100);
   };
@@ -46,17 +47,18 @@ export default function KontaktPage() {
   };
 
   return (
-    <div className="bg-[#F5EDE4]">
+    <div className="bg-[#F5EDE4] min-h-screen">
       <div className="max-w-6xl mx-auto px-6 py-14">
         <div className="max-w-2xl mb-10">
           <div className="uppercase tracking-[3px] text-xs text-brand-gold mb-2">ZAPRASZAMY</div>
-          <h1 className="font-serif text-6xl tracking-[-1px] text-brand-brown">Kontakt</h1>
+          <h1 className="font-serif text-6xl tracking-[-1px] text-brand-brown">Kontakt i dojazd</h1>
           <p className="mt-3 text-xl text-[#374151]">Chętnie odpowiemy na pytania i pomożemy z zamówieniem.</p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
-          {/* Contact Info */}
+          {/* Lewa kolumna - Dane kontaktowe + Mapa */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Dane kontaktowe */}
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
               <h3 className="font-medium text-brand-brown mb-5 text-lg">Jankesowa Pasieka</h3>
               
@@ -70,34 +72,58 @@ export default function KontaktPage() {
                   </div>
                 </div>
 
-                <a href="tel:+48514070298" className="flex gap-4 group">
-                  <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0 group-hover:scale-110 transition" />
+                <a href="tel:+48514070298" className="flex gap-4 group hover:text-brand-gold transition">
+                  <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <div>+48 514 070 298</div>
                     <div className="text-xs text-brand-brown/60">Poniedziałek – Sobota: 8:00 – 20:00</div>
                   </div>
                 </a>
 
-                <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-4 group">
-                  <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0 group-hover:scale-110 transition" />
+                <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-4 group hover:text-brand-gold transition">
+                  <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div>jankesowa.pasieka@gmail.com</div>
                 </a>
 
                 <div className="flex gap-4 pt-2 border-t border-brand-creamDark">
                   <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div className="text-sm leading-snug">
-                    Wizyty w pasiece<br />tylko po wcześniejszym uzgodnieniu telefonicznym lub mailowym
+                    Wizyty w pasiece<br />tylko po wcześniejszym uzgodnieniu
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="px-1 text-xs text-brand-brown/60 leading-relaxed">
-              Zamówienia hurtowe i hurtowe dostawy dla sklepów — prosimy o kontakt mailowy lub telefoniczny.
+            {/* Mapa Google */}
+            <div className="bg-white rounded-2xl border border-brand-creamDark overflow-hidden">
+              <div className="p-4 border-b border-brand-creamDark bg-white">
+                <h4 className="font-medium text-brand-brown">Jak do nas dojechać</h4>
+              </div>
+              <div className="aspect-video w-full">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2421.5!2d18.45!3d53.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTPCsDIxJzAwLjAiTiAxOMKwMjcnMDAuMCJF!5e0!3m2!1spl!2spl!4v1720000000000"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+              <div className="p-4 text-xs text-brand-brown/70">
+                Topolno 45, 86-120 Pruszcz •{" "}
+                <a 
+                  href="https://maps.google.com/?q=Topolno+45+Pruszcz" 
+                  target="_blank" 
+                  className="text-brand-gold hover:underline"
+                >
+                  Otwórz w Google Maps →
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Formularz kontaktowy */}
           <div className="lg:col-span-3">
             <form onSubmit={handleSubmit} className="bg-white rounded-3xl border border-brand-creamDark p-8 md:p-9 space-y-6">
               <div className="grid sm:grid-cols-2 gap-5">
@@ -143,15 +169,15 @@ export default function KontaktPage() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  className="textarea"
+                  className="textarea h-32"
                   placeholder="Napisz czym możemy Ci pomóc..."
                   required
                 />
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full py-3 text-base" 
+              <Button
+                type="submit"
+                className="w-full py-3 text-base"
                 disabled={isSubmitting || submitted}
               >
                 {isSubmitting ? "Wysyłanie..." : submitted ? "Dziękujemy! ✓" : "Wyślij wiadomość"}

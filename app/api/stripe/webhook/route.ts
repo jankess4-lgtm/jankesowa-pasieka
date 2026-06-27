@@ -28,9 +28,16 @@ export async function POST(request: NextRequest) {
 
     const orderInfo = {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
-      customerName: session.customer_details?.name || session.shipping_details?.name || "Nie podano",
-      customerEmail: session.customer_details?.email || session.customer_email || "Brak",
-      customerPhone: session.metadata?.customer_phone || session.customer_details?.phone || "Brak",
+      customerName: session.customer_details?.name || 
+                   session.shipping_details?.name || 
+                   session.metadata?.customer_name || 
+                   "Nie podano",
+      customerEmail: session.customer_details?.email || 
+                     session.customer_email || 
+                     "Brak",
+      customerPhone: session.metadata?.customer_phone || 
+                     session.customer_details?.phone || 
+                     "Brak",
       totalAmount: (session.amount_total || 0) / 100,
       deliveryMethod: session.metadata?.delivery_method || "Nie określono",
       parcelLocker: session.metadata?.parcel_locker,
@@ -47,13 +54,13 @@ export async function POST(request: NextRequest) {
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
 
     await sendAdminEmail(orderInfo);
-    await sendAdminSMS(orderInfo);     // SMS do Ciebie
+    await sendAdminSMS(orderInfo);
   }
 
   return NextResponse.json({ received: true });
 }
 
-// Email do Ciebie
+// Email
 async function sendAdminEmail(order: any) {
   try {
     const productsHtml = order.products.map((p: any) => 
@@ -98,10 +105,10 @@ async function sendAdminEmail(order: any) {
   }
 }
 
-// SMS do Ciebie (SMSAPI)
+// SMS do Ciebie
 async function sendAdminSMS(order: any) {
   try {
-    const message = `Nowe zamowienie #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
+    const message = `Nowe zam. #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
 
     const response = await fetch('https://api.smsapi.pl/sms.do', {
       method: 'POST',
@@ -118,7 +125,7 @@ async function sendAdminSMS(order: any) {
     });
 
     const data = await response.json();
-    console.log("📱 SMS wysłany pomyślnie:", data);
+    console.log("📱 SMS wysłany:", data);
   } catch (error) {
     console.error("❌ BŁĄD SMS:", error);
   }

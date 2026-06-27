@@ -24,21 +24,13 @@ export async function POST(request: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
     const orderInfo = {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
-      customerName: session.customer_details?.name || 
-                   session.shipping_details?.name || 
-                   session.metadata?.customer_name || 
-                   "Nie podano",
-      customerEmail: session.customer_details?.email || 
-                     session.customer_email || 
-                     "Brak",
-      customerPhone: session.metadata?.customer_phone || 
-                     session.customer_details?.phone || 
-                     "Brak",
+      customerName: session.customer_details?.name || session.shipping_details?.name || "Nie podano",
+      customerEmail: session.customer_details?.email || session.customer_email || "Brak",
+      customerPhone: session.metadata?.customer_phone || session.customer_details?.phone || "Brak",
       totalAmount: (session.amount_total || 0) / 100,
       deliveryMethod: session.metadata?.delivery_method || "Nie określono",
       parcelLocker: session.metadata?.parcel_locker,
@@ -55,19 +47,20 @@ export async function POST(request: NextRequest) {
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
 
     await sendAdminEmail(orderInfo);
+    await sendAdminSMS(orderInfo);        // <--- SMS
   }
 
   return NextResponse.json({ received: true });
 }
 
-// Profesjonalna funkcja
+// Email
 async function sendAdminEmail(order: any) {
   try {
-    let productsHtml = order.products.map((p: any) => 
+    const productsHtml = order.products.map((p: any) => 
       `<li>${p.quantity} × ${p.name} — ${p.amount} zł</li>`
     ).join('');
 
-    const result = await resend.emails.send({
+    await resend.emails.send({
       from: "Jankesowa Pasieka <zamowienia@jankesowapasieka.pl>",
       to: "jankesowa.pasieka@gmail.com",
       replyTo: "jankesowa.pasieka@gmail.com",
@@ -99,8 +92,34 @@ async function sendAdminEmail(order: any) {
       `,
     });
 
-    console.log(`📧 Email wysłany pomyślnie! ID: ${result.data?.id || 'brak ID'}`);
+    console.log(`📧 Email wysłany pomyślnie!`);
   } catch (error: any) {
-    console.error("❌ BŁĄD WYSYŁANIA EMAILA:", error.message);
+    console.error("❌ BŁĄD EMAIL:", error.message);
+  }
+}
+
+// SMS do Ciebie
+async function sendAdminSMS(order: any) {
+  try {
+    const message = `Nowe zamówienie #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
+
+    const response = await fetch('https://api.smsapi.pl/sms.do', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${process.env.SMSAPI_TOKEN}`,
+      },
+      body: new URLSearchParams({
+        from: 'Jankesowa',
+        to: '48514070298',           // Twój numer
+        message: message,
+        format: 'json'
+      })
+    });
+
+    const data = await response.json();
+    console.log("📱 SMS wysłany:", data);
+  } catch (error) {
+    console.error("❌ BŁĄD SMS:", error);
   }
 }

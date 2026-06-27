@@ -25,13 +25,13 @@ export async function POST(request: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    // Pobieramy pełne line items
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
     const orderInfo = {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
       customerName: session.customer_details?.name || 
                    session.shipping_details?.name || 
+                   session.metadata?.customer_name || 
                    "Nie podano",
       customerEmail: session.customer_details?.email || 
                      session.customer_email || 
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-// Ostateczna funkcja
+// Profesjonalna funkcja
 async function sendAdminEmail(order: any) {
   try {
     let productsHtml = order.products.map((p: any) => 
@@ -102,6 +102,5 @@ async function sendAdminEmail(order: any) {
     console.log(`📧 Email wysłany pomyślnie! ID: ${result.data?.id || 'brak ID'}`);
   } catch (error: any) {
     console.error("❌ BŁĄD WYSYŁANIA EMAILA:", error.message);
-    console.error("Pełny obiekt błędu:", JSON.stringify(error, null, 2));
   }
 }

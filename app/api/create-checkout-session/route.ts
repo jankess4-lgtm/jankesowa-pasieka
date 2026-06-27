@@ -82,10 +82,6 @@ export async function POST(request: NextRequest) {
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik", "p24"],
-      payment_method_options: {
-        apple_pay: {},
-        google_pay: {},
-      },
       mode: "payment",
       ui_mode: "hosted",
       line_items: lineItems,

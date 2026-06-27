@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false;
 
-// Product details (pozostaje bez zmian)
+// Product details
 function getProductDetails(product: Product): ProductDetails {
   const nameLower = product.name.toLowerCase();
 
@@ -50,15 +50,15 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
-  // Dodaj tutaj resztę swoich definicji dla innych miodów (lipowy, wielokwiatowy itd.) - możesz skopiować z poprzedniej wersji
-  // Dla uproszczenia zostawiam fallback
+  // Fallback dla pozostałych produktów
   return {
-    richDescription: product.longDescription || "Opis produktu wkrótce.",
+    richDescription: product.longDescription || "Szczegółowy opis produktu wkrótce.",
     specs: [
       { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
-      { label: "Jakość", value: "Niepasteryzowany, surowy" },
+      { label: "Jakość", value: "Niepasteryzowany, surowy miód" },
+      { label: "Opakowanie", value: "Szklane, ekologiczne" },
     ],
-    whyBuy: "Wybierz produkt z naszej rodzinnej pasieki – pełen naturalnych wartości.",
+    whyBuy: "Wybierz produkt z naszej rodzinnej pasieki – pełen naturalnych wartości i tradycji.",
   };
 }
 
@@ -90,11 +90,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
-          {/* IMAGE SECTION - Poprawiona logika */}
+          {/* IMAGE SECTION */}
           <div className="space-y-4">
             <div className="relative aspect-[4/3.6] lg:aspect-square rounded-3xl overflow-hidden bg-white border border-brand-creamDark shadow-sm">
               {isAvailable ? (
-                // Dostępny produkt - normalne zdjęcie
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -104,14 +103,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   priority
                 />
               ) : (
-                // Niedostępny produkt - duże wyszarzone logo
                 <div className="absolute inset-0 flex items-center justify-center bg-[#F5EDE4]">
                   <Image
                     src="/logo.png"
                     alt="Jankesowa Pasieka"
                     width={320}
                     height={320}
-                    className="opacity-15 grayscale"
+                    className="opacity-20 grayscale"
                   />
                 </div>
               )}
@@ -155,7 +153,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </p>
             </div>
 
-            {/* Charakterystyka */}
+            {/* Charakterystyka - tabela zostaje zachowana */}
             <div>
               <h2 className="font-medium text-lg mb-4 text-brand-brown tracking-tight">Charakterystyka</h2>
               <div className="overflow-hidden rounded-2xl border border-brand-creamDark bg-white">
@@ -178,9 +176,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
           </div>
         </div>
-
-        {/* Pozostałe sekcje (Dlaczego warto kupić, itd.) - możesz zostawić jak były */}
-        {/* ... wklej tutaj resztę swojego oryginalnego kodu jeśli chcesz ... */}
 
         {/* Navigation prev/next */}
         <div className="mt-12 pt-8 border-t border-brand-creamDark flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">

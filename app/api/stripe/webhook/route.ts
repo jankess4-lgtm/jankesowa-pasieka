@@ -47,13 +47,13 @@ export async function POST(request: NextRequest) {
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
 
     await sendAdminEmail(orderInfo);
-    await sendAdminSMS(orderInfo);        // <--- SMS
+    await sendAdminSMS(orderInfo);     // SMS do Ciebie
   }
 
   return NextResponse.json({ received: true });
 }
 
-// Email
+// Email do Ciebie
 async function sendAdminEmail(order: any) {
   try {
     const productsHtml = order.products.map((p: any) => 
@@ -98,10 +98,10 @@ async function sendAdminEmail(order: any) {
   }
 }
 
-// SMS do Ciebie
+// SMS do Ciebie (SMSAPI)
 async function sendAdminSMS(order: any) {
   try {
-    const message = `Nowe zamówienie #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
+    const message = `Nowe zamowienie #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
 
     const response = await fetch('https://api.smsapi.pl/sms.do', {
       method: 'POST',
@@ -111,14 +111,14 @@ async function sendAdminSMS(order: any) {
       },
       body: new URLSearchParams({
         from: 'Jankesowa',
-        to: '48514070298',           // Twój numer
+        to: '48514070298',
         message: message,
         format: 'json'
       })
     });
 
     const data = await response.json();
-    console.log("📱 SMS wysłany:", data);
+    console.log("📱 SMS wysłany pomyślnie:", data);
   } catch (error) {
     console.error("❌ BŁĄD SMS:", error);
   }

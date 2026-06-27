@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-// Ostateczna wersja
+// Ostateczna, dopracowana funkcja
 async function sendAdminEmail(order: any) {
   try {
     const result = await resend.emails.send({

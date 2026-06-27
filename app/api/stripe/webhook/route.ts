@@ -29,10 +29,10 @@ export async function POST(request: NextRequest) {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
       customerName: session.customer_details?.name || "Brak imienia",
       customerEmail: session.customer_details?.email || session.customer_email,
-      customerPhone: session.metadata?.customer_phone || "Brak telefonu",
+      customerPhone: session.metadata?.customer_phone || "Brak",
       totalAmount: (session.amount_total || 0) / 100,
       deliveryMethod: session.metadata?.delivery_method || "Nie określono",
-      parcelLocker: session.metadata?.parcel_locker || null,
+      parcelLocker: session.metadata?.parcel_locker,
       address: session.metadata?.shipping_street 
         ? `${session.metadata.shipping_street}, ${session.metadata.shipping_postal_code} ${session.metadata.shipping_city}` 
         : null,
@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
 
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", orderInfo);
 
-    // Wysyłanie prawdziwego emaila
     await sendAdminEmail(orderInfo);
   }
 
@@ -79,8 +78,8 @@ async function sendAdminEmail(order: any) {
       `,
     });
 
-    console.log("📧 Email do sprzedawcy wysłany pomyślnie!");
+    console.log("📧 Email do sprzedawcy wysłany pomyślnie na jankesowa.pasieka@gmail.com");
   } catch (error: any) {
-    console.error("Błąd wysyłania emaila przez Resend:", error.message);
+    console.error("Błąd wysyłania emaila:", error.message);
   }
 }

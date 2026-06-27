@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
 
   let event: Stripe.Event;
 
-  // Weryfikacja podpisu webhooka Stripe
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
@@ -23,21 +22,34 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  // Obsługa udanego zamówienia
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
+    // Pobieramy pełne line items
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+
     const orderInfo = {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
-      customerName: session.customer_details?.name || "Nie podano",
-      customerEmail: session.customer_details?.email || session.customer_email || "Brak emaila",
-      customerPhone: session.metadata?.customer_phone || "Brak",
+      customerName: session.customer_details?.name || 
+                   session.shipping_details?.name || 
+                   "Nie podano",
+      customerEmail: session.customer_details?.email || 
+                     session.customer_email || 
+                     "Brak",
+      customerPhone: session.metadata?.customer_phone || 
+                     session.customer_details?.phone || 
+                     "Brak",
       totalAmount: (session.amount_total || 0) / 100,
       deliveryMethod: session.metadata?.delivery_method || "Nie określono",
-      parcelLocker: session.metadata?.parcel_locker || null,
-      address: session.metadata?.shipping_street 
-        ? `${session.metadata.shipping_street}, ${session.metadata.shipping_postal_code} ${session.metadata.shipping_city}` 
+      parcelLocker: session.metadata?.parcel_locker,
+      address: session.shipping_details?.address 
+        ? `${session.shipping_details.address.line1 || ''}, ${session.shipping_details.address.postal_code || ''} ${session.shipping_details.address.city || ''}`
         : null,
+      products: lineItems.data.map(item => ({
+        name: item.description || "Produkt",
+        quantity: item.quantity || 1,
+        amount: (item.amount_total || 0) / 100
+      }))
     };
 
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
@@ -48,9 +60,13 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-// Ostateczna, profesjonalna funkcja wysyłająca email
+// Ostateczna funkcja
 async function sendAdminEmail(order: any) {
   try {
+    let productsHtml = order.products.map((p: any) => 
+      `<li>${p.quantity} × ${p.name} — ${p.amount} zł</li>`
+    ).join('');
+
     const result = await resend.emails.send({
       from: "Jankesowa Pasieka <zamowienia@jankesowapasieka.pl>",
       to: "jankesowa.pasieka@gmail.com",
@@ -68,8 +84,10 @@ async function sendAdminEmail(order: any) {
           <li><strong>Telefon:</strong> ${order.customerPhone}</li>
         </ul>
         
-        <h3>Zamówienie</h3>
-        <p><strong>Kwota całkowita:</strong> ${order.totalAmount} zł</p>
+        <h3>Zamówione produkty</h3>
+        <ul>${productsHtml}</ul>
+        
+        <h3>Razem do zapłaty: <strong>${order.totalAmount} zł</strong></h3>
         
         <h3>Dostawa</h3>
         <p><strong>Metoda:</strong> ${order.deliveryMethod === "parcel" ? "Paczkomat InPost" : order.deliveryMethod}</p>

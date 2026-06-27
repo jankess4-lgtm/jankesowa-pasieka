@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export default function KontaktPage() {
@@ -25,7 +25,6 @@ export default function KontaktPage() {
 
     setIsSubmitting(true);
 
-    // Symulacja wysyłania
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
@@ -34,9 +33,7 @@ export default function KontaktPage() {
         description: "Dziękujemy! Odpowiemy w ciągu 1-2 dni roboczych.",
       });
 
-      // Reset formularza
       setFormData({ name: "", email: "", phone: "", message: "" });
-      
       setTimeout(() => setSubmitted(false), 4200);
     }, 1100);
   };
@@ -56,7 +53,7 @@ export default function KontaktPage() {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
-          {/* Lewa kolumna - Dane kontaktowe + Mapa */}
+          {/* Lewa kolumna */}
           <div className="lg:col-span-2 space-y-8">
             {/* Dane kontaktowe */}
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
@@ -94,9 +91,44 @@ export default function KontaktPage() {
               </div>
             </div>
 
+            {/* Wizytówka do pobrania */}
+            <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
+              <h4 className="font-medium text-brand-brown mb-4">Pobierz wizytówkę</h4>
+              <p className="text-sm text-brand-brown/70 mb-5">Zapisz nasze dane w telefonie lub wydrukuj.</p>
+              
+              <div className="space-y-3">
+                <a 
+                  href="/wizytowka.pdf" 
+                  download 
+                  className="flex items-center gap-3 w-full bg-brand-gold hover:bg-amber-600 text-white py-3.5 px-5 rounded-xl transition font-medium"
+                >
+                  <Download className="w-5 h-5" />
+                  Pobierz wizytówkę PDF
+                </a>
+
+                <a 
+                  href="/wizytowka.png" 
+                  download 
+                  className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition"
+                >
+                  <Download className="w-5 h-5" />
+                  Pobierz wizytówkę PNG
+                </a>
+
+                <a 
+                  href="/jankesowa-pasieka.vcf" 
+                  download 
+                  className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition"
+                >
+                  <Download className="w-5 h-5" />
+                  Dodaj do kontaktów (vCard)
+                </a>
+              </div>
+            </div>
+
             {/* Mapa Google */}
             <div className="bg-white rounded-2xl border border-brand-creamDark overflow-hidden">
-              <div className="p-4 border-b border-brand-creamDark bg-white">
+              <div className="p-4 border-b border-brand-creamDark">
                 <h4 className="font-medium text-brand-brown">Jak do nas dojechać</h4>
               </div>
               <div className="aspect-video w-full">
@@ -109,16 +141,6 @@ export default function KontaktPage() {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
-              </div>
-              <div className="p-4 text-xs text-brand-brown/70">
-                Topolno 45, 86-120 Pruszcz •{" "}
-                <a 
-                  href="https://maps.google.com/?q=Topolno+45+Pruszcz" 
-                  target="_blank" 
-                  className="text-brand-gold hover:underline"
-                >
-                  Otwórz w Google Maps →
-                </a>
               </div>
             </div>
           </div>

@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
   let event: Stripe.Event;
 
-  // Weryfikacja podpisu webhooka
+  // Weryfikacja podpisu webhooka Stripe
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const orderInfo = {
       orderId: session.metadata?.orderRef || session.id.slice(-8).toUpperCase(),
-      customerName: session.customer_details?.name || "Brak imienia",
+      customerName: session.customer_details?.name || "Nie podano",
       customerEmail: session.customer_details?.email || session.customer_email || "Brak emaila",
       customerPhone: session.metadata?.customer_phone || "Brak",
       totalAmount: (session.amount_total || 0) / 100,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-// Profesjonalna funkcja wysyłająca email do sprzedawcy
+// Ostateczna, profesjonalna funkcja wysyłająca email
 async function sendAdminEmail(order: any) {
   try {
     const result = await resend.emails.send({
@@ -72,7 +72,7 @@ async function sendAdminEmail(order: any) {
         <p><strong>Kwota całkowita:</strong> ${order.totalAmount} zł</p>
         
         <h3>Dostawa</h3>
-        <p><strong>Metoda:</strong> ${order.deliveryMethod}</p>
+        <p><strong>Metoda:</strong> ${order.deliveryMethod === "parcel" ? "Paczkomat InPost" : order.deliveryMethod}</p>
         ${order.parcelLocker ? `<p><strong>Paczkomat:</strong> ${order.parcelLocker}</p>` : ''}
         ${order.address ? `<p><strong>Adres:</strong> ${order.address}</p>` : ''}
         

@@ -77,7 +77,7 @@ export const products: Product[] = [
     price: 30,
     unit: "350 ml (0,49 kg)",
     category: "miody",
-    image: "/images/miod-akacjowy-0,49-kg.PNG",
+    image: "/images/miod-akacjowy-0,49-kg.png",
     inStock: 35,
     available: true,
   },

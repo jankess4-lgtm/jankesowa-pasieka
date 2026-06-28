@@ -55,7 +55,7 @@ export const products: Product[] = [
     available: false,
     badgeText: "Produkt sezonowy - niedostępny",
   },
-  {
+     {
     id: 5,
     name: "Miód akacjowy – 900 ml (1,2 kg)",
     slug: "miod-akacjowy-900ml",
@@ -77,7 +77,7 @@ export const products: Product[] = [
     price: 30,
     unit: "350 ml (0,49 kg)",
     category: "miody",
-    image: "/images/miod-akacjowy-0,49-kg.png",
+    image: "/images/miod-akacjowy-0,49-kg.PNG",
     inStock: 35,
     available: true,
   },

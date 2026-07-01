@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { organizationJsonLd } from "@/lib/structured-data";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -49,6 +50,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" className={`${inter.variable} ${playfair.variable} ${satisfy.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
         <Navbar />
         <main>{children}</main>

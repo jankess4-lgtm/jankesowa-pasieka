@@ -47,6 +47,28 @@ interface FormErrors {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
+const PACZKOMAT_FALLBACK_MESSAGE =
+  "Nie znalazłeś swojego paczkomatu na liście? Napisz do nas w wiadomości po złożeniu zamówienia – wyślemy miód na dowolny paczkomat w Polsce.";
+
+const PARCEL_MANUAL_CODE_HINT =
+  "Możesz wpisać dowolny kod paczkomatu – nie musi być na liście.";
+
+function getNoSearchResultsMessage(term: string): string {
+  return `Brak wyników dla „${term}". Wpisz kod paczkomatu ręcznie poniżej.`;
+}
+
+function getSearchResultsHint(
+  hasQuery: boolean,
+  resultCount: number,
+  totalCount: number
+): string {
+  if (hasQuery) {
+    const suffix = resultCount === 80 ? "+" : "";
+    return `Znaleziono: ${resultCount}${suffix} wyników`;
+  }
+  return `Pokazujemy pierwsze 80 z ${totalCount} paczkomatów – wpisz miasto lub kod, aby zawęzić`;
+}
+
 function normalizeSearch(value: string): string {
   return value
     .toLowerCase()
@@ -379,15 +401,17 @@ export default function KoszykPage() {
                     </div>
 
                     <p className="text-xs text-brand-brown/50 mb-2">
-                      {searchTerm
-                        ? `Znaleziono: ${filteredPaczkomaty.length}${filteredPaczkomaty.length === 80 ? "+" : ""} wyników`
-                        : `Pokazujemy pierwsze 80 z ${paczkomaty.length} paczkomatów – wpisz miasto lub kod, aby zawęzić`}
+                      {getSearchResultsHint(
+                        !!searchTerm,
+                        filteredPaczkomaty.length,
+                        paczkomaty.length
+                      )}
                     </p>
 
                     <div className="max-h-80 overflow-auto border border-brand-creamDark rounded-xl mb-4 bg-white">
                       {filteredPaczkomaty.length === 0 ? (
                         <div className="px-4 py-8 text-center text-sm text-brand-brown/60">
-                          Brak wyników dla „{searchTerm}". Wpisz kod paczkomatu ręcznie poniżej.
+                          {getNoSearchResultsMessage(searchTerm)}
                         </div>
                       ) : (
                         filteredPaczkomaty.map((p, index) => {
@@ -440,13 +464,12 @@ export default function KoszykPage() {
                         <p className="text-red-500 text-xs mt-1.5">{errors.parcelLocker}</p>
                       )}
                       <p className="text-xs text-brand-brown/60 mt-2">
-                        Możesz wpisać dowolny kod paczkomatu – nie musi być na liście.
+                        {PARCEL_MANUAL_CODE_HINT}
                       </p>
                     </div>
 
                     <div className="mt-5 p-4 bg-brand-cream/80 border border-brand-creamDark rounded-xl text-sm text-brand-brown/80 leading-relaxed">
-                      Nie znalazłeś swojego paczkomatu na liście? Napisz do nas w wiadomości po
-                      złożeniu zamówienia – wyślemy miód na dowolny paczkomat w Polsce.
+                      {PACZKOMAT_FALLBACK_MESSAGE}
                     </div>
                   </motion.div>
                 )}

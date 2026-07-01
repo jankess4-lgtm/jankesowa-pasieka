@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/useCart";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
-import { paczkomaty, Paczkomat } from "@/lib/paczkomaty";
+import { loadPaczkomaty, normalizeText, Paczkomat } from "@/lib/paczkomaty";
 
 interface FormData {
   fullName: string;
@@ -46,15 +46,24 @@ interface FormErrors {
 }
 
 const STORAGE_KEY = "jankesowa_checkout_form";
+const SEARCH_DEBOUNCE_MS = 200;
+const SEARCH_RESULTS_LIMIT = 80;
 
-const PACZKOMAT_FALLBACK_MESSAGE =
-  "Nie znalazłeś swojego paczkomatu na liście? Napisz do nas w wiadomości po złożeniu zamówienia – wyślemy miód na dowolny paczkomat w Polsce.";
-
-const PARCEL_MANUAL_CODE_HINT =
-  "Możesz wpisać dowolny kod paczkomatu – nie musi być na liście.";
+const COPY = {
+  paczkomatFallback:
+    "Nie znalazłeś swojego paczkomatu? Napisz do nas po zamówieniu – wyślemy na dowolny paczkomat w Polsce.",
+  parcelManualHint: "Możesz wpisać dowolny kod paczkomatu – nie musi być na liście.",
+  emptyPaczkomatList: "Brak paczkomatów na liście. Wpisz kod ręcznie poniżej.",
+  loadingPaczkomaty: "Ładowanie bazy paczkomatów...",
+  loadingPaczkomatyList: "Wczytywanie listy paczkomatów...",
+  contactRequiredHint:
+    "Uzupełnij dane kontaktowe i wybierz sposób dostawy, aby przejść do płatności.",
+  pickupHint:
+    "Wybierz odbiór osobisty i przejdź do płatności – dane kontaktowe nie są wymagane.",
+} as const;
 
 function getNoSearchResultsMessage(term: string): string {
-  return `Brak wyników dla „${term}". Wpisz kod paczkomatu ręcznie poniżej.`;
+  return `Brak wyników dla: ${term}. Wpisz kod paczkomatu ręcznie poniżej.`;
 }
 
 function getSearchResultsHint(
@@ -63,18 +72,108 @@ function getSearchResultsHint(
   totalCount: number
 ): string {
   if (hasQuery) {
-    const suffix = resultCount === 80 ? "+" : "";
+    const suffix = resultCount === SEARCH_RESULTS_LIMIT ? "+" : "";
     return `Znaleziono: ${resultCount}${suffix} wyników`;
   }
-  return `Pokazujemy pierwsze 80 z ${totalCount} paczkomatów – wpisz miasto lub kod, aby zawęzić`;
+  return `Pokazujemy pierwsze ${SEARCH_RESULTS_LIMIT} z ${totalCount} paczkomatów – wpisz miasto lub kod, aby zawęzić`;
 }
 
-function normalizeSearch(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
+function getLockerCode(locker: Paczkomat): string {
+  return locker.name || locker.id;
+}
+
+function getLockerCity(locker: Paczkomat): string {
+  return locker.address_details?.city || "";
+}
+
+function getLockerAddress(locker: Paczkomat): string {
+  if (locker.address?.line1) return locker.address.line1;
+  if (locker.address_details?.street) return locker.address_details.street;
+  return "";
+}
+
+function getLockerHours(locker: Paczkomat): string {
+  return locker.opening_hours || "24/7";
+}
+
+function getLockerSearchBlob(locker: Paczkomat): string {
+  return [
+    locker.id,
+    locker.name,
+    locker.display_name,
+    locker.address?.line1,
+    locker.address?.line2,
+    locker.address_details?.city,
+    locker.address_details?.street,
+    locker.address_details?.post_code,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function filterPaczkomaty(list: Paczkomat[], search: string): Paczkomat[] {
+  const queryParts = normalizeText(search).trim().split(/\s+/).filter(Boolean);
+  if (queryParts.length === 0) return list.slice(0, SEARCH_RESULTS_LIMIT);
+
+  return list
+    .filter((locker) => {
+      const blob = normalizeText(getLockerSearchBlob(locker));
+      return queryParts.every((part) => blob.includes(part));
+    })
+    .slice(0, SEARCH_RESULTS_LIMIT);
+}
+
+function needsContactValidation(method: FormData["deliveryMethod"]): boolean {
+  return method === "parcel" || method === "address";
+}
+
+function validateContactFields(customer: FormData, errors: FormErrors): void {
+  if (!needsContactValidation(customer.deliveryMethod)) return;
+
+  if (!customer.fullName.trim()) {
+    errors.fullName = "Imię i nazwisko jest wymagane";
+  } else if (customer.fullName.trim().length < 3) {
+    errors.fullName = "Podaj pełne imię i nazwisko";
+  }
+
+  if (!customer.phone.trim()) {
+    errors.phone = "Telefon jest wymagany";
+  } else if (customer.phone.replace(/\D/g, "").length < 9) {
+    errors.phone = "Podaj poprawny numer telefonu (min. 9 cyfr)";
+  }
+
+  if (!customer.email.trim()) {
+    errors.email = "Email jest wymagany";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
+    errors.email = "Podaj poprawny adres email";
+  }
+}
+
+function validateAddressFields(customer: FormData, errors: FormErrors): void {
+  if (customer.deliveryMethod !== "address") return;
+
+  if (!customer.street?.trim()) {
+    errors.street = "Ulica i numer są wymagane";
+  }
+  if (!customer.postalCode?.trim()) {
+    errors.postalCode = "Kod pocztowy jest wymagany";
+  } else if (!/^\d{2}-\d{3}$/.test(customer.postalCode.trim())) {
+    errors.postalCode = "Kod pocztowy w formacie XX-XXX";
+  }
+  if (!customer.city?.trim()) {
+    errors.city = "Miasto jest wymagane";
+  }
+}
+
+function validateParcelFields(customer: FormData, errors: FormErrors): void {
+  if (customer.deliveryMethod !== "parcel") return;
+
+  const locker = customer.parcelLocker?.trim() || "";
+  if (!locker) {
+    errors.parcelLocker = "Wybierz paczkomat z listy lub wpisz kod ręcznie";
+  } else if (locker.length < 3) {
+    errors.parcelLocker = "Kod paczkomatu jest za krótki";
+  }
 }
 
 function getShippingCost(method: FormData["deliveryMethod"]): number {
@@ -105,7 +204,47 @@ export default function KoszykPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedLocker, setSelectedLocker] = useState<Paczkomat | null>(null);
+  const [paczkomatyList, setPaczkomatyList] = useState<Paczkomat[]>([]);
+  const [paczkomatyLoading, setPaczkomatyLoading] = useState(true);
+  const [paczkomatyError, setPaczkomatyError] = useState<string | null>(null);
+
+  const fetchPaczkomaty = useCallback(() => {
+    setPaczkomatyLoading(true);
+    setPaczkomatyError(null);
+
+    loadPaczkomaty()
+      .then((loadedItems) => {
+        setPaczkomatyList(loadedItems);
+        if (loadedItems.length === 0) {
+          setPaczkomatyError(
+            "Nie udało się wczytać listy paczkomatów. Możesz wpisać kod ręcznie poniżej."
+          );
+        }
+      })
+      .catch(() => {
+        setPaczkomatyList([]);
+        setPaczkomatyError(
+          "Błąd ładowania bazy paczkomatów. Możesz wpisać kod ręcznie poniżej."
+        );
+      })
+      .finally(() => {
+        setPaczkomatyLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchPaczkomaty();
+  }, [fetchPaczkomaty]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -122,22 +261,14 @@ export default function KoszykPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(customer));
   }, [customer]);
 
+  const requiresContact = needsContactValidation(customer.deliveryMethod);
   const shippingCost = getShippingCost(customer.deliveryMethod);
   const grandTotal = totalPrice + shippingCost;
 
-  const filteredPaczkomaty = useMemo(() => {
-    const query = normalizeSearch(searchTerm);
-    if (!query) return paczkomaty.slice(0, 80);
-
-    return paczkomaty
-      .filter(
-        (p) =>
-          normalizeSearch(p.city).includes(query) ||
-          normalizeSearch(p.address).includes(query) ||
-          normalizeSearch(p.code).includes(query)
-      )
-      .slice(0, 80);
-  }, [searchTerm]);
+  const filteredPaczkomaty = useMemo(
+    () => filterPaczkomaty(paczkomatyList, debouncedSearch),
+    [paczkomatyList, debouncedSearch]
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -148,8 +279,6 @@ export default function KoszykPage() {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
-
-  const requiresContact = customer.deliveryMethod !== "pickup";
 
   const handleDeliveryChange = (method: FormData["deliveryMethod"]) => {
     setCustomer((prev) => ({ ...prev, deliveryMethod: method }));
@@ -167,9 +296,12 @@ export default function KoszykPage() {
 
   const handleSelectLocker = (locker: Paczkomat) => {
     setSelectedLocker(locker);
+    const code = getLockerCode(locker);
+    const address = getLockerAddress(locker);
+    const city = getLockerCity(locker);
     setCustomer((prev) => ({
       ...prev,
-      parcelLocker: `${locker.code} – ${locker.address}, ${locker.city}`,
+      parcelLocker: `${code} – ${address}, ${city}`,
     }));
     setErrors((prev) => ({ ...prev, parcelLocker: undefined }));
   };
@@ -186,44 +318,9 @@ export default function KoszykPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (customer.deliveryMethod !== "pickup") {
-      if (!customer.fullName.trim()) {
-        newErrors.fullName = "Imię i nazwisko jest wymagane";
-      } else if (customer.fullName.trim().length < 3) {
-        newErrors.fullName = "Podaj pełne imię i nazwisko";
-      }
-
-      if (!customer.phone.trim()) {
-        newErrors.phone = "Telefon jest wymagany";
-      } else if (customer.phone.replace(/\D/g, "").length < 9) {
-        newErrors.phone = "Podaj poprawny numer telefonu (min. 9 cyfr)";
-      }
-
-      if (!customer.email.trim()) {
-        newErrors.email = "Email jest wymagany";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
-        newErrors.email = "Podaj poprawny adres email";
-      }
-    }
-
-    if (customer.deliveryMethod === "address") {
-      if (!customer.street?.trim()) newErrors.street = "Ulica i numer są wymagane";
-      if (!customer.postalCode?.trim()) {
-        newErrors.postalCode = "Kod pocztowy jest wymagany";
-      } else if (!/^\d{2}-\d{3}$/.test(customer.postalCode.trim())) {
-        newErrors.postalCode = "Kod pocztowy w formacie XX-XXX";
-      }
-      if (!customer.city?.trim()) newErrors.city = "Miasto jest wymagane";
-    }
-
-    if (customer.deliveryMethod === "parcel") {
-      const locker = customer.parcelLocker?.trim() || "";
-      if (!locker) {
-        newErrors.parcelLocker = "Wybierz paczkomat z listy lub wpisz kod ręcznie";
-      } else if (locker.length < 3) {
-        newErrors.parcelLocker = "Kod paczkomatu jest za krótki";
-      }
-    }
+    validateContactFields(customer, newErrors);
+    validateAddressFields(customer, newErrors);
+    validateParcelFields(customer, newErrors);
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -283,16 +380,12 @@ export default function KoszykPage() {
           </Link>
           <h1 className="text-4xl font-serif text-brand-brown">Koszyk i dostawa</h1>
           <p className="text-brand-brown/70 mt-2">
-            {requiresContact
-              ? "Uzupełnij dane kontaktowe i wybierz sposób dostawy, aby przejść do płatności."
-              : "Wybierz odbiór osobisty i przejdź do płatności – dane kontaktowe nie są wymagane."}
+            {requiresContact ? COPY.contactRequiredHint : COPY.pickupHint}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          {/* Lewa kolumna – formularz */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Sposób dostawy */}
             <div className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-medium text-brand-brown mb-6">Sposób dostawy</h2>
 
@@ -320,7 +413,6 @@ export default function KoszykPage() {
               </div>
 
               <AnimatePresence mode="wait">
-                {/* Paczkomat */}
                 {customer.deliveryMethod === "parcel" && (
                   <motion.div
                     key="parcel"
@@ -338,7 +430,7 @@ export default function KoszykPage() {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-brown/40" />
                       <input
                         type="text"
-                        placeholder="Np. Toruń, Bydgoszcz, TOR045, ul. Mickiewicza..."
+                        placeholder="Np. Toruń, Bydgoszcz, TOR01M, ul. Mickiewicza..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold/30"
@@ -346,42 +438,68 @@ export default function KoszykPage() {
                     </div>
 
                     <p className="text-xs text-brand-brown/50 mb-2">
-                      {getSearchResultsHint(
-                        !!searchTerm,
-                        filteredPaczkomaty.length,
-                        paczkomaty.length
-                      )}
+                      {paczkomatyLoading
+                        ? COPY.loadingPaczkomaty
+                        : getSearchResultsHint(
+                            !!debouncedSearch.trim(),
+                            filteredPaczkomaty.length,
+                            paczkomatyList.length
+                          )}
                     </p>
 
+                    {paczkomatyError && !paczkomatyLoading && (
+                      <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-900 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <span>{paczkomatyError}</span>
+                        <button
+                          type="button"
+                          onClick={fetchPaczkomaty}
+                          className="text-xs font-medium text-brand-gold hover:underline whitespace-nowrap"
+                        >
+                          Spróbuj ponownie
+                        </button>
+                      </div>
+                    )}
+
                     <div className="max-h-80 overflow-auto border border-brand-creamDark rounded-xl mb-4 bg-white">
-                      {filteredPaczkomaty.length === 0 ? (
+                      {paczkomatyLoading ? (
                         <div className="px-4 py-8 text-center text-sm text-brand-brown/60">
-                          {getNoSearchResultsMessage(searchTerm)}
+                          {COPY.loadingPaczkomatyList}
+                        </div>
+                      ) : filteredPaczkomaty.length === 0 ? (
+                        <div className="px-4 py-8 text-center text-sm text-brand-brown/60">
+                          {debouncedSearch.trim()
+                            ? getNoSearchResultsMessage(debouncedSearch)
+                            : COPY.emptyPaczkomatList}
                         </div>
                       ) : (
-                        filteredPaczkomaty.map((p, index) => {
+                        filteredPaczkomaty.map((locker, index) => {
+                          const code = getLockerCode(locker);
+                          const address = getLockerAddress(locker);
+                          const city = getLockerCity(locker);
                           const isSelected =
-                            selectedLocker?.code === p.code &&
-                            selectedLocker?.city === p.city &&
-                            selectedLocker?.address === p.address;
+                            selectedLocker !== null &&
+                            getLockerCode(selectedLocker) === code &&
+                            getLockerCity(selectedLocker) === city &&
+                            getLockerAddress(selectedLocker) === address;
+
                           return (
                             <button
-                              key={`${p.code}-${p.city}-${index}`}
+                              key={`${code}-${city}-${index}`}
                               type="button"
-                              onClick={() => handleSelectLocker(p)}
+                              onClick={() => handleSelectLocker(locker)}
                               className={`w-full text-left px-4 py-3 border-b border-brand-creamDark last:border-b-0 hover:bg-brand-cream/60 transition-colors flex justify-between items-start gap-3 ${
                                 isSelected ? "bg-brand-gold/10 border-l-4 border-l-brand-gold" : ""
                               }`}
                             >
                               <div className="min-w-0">
                                 <div className="font-mono text-sm font-semibold text-brand-brown">
-                                  {p.code}
+                                  {code}
                                 </div>
-                                <div className="text-sm text-brand-brown/80">{p.address}</div>
-                                <div className="text-xs text-brand-brown/50 mt-0.5">{p.city}</div>
+                                <div className="text-sm text-brand-brown/80">{address}</div>
+                                <div className="text-xs text-brand-brown/50 mt-0.5">{city}</div>
                               </div>
                               <div className="text-xs text-brand-brown/50 whitespace-nowrap flex-shrink-0">
-                                {p.hours}
+                                {getLockerHours(locker)}
                               </div>
                             </button>
                           );
@@ -402,24 +520,21 @@ export default function KoszykPage() {
                         name="parcelLocker"
                         value={customer.parcelLocker || ""}
                         onChange={handleParcelLockerChange}
-                        placeholder="Np. TOR045, BYD012 lub pełny kod z aplikacji InPost"
+                        placeholder="Np. TOR01M, BYD01M lub kod z aplikacji InPost"
                         className={inputClass(!!errors.parcelLocker)}
                       />
                       {errors.parcelLocker && (
                         <p className="text-red-500 text-xs mt-1.5">{errors.parcelLocker}</p>
                       )}
-                      <p className="text-xs text-brand-brown/60 mt-2">
-                        {PARCEL_MANUAL_CODE_HINT}
-                      </p>
+                      <p className="text-xs text-brand-brown/60 mt-2">{COPY.parcelManualHint}</p>
                     </div>
 
                     <div className="mt-5 p-4 bg-brand-cream/80 border border-brand-creamDark rounded-xl text-sm text-brand-brown/80 leading-relaxed">
-                      {PACZKOMAT_FALLBACK_MESSAGE}
+                      {COPY.paczkomatFallback}
                     </div>
                   </motion.div>
                 )}
 
-                {/* Kurier */}
                 {customer.deliveryMethod === "address" && (
                   <motion.div
                     key="address"
@@ -435,7 +550,10 @@ export default function KoszykPage() {
                     </p>
 
                     <div>
-                      <label htmlFor="street" className="block text-sm font-medium text-brand-brown mb-2">
+                      <label
+                        htmlFor="street"
+                        className="block text-sm font-medium text-brand-brown mb-2"
+                      >
                         Ulica i numer <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -477,7 +595,10 @@ export default function KoszykPage() {
                       </div>
 
                       <div>
-                        <label htmlFor="city" className="block text-sm font-medium text-brand-brown mb-2">
+                        <label
+                          htmlFor="city"
+                          className="block text-sm font-medium text-brand-brown mb-2"
+                        >
                           Miasto <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -498,7 +619,6 @@ export default function KoszykPage() {
                   </motion.div>
                 )}
 
-                {/* Odbiór osobisty */}
                 {customer.deliveryMethod === "pickup" && (
                   <motion.div
                     key="pickup"
@@ -556,7 +676,6 @@ export default function KoszykPage() {
               </AnimatePresence>
             </div>
 
-            {/* Dane kontaktowe – wymagane dla kuriera i paczkomatu */}
             <AnimatePresence mode="wait">
               {requiresContact && (
                 <motion.div
@@ -642,7 +761,6 @@ export default function KoszykPage() {
             </AnimatePresence>
           </div>
 
-          {/* Prawa kolumna – podsumowanie */}
           <div className="lg:col-span-5">
             <div className="bg-white rounded-2xl shadow-sm p-8 sticky top-6">
               <h2 className="text-2xl font-medium text-brand-brown mb-6">Podsumowanie</h2>

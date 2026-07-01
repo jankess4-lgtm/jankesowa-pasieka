@@ -81,7 +81,7 @@ export default function KoszykPage() {
 
   // ==================== ROZBUDOWANA BAZA PACZKOMATÓW ====================
  const paczkomaty: Paczkomat[] = [
-     // ==================== TORUŃ - CZĘŚĆ 1 ====================
+     // TORUŃ
   { code: "TOR001", address: "ul. Kopernika 12 (Biedronka, Stare Miasto)", city: "Toruń", hours: "24/7" },
   { code: "TOR002", address: "ul. Mickiewicza 18", city: "Toruń", hours: "24/7" },
   { code: "TOR003", address: "ul. Żeglarska 5", city: "Toruń", hours: "24/7" },
@@ -112,9 +112,7 @@ export default function KoszykPage() {
   { code: "TOR028", address: "ul. Chrobrego 33", city: "Toruń", hours: "24/7" },
   { code: "TOR029", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
   { code: "TOR030", address: "ul. Sienkiewicza 22", city: "Toruń", hours: "24/7" },
-  // ... (kontynuacja)
-  // ==================== TORUŃ - CZĘŚĆ 2 ====================
-    { code: "TOR031", address: "ul. Szubińska 45 (Biedronka)", city: "Toruń", hours: "24/7" },
+  { code: "TOR031", address: "ul. Szubińska 45 (Biedronka)", city: "Toruń", hours: "24/7" },
   { code: "TOR032", address: "ul. Wschodnia 67", city: "Toruń", hours: "24/7" },
   { code: "TOR033", address: "ul. Chrobrego 12", city: "Toruń", hours: "24/7" },
   { code: "TOR034", address: "ul. Piłsudskiego 105", city: "Toruń", hours: "24/7" },
@@ -164,8 +162,6 @@ export default function KoszykPage() {
   { code: "TOR078", address: "ul. Malczewskiego 12", city: "Toruń", hours: "24/7" },
   { code: "TOR079", address: "ul. Modrzewskiego 55", city: "Toruń", hours: "24/7" },
   { code: "TOR080", address: "ul. Elbląska 22", city: "Toruń", hours: "24/7" },
-];
-  // ==================== TORUŃ - CZĘŚĆ 3 ====================
   { code: "TOR081", address: "ul. Sobieskiego 45 (Rubinkowo)", city: "Toruń", hours: "24/7" },
   { code: "TOR082", address: "ul. Traugutta 78", city: "Toruń", hours: "24/7" },
   { code: "TOR083", address: "ul. Kościuszki 145 (Mokre)", city: "Toruń", hours: "24/7" },
@@ -236,8 +232,6 @@ export default function KoszykPage() {
   { code: "TOR148", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
   { code: "TOR149", address: "ul. Reymonta 55", city: "Toruń", hours: "24/7" },
   { code: "TOR150", address: "ul. Staffa 33", city: "Toruń", hours: "24/7" },
-];
-  // ==================== TORUŃ - CZĘŚĆ 4 ====================
   { code: "TOR151", address: "ul. Tuwima 45", city: "Toruń", hours: "24/7" },
   { code: "TOR152", address: "ul. Gałczyńskiego 78", city: "Toruń", hours: "24/7" },
   { code: "TOR153", address: "ul. Norwida 55", city: "Toruń", hours: "24/7" },
@@ -298,8 +292,6 @@ export default function KoszykPage() {
   { code: "TOR208", address: "ul. Słowackiego 90", city: "Toruń", hours: "24/7" },
   { code: "TOR209", address: "ul. Krasińskiego 44", city: "Toruń", hours: "24/7" },
   { code: "TOR210", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
-];  
-// ==================== TORUŃ - CZĘŚĆ 5 (poprawiona, bez duplikatów) ====================
   { code: "TOR211", address: "ul. Elbląska 45 (Mokre)", city: "Toruń", hours: "24/7" },
   { code: "TOR212", address: "ul. Wschodnia 78", city: "Toruń", hours: "24/7" },
   { code: "TOR213", address: "ul. Kleeberga 22", city: "Toruń", hours: "24/7" },
@@ -340,8 +332,8 @@ export default function KoszykPage() {
   { code: "TOR248", address: "ul. Hallera 67", city: "Toruń", hours: "24/7" },
   { code: "TOR249", address: "ul. Dowbora-Muśnickiego 44", city: "Toruń", hours: "24/7" },
   { code: "TOR250", address: "ul. 11 Listopada 120", city: "Toruń", hours: "24/7" },
-];
-  // ==================== GMINA LUBICZ ====================
+
+  // GMINA LUBICZ 
   { code: "LUB001", address: "ul. Toruńska 45 (Lubicz Dolny, przy Biedronce)", city: "Lubicz", hours: "24/7" },
   { code: "LUB002", address: "ul. Główna 12 (Lubicz Górny)", city: "Lubicz", hours: "06:00-22:00" },
   { code: "LUB003", address: "ul. Toruńska 120 (Lubicz Dolny)", city: "Lubicz", hours: "24/7" },
@@ -357,8 +349,8 @@ export default function KoszykPage() {
   { code: "LUB013", address: "ul. Toruńska 200 (Lubicz)", city: "Lubicz", hours: "24/7" },
   { code: "LUB014", address: "ul. Kwiatowa 12 (Lubicz Górny)", city: "Lubicz", hours: "24/7" },
   { code: "LUB015", address: "ul. Parkowa 28 (Lubicz)", city: "Lubicz", hours: "24/7" },
-];
-  // ==================== GMINA OBROWO ====================
+
+  // GMINA OBROWO 
     { code: "OBR004", address: "ul. Szkolna 5 (Obrowo)", city: "Obrowo", hours: "06:00-22:00" },
   { code: "OBR005", address: "ul. Leśna 22 (Obrowo)", city: "Obrowo", hours: "24/7" },
   { code: "OBR006", address: "ul. Toruńska 120 (Obrowo)", city: "Obrowo", hours: "24/7" },
@@ -371,54 +363,27 @@ export default function KoszykPage() {
   { code: "OBR013", address: "ul. Parkowa 18 (Obrowo)", city: "Obrowo", hours: "24/7" },
   { code: "OBR014", address: "ul. Sienkiewicza 25 (Obrowo)", city: "Obrowo", hours: "24/7" },
   { code: "OBR015", address: "ul. Bydgoska 145", city: "Obrowo", hours: "24/7" },
-];
-  // ==================== GMINA OBROWO + WSIE ====================
-  // Obrowo
   { code: "OBR001", address: "ul. Toruńska 45 (Obrowo, przy Lewiatan)", city: "Obrowo", hours: "24/7" },
   { code: "OBR002", address: "ul. Główna 12 (Obrowo)", city: "Obrowo", hours: "06:00-22:00" },
   { code: "OBR003", address: "ul. Bydgoska 78 (Obrowo)", city: "Obrowo", hours: "24/7" },
-
-  // Brzozówka
   { code: "OBR004", address: "ul. Brzozowa 15 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
   { code: "OBR005", address: "ul. Toruńska 112 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
-
-  // Dźwierzno
   { code: "OBR006", address: "ul. Dźwierzno 22 (Dźwierzno)", city: "Dźwierzno", hours: "24/7" },
   { code: "OBR007", address: "ul. Główna 8 (Dźwierzno)", city: "Dźwierzno", hours: "06:00-22:00" },
-
-  // Jodłówka
-  { code: "OBR008", address: "ul. Jodłówka 33", city: "Jodłówka", hours: "24/7" },
-
-  // Łążyn
   { code: "OBR009", address: "ul. Łążyn 18 (Łążyn)", city: "Łążyn", hours: "24/7" },
   { code: "OBR010", address: "ul. Toruńska 89 (Łążyn)", city: "Łążyn", hours: "24/7" },
-
-  // Nowe Dąbie
   { code: "OBR011", address: "ul. Dąbska 12 (Nowe Dąbie)", city: "Nowe Dąbie", hours: "24/7" },
-
-  // Osiek
   { code: "OBR012", address: "ul. Osiek 25", city: "Osiek", hours: "24/7" },
-
-  // Różankowo
   { code: "OBR013", address: "ul. Różankowo 7", city: "Różankowo", hours: "24/7" },
-
-  // Silno
   { code: "OBR014", address: "ul. Silno 44", city: "Silno", hours: "24/7" },
   { code: "OBR015", address: "ul. Toruńska 150 (Silno)", city: "Silno", hours: "24/7" },
-
-  // Węgorzyn
   { code: "OBR016", address: "ul. Węgorzyn 19", city: "Węgorzyn", hours: "24/7" },
-
-  // Złotoryja
   { code: "OBR017", address: "ul. Złotoryja 28", city: "Złotoryja", hours: "24/7" },
-
-  // Dodatkowe lokalizacje w gminie
   { code: "OBR018", address: "ul. Toruńska 220 (Obrowo - Osiedle)", city: "Obrowo", hours: "24/7" },
   { code: "OBR019", address: "ul. Leśna 55 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
   { code: "OBR020", address: "ul. Szkolna 10 (Dźwierzno)", city: "Dźwierzno", hours: "06:00-22:00" },
-];
-  // ==================== GMINA CZERNIKOWO ====================
-  // Czernikowo
+
+  // GMINA CZERNIKOWO
   { code: "CZE001", address: "ul. Toruńska 67 (Czernikowo, przy Biedronce)", city: "Czernikowo", hours: "24/7" },
   { code: "CZE002", address: "ul. Główna 12 (Czernikowo)", city: "Czernikowo", hours: "06:00-22:00" },
   { code: "CZE003", address: "ul. Bydgoska 45 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
@@ -430,97 +395,65 @@ export default function KoszykPage() {
   { code: "CZE009", address: "ul. Leśna 18 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
   { code: "CZE010", address: "ul. Kwiatowa 7 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
   { code: "CZE011", address: "ul. Toruńska 210 (Czernikowo - Osiedle)", city: "Czernikowo", hours: "24/7" },
-];
-  // ==================== GMINA ZŁAWIEŚ WIELKA ====================
-  // Zławieś Wielka
+
+  // GMINA ZŁAWIEŚ WIELKA 
   { code: "ZLA001", address: "ul. Toruńska 56 (Zławieś Wielka, przy sklepie)", city: "Zławieś Wielka", hours: "24/7" },
   { code: "ZLA002", address: "ul. Główna 15 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "06:00-22:00" },
   { code: "ZLA003", address: "ul. Bydgoska 78 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
   { code: "ZLA004", address: "ul. Szkolna 10 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "06:00-22:00" },
   { code: "ZLA005", address: "ul. Toruńska 145 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-
-  // Zławieś Mała
   { code: "ZLA006", address: "ul. Główna 22 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
   { code: "ZLA007", address: "ul. Toruńska 98 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
-
-  // Czerniewice
   { code: "ZLA008", address: "ul. Czerniewice 12", city: "Czerniewice", hours: "24/7" },
   { code: "ZLA009", address: "ul. Toruńska 175 (Czerniewice)", city: "Czerniewice", hours: "24/7" },
-
-  // Głuchowo
   { code: "ZLA010", address: "ul. Głuchowo 33", city: "Głuchowo", hours: "24/7" },
   { code: "ZLA011", address: "ul. Główna 8 (Głuchowo)", city: "Głuchowo", hours: "24/7" },
-
-  // Łążyn (część gminy)
   { code: "ZLA012", address: "ul. Łążyn 25", city: "Łążyn", hours: "24/7" },
-
-  // Dodatkowe lokalizacje w gminie
   { code: "ZLA013", address: "ul. Sportowa 18 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
   { code: "ZLA014", address: "ul. Leśna 7 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
   { code: "ZLA015", address: "ul. Polna 44 (Czerniewice)", city: "Czerniewice", hours: "24/7" },
   { code: "ZLA016", address: "ul. Kwiatowa 12 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
   { code: "ZLA017", address: "ul. Parkowa 19 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-];
-  // ==================== GMINA ŁUBIANKA ====================
-  // Łubianka
+
+  // GMINA ŁUBIANKA 
   { code: "LUB001", address: "ul. Toruńska 34 (Łubianka, przy sklepie)", city: "Łubianka", hours: "24/7" },
   { code: "LUB002", address: "ul. Główna 15 (Łubianka)", city: "Łubianka", hours: "06:00-22:00" },
   { code: "LUB003", address: "ul. Bydgoska 67 (Łubianka)", city: "Łubianka", hours: "24/7" },
   { code: "LUB004", address: "ul. Szkolna 9 (Łubianka)", city: "Łubianka", hours: "06:00-22:00" },
   { code: "LUB005", address: "ul. Toruńska 98 (Łubianka)", city: "Łubianka", hours: "24/7" },
-
-  // Brzozowo
   { code: "LUB006", address: "ul. Brzozowo 12", city: "Brzozowo", hours: "24/7" },
   { code: "LUB007", address: "ul. Toruńska 145 (Brzozowo)", city: "Brzozowo", hours: "24/7" },
-
-  // Dąbrowa Chełmińska (część gminy)
   { code: "LUB008", address: "ul. Dąbrowa 22", city: "Dąbrowa Chełmińska", hours: "24/7" },
   { code: "LUB009", address: "ul. Główna 18 (Dąbrowa Chełmińska)", city: "Dąbrowa Chełmińska", hours: "24/7" },
-
-  // Łążyn (część)
   { code: "LUB010", address: "ul. Łążyn 35", city: "Łążyn", hours: "24/7" },
-
-  // Dodatkowe lokalizacje w gminie Łubianka
   { code: "LUB011", address: "ul. Leśna 8 (Łubianka)", city: "Łubianka", hours: "24/7" },
   { code: "LUB012", address: "ul. Sportowa 15 (Łubianka)", city: "Łubianka", hours: "24/7" },
   { code: "LUB013", address: "ul. Polna 28 (Brzozowo)", city: "Brzozowo", hours: "24/7" },
   { code: "LUB014", address: "ul. Kwiatowa 7 (Łubianka)", city: "Łubianka", hours: "24/7" },
   { code: "LUB015", address: "ul. Parkowa 19 (Łubianka)", city: "Łubianka", hours: "24/7" },
   { code: "LUB016", address: "ul. Toruńska 220 (Łubianka)", city: "Łubianka", hours: "24/7" },
-];
-  // ==================== GMINA ŁYSOMICE ====================
-  // Łysomice
+
+  // GMINA ŁYSOMICE 
   { code: "LYS001", address: "ul. Toruńska 56 (Łysomice, przy sklepie)", city: "Łysomice", hours: "24/7" },
   { code: "LYS002", address: "ul. Główna 12 (Łysomice)", city: "Łysomice", hours: "06:00-22:00" },
   { code: "LYS003", address: "ul. Bydgoska 78 (Łysomice)", city: "Łysomice", hours: "24/7" },
   { code: "LYS004", address: "ul. Szkolna 10 (Łysomice)", city: "Łysomice", hours: "06:00-22:00" },
   { code: "LYS005", address: "ul. Toruńska 145 (Łysomice)", city: "Łysomice", hours: "24/7" },
   { code: "LYS006", address: "ul. Sportowa 22 (Łysomice)", city: "Łysomice", hours: "24/7" },
-
-  // Turzno
   { code: "LYS007", address: "ul. Turzno 15", city: "Turzno", hours: "24/7" },
   { code: "LYS008", address: "ul. Toruńska 98 (Turzno)", city: "Turzno", hours: "24/7" },
-
-  // Gostkowo
   { code: "LYS009", address: "ul. Gostkowo 25", city: "Gostkowo", hours: "24/7" },
   { code: "LYS010", address: "ul. Główna 18 (Gostkowo)", city: "Gostkowo", hours: "24/7" },
-
-  // Różnowo
   { code: "LYS011", address: "ul. Różnowo 12", city: "Różnowo", hours: "24/7" },
-
-  // Nowa Wieś
   { code: "LYS012", address: "ul. Nowa Wieś 33", city: "Nowa Wieś", hours: "24/7" },
-
-  // Dodatkowe lokalizacje w gminie
   { code: "LYS013", address: "ul. Leśna 8 (Łysomice)", city: "Łysomice", hours: "24/7" },
   { code: "LYS014", address: "ul. Polna 19 (Turzno)", city: "Turzno", hours: "24/7" },
   { code: "LYS015", address: "ul. Kwiatowa 7 (Łysomice)", city: "Łysomice", hours: "24/7" },
   { code: "LYS016", address: "ul. Parkowa 22 (Łysomice)", city: "Łysomice", hours: "24/7" },
   { code: "LYS017", address: "ul. Toruńska 220 (Łysomice)", city: "Łysomice", hours: "24/7" },
-];
-  // ==================== MIASTO CHEŁMŻA ====================
-  // Chełmża - centrum
-  { code: "CHL001", address: "ul. Toruńska 12 (Chełmża, centrum)", city: "Chełmża", hours: "24/7" },
+
+  // MIASTO CHEŁMŻA 
+   { code: "CHL001", address: "ul. Toruńska 12 (Chełmża, centrum)", city: "Chełmża", hours: "24/7" },
   { code: "CHL002", address: "ul. Rynek 5 (Stare Miasto)", city: "Chełmża", hours: "24/7" },
   { code: "CHL003", address: "ul. 3 Maja 45 (Chełmża)", city: "Chełmża", hours: "24/7" },
   { code: "CHL004", address: "ul. Bydgoska 67 (Chełmża)", city: "Chełmża", hours: "24/7" },
@@ -530,8 +463,6 @@ export default function KoszykPage() {
   { code: "CHL008", address: "ul. Mickiewicza 33", city: "Chełmża", hours: "24/7" },
   { code: "CHL009", address: "ul. Piłsudskiego 78", city: "Chełmża", hours: "24/7" },
   { code: "CHL010", address: "ul. Dworcowa 15 (Chełmża)", city: "Chełmża", hours: "24/7" },
-
-  // Okolice Chełmży
   { code: "CHL011", address: "ul. Chełmżyńska 22 (Bielczyny)", city: "Bielczyny", hours: "24/7" },
   { code: "CHL012", address: "ul. Główna 18 (Kłódka)", city: "Kłódka", hours: "24/7" },
   { code: "CHL013", address: "ul. Toruńska 89 (Grzywno)", city: "Grzywno", hours: "24/7" },
@@ -542,8 +473,8 @@ export default function KoszykPage() {
   { code: "CHL018", address: "ul. Parkowa 28 (Chełmża)", city: "Chełmża", hours: "24/7" },
   { code: "CHL019", address: "ul. Toruńska 210 (Chełmża)", city: "Chełmża", hours: "24/7" },
   { code: "CHL020", address: "ul. Sienkiewicza 67 (Chełmża)", city: "Chełmża", hours: "24/7" },
-];
-    // ==================== BYDGOSZCZ - CZĘŚĆ 1 ====================
+
+  // BYDGOSZCZ
   { code: "BYD001", address: "ul. Gdańska 12 (Centrum)", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD003", address: "ul. Fordońska 140 (Lidl, Fordon)", city: "Bydgoszcz", hours: "24/7" },
@@ -614,8 +545,6 @@ export default function KoszykPage() {
   { code: "BYD068", address: "ul. Wybickiego 45", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD069", address: "ul. Modrzewiowa 19", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD070", address: "ul. Rekreacyjna 88", city: "Bydgoszcz", hours: "24/7" },
-];
-    // ==================== BYDGOSZCZ - CZĘŚĆ 2 ====================
   { code: "BYD071", address: "ul. Modrzewiowa 45", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD072", address: "ul. Rekreacyjna 12", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD073", address: "ul. Bajeczna 67", city: "Bydgoszcz", hours: "24/7" },
@@ -666,8 +595,6 @@ export default function KoszykPage() {
   { code: "BYD118", address: "ul. Matejki 67", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD119", address: "ul. Mickiewicza 88", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD120", address: "ul. Sienkiewicza 55", city: "Bydgoszcz", hours: "24/7" },
-];
-  // ==================== BYDGOSZCZ - CZĘŚĆ 3 (ostatnia) ====================
   { code: "BYD121", address: "ul. Krasińskiego 45", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD122", address: "ul. Konopnickiej 88", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD123", address: "ul. Reymonta 33", city: "Bydgoszcz", hours: "24/7" },
@@ -708,8 +635,8 @@ export default function KoszykPage() {
   { code: "BYD158", address: "ul. Norwida 67", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD159", address: "ul. Asnyka 44", city: "Bydgoszcz", hours: "24/7" },
   { code: "BYD160", address: "ul. Fredry 19", city: "Bydgoszcz", hours: "24/7" },
-];
-  // ==================== INOWROCŁAW ====================
+
+  // INOWROCŁAW
   { code: "INO001", address: "ul. Toruńska 45 (Inowrocław, centrum)", city: "Inowrocław", hours: "24/7" },
   { code: "INO002", address: "ul. Poznańska 67", city: "Inowrocław", hours: "24/7" },
   { code: "INO003", address: "ul. 3 Maja 12", city: "Inowrocław", hours: "24/7" },
@@ -720,8 +647,8 @@ export default function KoszykPage() {
   { code: "INO008", address: "ul. Ratuszowa 15", city: "Inowrocław", hours: "24/7" },
   { code: "INO009", address: "ul. Toruńska 120", city: "Inowrocław", hours: "24/7" },
   { code: "INO010", address: "ul. Sportowa 22", city: "Inowrocław", hours: "24/7" },
-];
-  // ==================== GRUDZIĄDZ ====================
+
+  // GRUDZIĄDZ
   { code: "GRU001", address: "ul. Toruńska 34 (Grudziądz)", city: "Grudziądz", hours: "24/7" },
   { code: "GRU002", address: "ul. Rynek 5 (Stare Miasto)", city: "Grudziądz", hours: "24/7" },
   { code: "GRU003", address: "ul. Długa 67", city: "Grudziądz", hours: "24/7" },
@@ -729,23 +656,23 @@ export default function KoszykPage() {
   { code: "GRU005", address: "ul. Bydgoska 89", city: "Grudziądz", hours: "24/7" },
   { code: "GRU006", address: "ul. Piłsudskiego 55", city: "Grudziądz", hours: "24/7" },
   { code: "GRU007", address: "ul. Chełmińska 33", city: "Grudziądz", hours: "24/7" },
-];
-  // ==================== WŁOCŁAWEK ====================
+
+  // WŁOCŁAWEK
   { code: "WLO001", address: "ul. Toruńska 78 (Włocławek)", city: "Włocławek", hours: "24/7" },
   { code: "WLO002", address: "ul. Kopernika 12", city: "Włocławek", hours: "24/7" },
   { code: "WLO003", address: "ul. 3 Maja 45", city: "Włocławek", hours: "24/7" },
   { code: "WLO004", address: "ul. Brzezińska 67", city: "Włocławek", hours: "24/7" },
   { code: "WLO005", address: "ul. Piłsudskiego 120", city: "Włocławek", hours: "24/7" },
-];
-  // ==================== NAKŁO NAD NOTECIĄ ====================
+
+  // NAKŁO NAD NOTECIĄ
   { code: "NAK001", address: "ul. 11 Listopada 45 (Nakło nad Notecią, centrum)", city: "Nakło nad Notecią", hours: "24/7" },
   { code: "NAK002", address: "ul. Bydgoska 12", city: "Nakło nad Notecią", hours: "24/7" },
   { code: "NAK003", address: "ul. Toruńska 67", city: "Nakło nad Notecią", hours: "24/7" },
   { code: "NAK004", address: "ul. Szkolna 8", city: "Nakło nad Notecią", hours: "06:00-22:00" },
   { code: "NAK005", address: "ul. Piłsudskiego 33", city: "Nakło nad Notecią", hours: "24/7" },
   { code: "NAK006", address: "ul. Kościuszki 19", city: "Nakło nad Notecią", hours: "24/7" },
-];
-  // ==================== BRODNICA ====================
+
+  // BRODNICA
   { code: "BRO001", address: "ul. Toruńska 56 (Brodnica, centrum)", city: "Brodnica", hours: "24/7" },
   { code: "BRO002", address: "ul. Sądowa 12", city: "Brodnica", hours: "24/7" },
   { code: "BRO003", address: "ul. 3 Maja 45", city: "Brodnica", hours: "24/7" },
@@ -753,8 +680,8 @@ export default function KoszykPage() {
   { code: "BRO005", address: "ul. Piłsudskiego 33", city: "Brodnica", hours: "24/7" },
   { code: "BRO006", address: "ul. Chełmińska 19", city: "Brodnica", hours: "24/7" },
   { code: "BRO007", address: "ul. Sienkiewicza 55", city: "Brodnica", hours: "24/7" },
-];
-  // ==================== CHEŁMNO ====================
+
+  // CHEŁMNO
   { code: "CHM001", address: "ul. Toruńska 34 (Chełmno, centrum)", city: "Chełmno", hours: "24/7" },
   { code: "CHM002", address: "ul. Rynek 5 (Stare Miasto)", city: "Chełmno", hours: "24/7" },
   { code: "CHM003", address: "ul. 3 Maja 67", city: "Chełmno", hours: "24/7" },
@@ -762,8 +689,8 @@ export default function KoszykPage() {
   { code: "CHM005", address: "ul. Piłsudskiego 45", city: "Chełmno", hours: "24/7" },
   { code: "CHM006", address: "ul. Kościelna 8", city: "Chełmno", hours: "06:00-22:00" },
   { code: "CHM007", address: "ul. Toruńska 120", city: "Chełmno", hours: "24/7" },
-];
-  // ==================== TUCHOLA ====================
+
+  // TUCHOLA
   { code: "TUC001", address: "ul. Kościuszki 45 (Tuchola, centrum)", city: "Tuchola", hours: "24/7" },
   { code: "TUC002", address: "ul. Główna 12", city: "Tuchola", hours: "24/7" },
   { code: "TUC003", address: "ul. Bydgoska 67", city: "Tuchola", hours: "24/7" },
@@ -771,8 +698,8 @@ export default function KoszykPage() {
   { code: "TUC005", address: "ul. Piłsudskiego 33", city: "Tuchola", hours: "24/7" },
   { code: "TUC006", address: "ul. Leśna 19", city: "Tuchola", hours: "24/7" },
   { code: "TUC007", address: "ul. Toruńska 89", city: "Tuchola", hours: "24/7" },
-];
-  // ==================== WARSZAWA ====================
+
+  // WARSZAWA
   { code: "WAW001", address: "ul. Marszałkowska 104/106 (Centrum)", city: "Warszawa", hours: "24/7" },
   { code: "WAW002", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7" },
   { code: "WAW003", address: "ul. Aleje Jerozolimskie 125", city: "Warszawa", hours: "24/7" },
@@ -780,46 +707,46 @@ export default function KoszykPage() {
   { code: "WAW005", address: "ul. Górczewska 212 (Bemowo)", city: "Warszawa", hours: "24/7" },
   { code: "WAW006", address: "ul. Bielańska 12 (Stare Miasto)", city: "Warszawa", hours: "24/7" },
 
-  // ==================== KRAKÓW ====================
+  // KRAKÓW
   { code: "KRK001", address: "ul. Floriańska 15 (Stare Miasto)", city: "Kraków", hours: "24/7" },
   { code: "KRK002", address: "ul. Wielicka 259 (Podgórze)", city: "Kraków", hours: "24/7" },
   { code: "KRK003", address: "ul. Zakopiańska 62", city: "Kraków", hours: "24/7" },
   { code: "KRK004", address: "ul. Bora-Komorowskiego 25 (Nowa Huta)", city: "Kraków", hours: "24/7" },
   { code: "KRK005", address: "ul. Mogilska 83", city: "Kraków", hours: "24/7" },
 
-  // ==================== POZNAŃ ====================
+  // POZNAŃ 
   { code: "POZ001", address: "ul. Półwiejska 27 (Stare Miasto)", city: "Poznań", hours: "24/7" },
   { code: "POZ002", address: "ul. Głogowska 416 (Grunwald)", city: "Poznań", hours: "24/7" },
   { code: "POZ003", address: "ul. Hetmańska 33", city: "Poznań", hours: "24/7" },
   { code: "POZ004", address: "ul. Winogrady 178", city: "Poznań", hours: "24/7" },
   { code: "POZ005", address: "ul. Marcelińska 90", city: "Poznań", hours: "24/7" },
 
-  // ==================== WROCŁAW ====================
+  // WROCŁAW 
   { code: "WRO001", address: "ul. Świdnicka 15 (Centrum)", city: "Wrocław", hours: "24/7" },
   { code: "WRO002", address: "ul. Legnicka 58", city: "Wrocław", hours: "24/7" },
   { code: "WRO003", address: "ul. Aleja Kromera 15 (Krzyki)", city: "Wrocław", hours: "24/7" },
   { code: "WRO004", address: "ul. Grabiszyńska 241", city: "Wrocław", hours: "24/7" },
 
-  // ==================== GDAŃSK ====================
+  // GDAŃSK 
   { code: "GDA001", address: "ul. Długa 41 (Główne Miasto)", city: "Gdańsk", hours: "24/7" },
   { code: "GDA002", address: "ul. Grunwaldzka 211 (Wrzeszcz)", city: "Gdańsk", hours: "24/7" },
   { code: "GDA003", address: "ul. Subisława 20 (Oliwa)", city: "Gdańsk", hours: "24/7" },
 
-  // ==================== ŁÓDŹ ====================
+  // ŁÓDŹ 
   { code: "LDZ001", address: "ul. Piotrkowska 87", city: "Łódź", hours: "24/7" },
   { code: "LDZ002", address: "ul. Pabianicka 92", city: "Łódź", hours: "24/7" },
   { code: "LDZ003", address: "ul. Aleksandrowska 122", city: "Łódź", hours: "24/7" },
 
-  // ==================== KATOWICE ====================
+  // KATOWICE 
   { code: "KAT001", address: "ul. Mariacka 20", city: "Katowice", hours: "24/7" },
   { code: "KAT002", address: "ul. Korfantego 51", city: "Katowice", hours: "24/7" },
   { code: "KAT003", address: "ul. Chorzowska 107", city: "Katowice", hours: "24/7" },
 
-  // ==================== LUBLIN ====================
+  // LUBLIN 
   { code: "LUB001", address: "ul. Krakowskie Przedmieście 45", city: "Lublin", hours: "24/7" },
   { code: "LUB002", address: "ul. 3 Maja 18", city: "Lublin", hours: "24/7" },
 
-  // ==================== SZCZECIN ====================
+  // SZCZECIN 
   { code: "SZE001", address: "ul. Wojska Polskiego 45", city: "Szczecin", hours: "24/7" },
   { code: "SZE002", address: "ul. Aleja Piastów 65", city: "Szczecin", hours: "24/7" },
 ];

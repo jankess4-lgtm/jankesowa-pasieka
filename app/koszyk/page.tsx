@@ -149,10 +149,15 @@ export default function KoszykPage() {
     }
   };
 
+  const requiresContact = customer.deliveryMethod !== "pickup";
+
   const handleDeliveryChange = (method: FormData["deliveryMethod"]) => {
     setCustomer((prev) => ({ ...prev, deliveryMethod: method }));
     setErrors((prev) => ({
       ...prev,
+      fullName: undefined,
+      phone: undefined,
+      email: undefined,
       street: undefined,
       postalCode: undefined,
       city: undefined,
@@ -181,22 +186,24 @@ export default function KoszykPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!customer.fullName.trim()) {
-      newErrors.fullName = "Imię i nazwisko jest wymagane";
-    } else if (customer.fullName.trim().length < 3) {
-      newErrors.fullName = "Podaj pełne imię i nazwisko";
-    }
+    if (customer.deliveryMethod !== "pickup") {
+      if (!customer.fullName.trim()) {
+        newErrors.fullName = "Imię i nazwisko jest wymagane";
+      } else if (customer.fullName.trim().length < 3) {
+        newErrors.fullName = "Podaj pełne imię i nazwisko";
+      }
 
-    if (!customer.phone.trim()) {
-      newErrors.phone = "Telefon jest wymagany";
-    } else if (customer.phone.replace(/\D/g, "").length < 9) {
-      newErrors.phone = "Podaj poprawny numer telefonu (min. 9 cyfr)";
-    }
+      if (!customer.phone.trim()) {
+        newErrors.phone = "Telefon jest wymagany";
+      } else if (customer.phone.replace(/\D/g, "").length < 9) {
+        newErrors.phone = "Podaj poprawny numer telefonu (min. 9 cyfr)";
+      }
 
-    if (!customer.email.trim()) {
-      newErrors.email = "Email jest wymagany";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
-      newErrors.email = "Podaj poprawny adres email";
+      if (!customer.email.trim()) {
+        newErrors.email = "Email jest wymagany";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
+        newErrors.email = "Podaj poprawny adres email";
+      }
     }
 
     if (customer.deliveryMethod === "address") {
@@ -231,11 +238,12 @@ export default function KoszykPage() {
     setIsSubmitting(true);
 
     try {
+      const isPickup = customer.deliveryMethod === "pickup";
       await startStripeCheckout(items, {
         ...customer,
-        fullName: customer.fullName.trim(),
-        phone: customer.phone.trim(),
-        email: customer.email.trim(),
+        fullName: isPickup ? "" : customer.fullName.trim(),
+        phone: isPickup ? "" : customer.phone.trim(),
+        email: isPickup ? "" : customer.email.trim(),
         parcelLocker: customer.parcelLocker?.trim(),
         street: customer.street?.trim(),
         postalCode: customer.postalCode?.trim(),
@@ -275,78 +283,15 @@ export default function KoszykPage() {
           </Link>
           <h1 className="text-4xl font-serif text-brand-brown">Koszyk i dostawa</h1>
           <p className="text-brand-brown/70 mt-2">
-            Uzupełnij dane kontaktowe i wybierz sposób dostawy, aby przejść do płatności.
+            {requiresContact
+              ? "Uzupełnij dane kontaktowe i wybierz sposób dostawy, aby przejść do płatności."
+              : "Wybierz odbiór osobisty i przejdź do płatności – dane kontaktowe nie są wymagane."}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
           {/* Lewa kolumna – formularz */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Dane kontaktowe – zawsze wymagane */}
-            <div className="bg-white rounded-2xl shadow-sm p-8">
-              <h2 className="text-2xl font-medium text-brand-brown mb-6">Dane kontaktowe</h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-brand-brown mb-2">
-                    Imię i nazwisko <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="fullName"
-                    type="text"
-                    name="fullName"
-                    value={customer.fullName}
-                    onChange={handleChange}
-                    placeholder="Jan Kowalski"
-                    className={inputClass(!!errors.fullName)}
-                    autoComplete="name"
-                  />
-                  {errors.fullName && (
-                    <p className="text-red-500 text-xs mt-1.5">{errors.fullName}</p>
-                  )}
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-brand-brown mb-2">
-                      Telefon <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      name="phone"
-                      value={customer.phone}
-                      onChange={handleChange}
-                      placeholder="+48 500 000 000"
-                      className={inputClass(!!errors.phone)}
-                      autoComplete="tel"
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-brand-brown mb-2">
-                      Email <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      name="email"
-                      value={customer.email}
-                      onChange={handleChange}
-                      placeholder="jan@example.com"
-                      className={inputClass(!!errors.email)}
-                      autoComplete="email"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Sposób dostawy */}
             <div className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-medium text-brand-brown mb-6">Sposób dostawy</h2>
@@ -610,6 +555,91 @@ export default function KoszykPage() {
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Dane kontaktowe – wymagane dla kuriera i paczkomatu */}
+            <AnimatePresence mode="wait">
+              {requiresContact && (
+                <motion.div
+                  key="contact"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white rounded-2xl shadow-sm p-8"
+                >
+                  <h2 className="text-2xl font-medium text-brand-brown mb-6">Dane kontaktowe</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label
+                        htmlFor="fullName"
+                        className="block text-sm font-medium text-brand-brown mb-2"
+                      >
+                        Imię i nazwisko <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="fullName"
+                        type="text"
+                        name="fullName"
+                        value={customer.fullName}
+                        onChange={handleChange}
+                        placeholder="Jan Kowalski"
+                        className={inputClass(!!errors.fullName)}
+                        autoComplete="name"
+                      />
+                      {errors.fullName && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.fullName}</p>
+                      )}
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="phone"
+                          className="block text-sm font-medium text-brand-brown mb-2"
+                        >
+                          Telefon <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="phone"
+                          type="tel"
+                          name="phone"
+                          value={customer.phone}
+                          onChange={handleChange}
+                          placeholder="+48 500 000 000"
+                          className={inputClass(!!errors.phone)}
+                          autoComplete="tel"
+                        />
+                        {errors.phone && (
+                          <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-brand-brown mb-2"
+                        >
+                          Email <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="email"
+                          type="email"
+                          name="email"
+                          value={customer.email}
+                          onChange={handleChange}
+                          placeholder="jan@example.com"
+                          className={inputClass(!!errors.email)}
+                          autoComplete="email"
+                        />
+                        {errors.email && (
+                          <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Prawa kolumna – podsumowanie */}

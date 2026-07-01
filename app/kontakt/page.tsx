@@ -11,11 +11,9 @@ export default function KontaktPage() {
     phone: "",
     message: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.message) {
@@ -25,17 +23,26 @@ export default function KontaktPage() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      
-      toast.success("Wiadomość wysłana pomyślnie", {
-        description: "Dziękujemy! Odpowiemy w ciągu 1-2 dni roboczych.",
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      setTimeout(() => setSubmitted(false), 4200);
-    }, 1100);
+      if (response.ok) {
+        toast.success("Wiadomość wysłana pomyślnie", {
+          description: "Dziękujemy! Odpowiemy w ciągu 1-2 dni roboczych.",
+        });
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        toast.error("Wystąpił błąd podczas wysyłania wiadomości");
+      }
+    } catch (error) {
+      toast.error("Nie udało się wysłać wiadomości. Spróbuj później.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -58,7 +65,7 @@ export default function KontaktPage() {
             {/* Dane kontaktowe */}
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
               <h3 className="font-medium text-brand-brown mb-5 text-lg">Jankesowa Pasieka</h3>
-              
+             
               <div className="space-y-6 text-sm">
                 <div className="flex gap-4">
                   <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
@@ -68,7 +75,6 @@ export default function KontaktPage() {
                     <div className="text-brand-brown/70">Kujawy nadwiślańskie</div>
                   </div>
                 </div>
-
                 <a href="tel:+48514070298" className="flex gap-4 group hover:text-brand-gold transition">
                   <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div>
@@ -76,12 +82,10 @@ export default function KontaktPage() {
                     <div className="text-xs text-brand-brown/60">Poniedziałek – Sobota: 8:00 – 20:00</div>
                   </div>
                 </a>
-
                 <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-4 group hover:text-brand-gold transition">
                   <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div>jankesowa.pasieka@gmail.com</div>
                 </a>
-
                 <div className="flex gap-4 pt-2 border-t border-brand-creamDark">
                   <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div className="text-sm leading-snug">
@@ -95,31 +99,17 @@ export default function KontaktPage() {
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
               <h4 className="font-medium text-brand-brown mb-4">Pobierz wizytówkę</h4>
               <p className="text-sm text-brand-brown/70 mb-5">Zapisz nasze dane w telefonie lub wydrukuj.</p>
-              
+             
               <div className="space-y-3">
-                <a 
-                  href="/wizytowka.pdf" 
-                  download 
-                  className="flex items-center gap-3 w-full bg-brand-gold hover:bg-amber-600 text-white py-3.5 px-5 rounded-xl transition font-medium"
-                >
+                <a href="/wizytowka.pdf" download className="flex items-center gap-3 w-full bg-brand-gold hover:bg-amber-600 text-white py-3.5 px-5 rounded-xl transition font-medium">
                   <Download className="w-5 h-5" />
                   Pobierz wizytówkę PDF
                 </a>
-
-                <a 
-                  href="/wizytowka.png" 
-                  download 
-                  className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition"
-                >
+                <a href="/wizytowka.png" download className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition">
                   <Download className="w-5 h-5" />
                   Pobierz wizytówkę PNG
                 </a>
-
-                <a 
-                  href="/jankesowa-pasieka.vcf" 
-                  download 
-                  className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition"
-                >
+                <a href="/jankesowa-pasieka.vcf" download className="flex items-center gap-3 w-full border border-brand-creamDark hover:bg-brand-cream py-3.5 px-5 rounded-xl transition">
                   <Download className="w-5 h-5" />
                   Dodaj do kontaktów (vCard)
                 </a>
@@ -172,7 +162,6 @@ export default function KontaktPage() {
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-brand-brown mb-1.5">Adres e-mail *</label>
                 <input
@@ -184,7 +173,6 @@ export default function KontaktPage() {
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-brand-brown mb-1.5">Wiadomość *</label>
                 <textarea
@@ -196,15 +184,13 @@ export default function KontaktPage() {
                   required
                 />
               </div>
-
               <Button
                 type="submit"
                 className="w-full py-3 text-base"
-                disabled={isSubmitting || submitted}
+                disabled={isSubmitting}
               >
-                {isSubmitting ? "Wysyłanie..." : submitted ? "Dziękujemy! ✓" : "Wyślij wiadomość"}
+                {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
               </Button>
-
               <p className="text-center text-[10px] text-brand-brown/50">Odpowiadamy zwykle w ciągu 1–2 dni roboczych.</p>
             </form>
           </div>

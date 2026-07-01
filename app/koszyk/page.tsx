@@ -1,19 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { MapPin, Phone, Mail, Clock, Truck, Package, User } from "lucide-react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Truck,
+  Package,
+  User,
+  CreditCard,
+  Plus,
+  Minus,
+  X,
+  Search,
+} from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/useCart";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
-
-interface Paczkomat {
-  code: string;
-  address: string;
-  city: string;
-  hours: string;
-}
+import { paczkomaty, Paczkomat } from "@/lib/paczkomaty";
 
 interface FormData {
   fullName: string;
@@ -38,8 +47,28 @@ interface FormErrors {
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
+function normalizeSearch(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function getShippingCost(method: FormData["deliveryMethod"]): number {
+  if (method === "address") return 16;
+  if (method === "parcel") return 14;
+  return 0;
+}
+
+function inputClass(hasError?: boolean): string {
+  return `w-full px-4 py-3 border rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold/30 ${
+    hasError ? "border-red-400 bg-red-50/50" : "border-gray-300 bg-white"
+  }`;
+}
+
 export default function KoszykPage() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, removeFromCart, updateQuantity } = useCart();
   const [customer, setCustomer] = useState<FormData>({
     fullName: "",
     phone: "",
@@ -53,735 +82,118 @@ export default function KoszykPage() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLocker, setSelectedLocker] = useState<Paczkomat | null>(null);
 
-  // Wczytanie zapisanych danych
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      setCustomer(JSON.parse(saved));
+      try {
+        setCustomer(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem(STORAGE_KEY);
+      }
     }
   }, []);
 
-  // Zapis do localStorage
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(customer));
   }, [customer]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const shippingCost = getShippingCost(customer.deliveryMethod);
+  const grandTotal = totalPrice + shippingCost;
+
+  const filteredPaczkomaty = useMemo(() => {
+    const query = normalizeSearch(searchTerm);
+    if (!query) return paczkomaty.slice(0, 80);
+
+    return paczkomaty
+      .filter(
+        (p) =>
+          normalizeSearch(p.city).includes(query) ||
+          normalizeSearch(p.address).includes(query) ||
+          normalizeSearch(p.code).includes(query)
+      )
+      .slice(0, 80);
+  }, [searchTerm]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setCustomer(prev => ({ ...prev, [name]: value }));
+    setCustomer((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
-  const handleDeliveryChange = (method: "address" | "parcel" | "pickup") => {
-    setCustomer(prev => ({ ...prev, deliveryMethod: method }));
+  const handleDeliveryChange = (method: FormData["deliveryMethod"]) => {
+    setCustomer((prev) => ({ ...prev, deliveryMethod: method }));
+    setErrors((prev) => ({
+      ...prev,
+      street: undefined,
+      postalCode: undefined,
+      city: undefined,
+      parcelLocker: undefined,
+    }));
   };
-
-  // ==================== ROZBUDOWANA BAZA PACZKOMATÓW ====================
- const paczkomaty: Paczkomat[] = [
-     // TORUŃ
-  { code: "TOR001", address: "ul. Kopernika 12 (Biedronka, Stare Miasto)", city: "Toruń", hours: "24/7" },
-  { code: "TOR002", address: "ul. Mickiewicza 18", city: "Toruń", hours: "24/7" },
-  { code: "TOR003", address: "ul. Żeglarska 5", city: "Toruń", hours: "24/7" },
-  { code: "TOR004", address: "ul. Dąbrowskiego 8 (Lidl)", city: "Toruń", hours: "06:00-22:00" },
-  { code: "TOR005", address: "ul. Olsztyńska 12 (Na Skarpie)", city: "Toruń", hours: "24/7" },
-  { code: "TOR006", address: "ul. Rubinkowska 48 (Rubinkowo I)", city: "Toruń", hours: "24/7" },
-  { code: "TOR007", address: "ul. Łódzka 72 (Mokre)", city: "Toruń", hours: "24/7" },
-  { code: "TOR008", address: "ul. Gagarina 145 (Bielany)", city: "Toruń", hours: "24/7" },
-  { code: "TOR009", address: "ul. Jarowa 8", city: "Toruń", hours: "24/7" },
-  { code: "TOR010", address: "ul. Wrzosowa 12 (Wrzosy)", city: "Toruń", hours: "24/7" },
-  { code: "TOR011", address: "ul. Chełmińska 95", city: "Toruń", hours: "24/7" },
-  { code: "TOR012", address: "ul. Bydgoska 165", city: "Toruń", hours: "24/7" },
-  { code: "TOR013", address: "ul. Reja 15 (Nowe Miasto)", city: "Toruń", hours: "24/7" },
-  { code: "TOR014", address: "ul. Broniewskiego 22 (Jar)", city: "Toruń", hours: "24/7" },
-  { code: "TOR015", address: "ul. Skarpowa 18 (Na Skarpie)", city: "Toruń", hours: "24/7" },
-  { code: "TOR016", address: "ul. Rubinkowska 78 (Rubinkowo II)", city: "Toruń", hours: "24/7" },
-  { code: "TOR017", address: "ul. Mokre 15", city: "Toruń", hours: "24/7" },
-  { code: "TOR018", address: "ul. Koniuchy 25", city: "Toruń", hours: "24/7" },
-  { code: "TOR019", address: "ul. Watzenrodego 8 (Rubinkowo I)", city: "Toruń", hours: "24/7" },
-  { code: "TOR020", address: "ul. Rydygiera 33 (Rubinkowo II)", city: "Toruń", hours: "24/7" },
-  { code: "TOR021", address: "ul. Skłodowskiej-Curie 25", city: "Toruń", hours: "24/7" },
-  { code: "TOR022", address: "ul. Legionów 65", city: "Toruń", hours: "24/7" },
-  { code: "TOR023", address: "ul. Olsztyńska 58", city: "Toruń", hours: "24/7" },
-  { code: "TOR024", address: "ul. Łódzka 95", city: "Toruń", hours: "24/7" },
-  { code: "TOR025", address: "ul. PCK 55 (Mokre)", city: "Toruń", hours: "24/7" },
-  { code: "TOR026", address: "ul. Szubińska 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR027", address: "ul. Wschodnia 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR028", address: "ul. Chrobrego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR029", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR030", address: "ul. Sienkiewicza 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR031", address: "ul. Szubińska 45 (Biedronka)", city: "Toruń", hours: "24/7" },
-  { code: "TOR032", address: "ul. Wschodnia 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR033", address: "ul. Chrobrego 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR034", address: "ul. Piłsudskiego 105", city: "Toruń", hours: "24/7" },
-  { code: "TOR035", address: "ul. Sienkiewicza 88 (Nowe Miasto)", city: "Toruń", hours: "24/7" },
-  { code: "TOR036", address: "ul. Kościuszki 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR037", address: "ul. Matejki 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR038", address: "ul. Kraszewskiego 18", city: "Toruń", hours: "24/7" },
-  { code: "TOR039", address: "ul. Słowackiego 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR040", address: "ul. Norwida 12 (Rubinkowo)", city: "Toruń", hours: "24/7" },
-  { code: "TOR041", address: "ul. Gałczyńskiego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR042", address: "ul. Staffa 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR043", address: "ul. Tuwima 28", city: "Toruń", hours: "24/7" },
-  { code: "TOR044", address: "ul. Lelewela 7 (Mokre)", city: "Toruń", hours: "24/7" },
-  { code: "TOR045", address: "ul. Fredry 52", city: "Toruń", hours: "24/7" },
-  { code: "TOR046", address: "ul. Asnyka 11", city: "Toruń", hours: "24/7" },
-  { code: "TOR047", address: "ul. Konopnickiej 39 (Na Skarpie)", city: "Toruń", hours: "24/7" },
-  { code: "TOR048", address: "ul. Reymonta 24", city: "Toruń", hours: "24/7" },
-  { code: "TOR049", address: "ul. Żeromskiego 81", city: "Toruń", hours: "24/7" },
-  { code: "TOR050", address: "ul. Wyspiańskiego 16", city: "Toruń", hours: "24/7" },
-  { code: "TOR051", address: "ul. Tetmajera 9 (Bielany)", city: "Toruń", hours: "24/7" },
-  { code: "TOR052", address: "ul. Kasprowicza 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR053", address: "ul. Słowackiego 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR054", address: "ul. Mickiewicza 95", city: "Toruń", hours: "24/7" },
-  { code: "TOR055", address: "ul. Kopernika 68", city: "Toruń", hours: "24/7" },
-  { code: "TOR056", address: "ul. Mostowa 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR057", address: "ul. Św. Józefa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR058", address: "ul. Grunwaldzka 110", city: "Toruń", hours: "24/7" },
-  { code: "TOR059", address: "ul. Wileńska 25", city: "Toruń", hours: "24/7" },
-  { code: "TOR060", address: "ul. Lubicka 48", city: "Toruń", hours: "24/7" },
-  { code: "TOR061", address: "ul. Bażyńskiego 19 (Rubinkowo II)", city: "Toruń", hours: "24/7" },
-  { code: "TOR062", address: "ul. Dekerta 7", city: "Toruń", hours: "24/7" },
-  { code: "TOR063", address: "ul. Popiełuszki 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR064", address: "ul. Bema 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR065", address: "ul. 1 Maja 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR066", address: "ul. Hallera 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR067", address: "ul. Czerwonej Armii 15", city: "Toruń", hours: "24/7" },
-  { code: "TOR068", address: "ul. Kleeberga 9", city: "Toruń", hours: "24/7" },
-  { code: "TOR069", address: "ul. Andersa 34", city: "Toruń", hours: "24/7" },
-  { code: "TOR070", address: "ul. Czartoryskiego 18", city: "Toruń", hours: "24/7" },
-  { code: "TOR071", address: "ul. Sobieskiego 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR072", address: "ul. Traugutta 29", city: "Toruń", hours: "24/7" },
-  { code: "TOR073", address: "ul. Kościuszki 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR074", address: "ul. Matejki 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR075", address: "ul. Krasińskiego 8", city: "Toruń", hours: "24/7" },
-  { code: "TOR076", address: "ul. Słowackiego 150", city: "Toruń", hours: "24/7" },
-  { code: "TOR077", address: "ul. Wybickiego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR078", address: "ul. Malczewskiego 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR079", address: "ul. Modrzewskiego 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR080", address: "ul. Elbląska 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR081", address: "ul. Sobieskiego 45 (Rubinkowo)", city: "Toruń", hours: "24/7" },
-  { code: "TOR082", address: "ul. Traugutta 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR083", address: "ul. Kościuszki 145 (Mokre)", city: "Toruń", hours: "24/7" },
-  { code: "TOR084", address: "ul. Matejki 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR085", address: "ul. Krasińskiego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR086", address: "ul. Konopnickiej 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR087", address: "ul. Reymonta 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR088", address: "ul. Staffa 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR089", address: "ul. Tuwima 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR090", address: "ul. Gałczyńskiego 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR091", address: "ul. Norwida 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR092", address: "ul. Asnyka 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR093", address: "ul. Fredry 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR094", address: "ul. Malczewskiego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR095", address: "ul. Wybickiego 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR096", address: "ul. Modrzewiowa 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR097", address: "ul. Rekreacyjna 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR098", address: "ul. Bajeczna 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR099", address: "ul. Czerkaska 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR100", address: "ul. Smukalska 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR101", address: "ul. Rycerska 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR102", address: "ul. Andersa 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR103", address: "ul. Sikorskiego 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR104", address: "ul. Maczka 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR105", address: "ul. Hallera 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR106", address: "ul. Dowbora-Muśnickiego 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR107", address: "ul. 11 Listopada 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR108", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR109", address: "ul. Dworcowa 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR110", address: "ul. Pomorska 190", city: "Toruń", hours: "24/7" },
-  { code: "TOR111", address: "ul. Kościuszki 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR112", address: "ul. Matejki 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR113", address: "ul. Mickiewicza 105", city: "Toruń", hours: "24/7" },
-  { code: "TOR114", address: "ul. Sienkiewicza 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR115", address: "ul. Słowackiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR116", address: "ul. Krasińskiego 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR117", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR118", address: "ul. Reymonta 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR119", address: "ul. Staffa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR120", address: "ul. Tuwima 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR121", address: "ul. Gałczyńskiego 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR122", address: "ul. Norwida 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR123", address: "ul. Asnyka 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR124", address: "ul. Fredry 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR125", address: "ul. Malczewskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR126", address: "ul. Wybickiego 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR127", address: "ul. Modrzewiowa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR128", address: "ul. Rekreacyjna 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR129", address: "ul. Bajeczna 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR130", address: "ul. Czerkaska 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR131", address: "ul. Smukalska 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR132", address: "ul. Rycerska 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR133", address: "ul. Andersa 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR134", address: "ul. Sikorskiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR135", address: "ul. Maczka 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR136", address: "ul. Hallera 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR137", address: "ul. Dowbora-Muśnickiego 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR138", address: "ul. 11 Listopada 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR139", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR140", address: "ul. Dworcowa 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR141", address: "ul. Pomorska 190", city: "Toruń", hours: "24/7" },
-  { code: "TOR142", address: "ul. Kościuszki 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR143", address: "ul. Matejki 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR144", address: "ul. Mickiewicza 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR145", address: "ul. Sienkiewicza 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR146", address: "ul. Słowackiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR147", address: "ul. Krasińskiego 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR148", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR149", address: "ul. Reymonta 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR150", address: "ul. Staffa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR151", address: "ul. Tuwima 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR152", address: "ul. Gałczyńskiego 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR153", address: "ul. Norwida 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR154", address: "ul. Asnyka 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR155", address: "ul. Fredry 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR156", address: "ul. Malczewskiego 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR157", address: "ul. Wybickiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR158", address: "ul. Modrzewiowa 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR159", address: "ul. Rekreacyjna 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR160", address: "ul. Bajeczna 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR161", address: "ul. Czerkaska 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR162", address: "ul. Smukalska 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR163", address: "ul. Rycerska 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR164", address: "ul. Andersa 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR165", address: "ul. Sikorskiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR166", address: "ul. Maczka 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR167", address: "ul. Hallera 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR168", address: "ul. Dowbora-Muśnickiego 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR169", address: "ul. 11 Listopada 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR170", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR171", address: "ul. Dworcowa 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR172", address: "ul. Pomorska 190", city: "Toruń", hours: "24/7" },
-  { code: "TOR173", address: "ul. Kościuszki 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR174", address: "ul. Matejki 45", city: "Toruń", hours: "24/7" },
-  { code: "TOR175", address: "ul. Mickiewicza 105", city: "Toruń", hours: "24/7" },
-  { code: "TOR176", address: "ul. Sienkiewicza 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR177", address: "ul. Słowackiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR178", address: "ul. Krasińskiego 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR179", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR180", address: "ul. Reymonta 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR181", address: "ul. Staffa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR182", address: "ul. Tuwima 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR183", address: "ul. Gałczyńskiego 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR184", address: "ul. Norwida 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR185", address: "ul. Asnyka 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR186", address: "ul. Fredry 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR187", address: "ul. Malczewskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR188", address: "ul. Wybickiego 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR189", address: "ul. Modrzewiowa 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR190", address: "ul. Rekreacyjna 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR191", address: "ul. Bajeczna 12", city: "Toruń", hours: "24/7" },
-  { code: "TOR192", address: "ul. Czerkaska 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR193", address: "ul. Smukalska 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR194", address: "ul. Rycerska 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR195", address: "ul. Andersa 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR196", address: "ul. Sikorskiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR197", address: "ul. Maczka 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR198", address: "ul. Hallera 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR199", address: "ul. Dowbora-Muśnickiego 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR200", address: "ul. 11 Listopada 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR201", address: "ul. Piłsudskiego 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR202", address: "ul. Dworcowa 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR203", address: "ul. Pomorska 190", city: "Toruń", hours: "24/7" },
-  { code: "TOR204", address: "ul. Kościuszki 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR205", address: "ul. Matejki 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR206", address: "ul. Mickiewicza 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR207", address: "ul. Sienkiewicza 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR208", address: "ul. Słowackiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR209", address: "ul. Krasińskiego 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR210", address: "ul. Konopnickiej 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR211", address: "ul. Elbląska 45 (Mokre)", city: "Toruń", hours: "24/7" },
-  { code: "TOR212", address: "ul. Wschodnia 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR213", address: "ul. Kleeberga 22", city: "Toruń", hours: "24/7" },
-  { code: "TOR214", address: "ul. gen. Andersa 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR215", address: "ul. gen. Sikorskiego 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR216", address: "ul. gen. Maczka 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR217", address: "ul. gen. Hallera 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR218", address: "ul. gen. Dowbora-Muśnickiego 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR219", address: "ul. 11 Listopada 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR220", address: "ul. Piłsudskiego 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR221", address: "ul. Dworcowa 88", city: "Toruń", hours: "24/7" },
-  { code: "TOR222", address: "ul. Pomorska 210", city: "Toruń", hours: "24/7" },
-  { code: "TOR223", address: "ul. Kościuszki 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR224", address: "ul. Matejki 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR225", address: "ul. Mickiewicza 130", city: "Toruń", hours: "24/7" },
-  { code: "TOR226", address: "ul. Sienkiewicza 95", city: "Toruń", hours: "24/7" },
-  { code: "TOR227", address: "ul. Słowackiego 110", city: "Toruń", hours: "24/7" },
-  { code: "TOR228", address: "ul. Krasińskiego 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR229", address: "ul. Konopnickiej 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR230", address: "ul. Reymonta 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR231", address: "ul. Staffa 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR232", address: "ul. Tuwima 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR233", address: "ul. Gałczyńskiego 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR234", address: "ul. Norwida 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR235", address: "ul. Asnyka 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR236", address: "ul. Fredry 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR237", address: "ul. Malczewskiego 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR238", address: "ul. Wybickiego 33", city: "Toruń", hours: "24/7" },
-  { code: "TOR239", address: "ul. Modrzewiowa 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR240", address: "ul. Rekreacyjna 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR241", address: "ul. Bajeczna 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR242", address: "ul. Czerkaska 19", city: "Toruń", hours: "24/7" },
-  { code: "TOR243", address: "ul. Smukalska 78", city: "Toruń", hours: "24/7" },
-  { code: "TOR244", address: "ul. Rycerska 55", city: "Toruń", hours: "24/7" },
-  { code: "TOR245", address: "ul. Andersa 120", city: "Toruń", hours: "24/7" },
-  { code: "TOR246", address: "ul. Sikorskiego 145", city: "Toruń", hours: "24/7" },
-  { code: "TOR247", address: "ul. Maczka 90", city: "Toruń", hours: "24/7" },
-  { code: "TOR248", address: "ul. Hallera 67", city: "Toruń", hours: "24/7" },
-  { code: "TOR249", address: "ul. Dowbora-Muśnickiego 44", city: "Toruń", hours: "24/7" },
-  { code: "TOR250", address: "ul. 11 Listopada 120", city: "Toruń", hours: "24/7" },
-
-  // GMINA LUBICZ 
-  { code: "LUB001", address: "ul. Toruńska 45 (Lubicz Dolny, przy Biedronce)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB002", address: "ul. Główna 12 (Lubicz Górny)", city: "Lubicz", hours: "06:00-22:00" },
-  { code: "LUB003", address: "ul. Toruńska 120 (Lubicz Dolny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB004", address: "ul. Sienkiewicza 8 (Lubicz)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB005", address: "ul. Bydgoska 67 (Lubicz Górny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB006", address: "ul. Kościelna 15 (Lubicz Dolny)", city: "Lubicz", hours: "06:00-22:00" },
-  { code: "LUB007", address: "ul. Sportowa 22 (Lubicz)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB008", address: "ul. Toruńska 89 (Lubicz Dolny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB009", address: "ul. Leśna 33 (Lubicz Górny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB010", address: "ul. Polna 18 (Lubicz)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB011", address: "ul. Główna 78 (Lubicz Górny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB012", address: "ul. Szkolna 5 (Lubicz Dolny)", city: "Lubicz", hours: "06:00-22:00" },
-  { code: "LUB013", address: "ul. Toruńska 200 (Lubicz)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB014", address: "ul. Kwiatowa 12 (Lubicz Górny)", city: "Lubicz", hours: "24/7" },
-  { code: "LUB015", address: "ul. Parkowa 28 (Lubicz)", city: "Lubicz", hours: "24/7" },
-
-  // GMINA OBROWO 
-    { code: "OBR004", address: "ul. Szkolna 5 (Obrowo)", city: "Obrowo", hours: "06:00-22:00" },
-  { code: "OBR005", address: "ul. Leśna 22 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR006", address: "ul. Toruńska 120 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR007", address: "ul. Kościelna 8 (Obrowo)", city: "Obrowo", hours: "06:00-22:00" },
-  { code: "OBR008", address: "ul. Sportowa 15 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR009", address: "ul. Polna 33 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR010", address: "ul. Główna 89 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR011", address: "ul. Toruńska 200 (Osiedle Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR012", address: "ul. Kwiatowa 7 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR013", address: "ul. Parkowa 18 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR014", address: "ul. Sienkiewicza 25 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR015", address: "ul. Bydgoska 145", city: "Obrowo", hours: "24/7" },
-  { code: "OBR001", address: "ul. Toruńska 45 (Obrowo, przy Lewiatan)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR002", address: "ul. Główna 12 (Obrowo)", city: "Obrowo", hours: "06:00-22:00" },
-  { code: "OBR003", address: "ul. Bydgoska 78 (Obrowo)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR004", address: "ul. Brzozowa 15 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
-  { code: "OBR005", address: "ul. Toruńska 112 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
-  { code: "OBR006", address: "ul. Dźwierzno 22 (Dźwierzno)", city: "Dźwierzno", hours: "24/7" },
-  { code: "OBR007", address: "ul. Główna 8 (Dźwierzno)", city: "Dźwierzno", hours: "06:00-22:00" },
-  { code: "OBR009", address: "ul. Łążyn 18 (Łążyn)", city: "Łążyn", hours: "24/7" },
-  { code: "OBR010", address: "ul. Toruńska 89 (Łążyn)", city: "Łążyn", hours: "24/7" },
-  { code: "OBR011", address: "ul. Dąbska 12 (Nowe Dąbie)", city: "Nowe Dąbie", hours: "24/7" },
-  { code: "OBR012", address: "ul. Osiek 25", city: "Osiek", hours: "24/7" },
-  { code: "OBR013", address: "ul. Różankowo 7", city: "Różankowo", hours: "24/7" },
-  { code: "OBR014", address: "ul. Silno 44", city: "Silno", hours: "24/7" },
-  { code: "OBR015", address: "ul. Toruńska 150 (Silno)", city: "Silno", hours: "24/7" },
-  { code: "OBR016", address: "ul. Węgorzyn 19", city: "Węgorzyn", hours: "24/7" },
-  { code: "OBR017", address: "ul. Złotoryja 28", city: "Złotoryja", hours: "24/7" },
-  { code: "OBR018", address: "ul. Toruńska 220 (Obrowo - Osiedle)", city: "Obrowo", hours: "24/7" },
-  { code: "OBR019", address: "ul. Leśna 55 (Brzozówka)", city: "Brzozówka", hours: "24/7" },
-  { code: "OBR020", address: "ul. Szkolna 10 (Dźwierzno)", city: "Dźwierzno", hours: "06:00-22:00" },
-
-  // GMINA CZERNIKOWO
-  { code: "CZE001", address: "ul. Toruńska 67 (Czernikowo, przy Biedronce)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE002", address: "ul. Główna 12 (Czernikowo)", city: "Czernikowo", hours: "06:00-22:00" },
-  { code: "CZE003", address: "ul. Bydgoska 45 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE004", address: "ul. Szkolna 8 (Czernikowo)", city: "Czernikowo", hours: "06:00-22:00" },
-  { code: "CZE005", address: "ul. Toruńska 120 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE006", address: "ul. Kościelna 15 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE007", address: "ul. Sportowa 22 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE008", address: "ul. Polna 33 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE009", address: "ul. Leśna 18 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE010", address: "ul. Kwiatowa 7 (Czernikowo)", city: "Czernikowo", hours: "24/7" },
-  { code: "CZE011", address: "ul. Toruńska 210 (Czernikowo - Osiedle)", city: "Czernikowo", hours: "24/7" },
-
-  // GMINA ZŁAWIEŚ WIELKA 
-  { code: "ZLA001", address: "ul. Toruńska 56 (Zławieś Wielka, przy sklepie)", city: "Zławieś Wielka", hours: "24/7" },
-  { code: "ZLA002", address: "ul. Główna 15 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "06:00-22:00" },
-  { code: "ZLA003", address: "ul. Bydgoska 78 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-  { code: "ZLA004", address: "ul. Szkolna 10 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "06:00-22:00" },
-  { code: "ZLA005", address: "ul. Toruńska 145 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-  { code: "ZLA006", address: "ul. Główna 22 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
-  { code: "ZLA007", address: "ul. Toruńska 98 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
-  { code: "ZLA008", address: "ul. Czerniewice 12", city: "Czerniewice", hours: "24/7" },
-  { code: "ZLA009", address: "ul. Toruńska 175 (Czerniewice)", city: "Czerniewice", hours: "24/7" },
-  { code: "ZLA010", address: "ul. Głuchowo 33", city: "Głuchowo", hours: "24/7" },
-  { code: "ZLA011", address: "ul. Główna 8 (Głuchowo)", city: "Głuchowo", hours: "24/7" },
-  { code: "ZLA012", address: "ul. Łążyn 25", city: "Łążyn", hours: "24/7" },
-  { code: "ZLA013", address: "ul. Sportowa 18 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-  { code: "ZLA014", address: "ul. Leśna 7 (Zławieś Mała)", city: "Zławieś Mała", hours: "24/7" },
-  { code: "ZLA015", address: "ul. Polna 44 (Czerniewice)", city: "Czerniewice", hours: "24/7" },
-  { code: "ZLA016", address: "ul. Kwiatowa 12 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-  { code: "ZLA017", address: "ul. Parkowa 19 (Zławieś Wielka)", city: "Zławieś Wielka", hours: "24/7" },
-
-  // GMINA ŁUBIANKA 
-  { code: "LUB001", address: "ul. Toruńska 34 (Łubianka, przy sklepie)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB002", address: "ul. Główna 15 (Łubianka)", city: "Łubianka", hours: "06:00-22:00" },
-  { code: "LUB003", address: "ul. Bydgoska 67 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB004", address: "ul. Szkolna 9 (Łubianka)", city: "Łubianka", hours: "06:00-22:00" },
-  { code: "LUB005", address: "ul. Toruńska 98 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB006", address: "ul. Brzozowo 12", city: "Brzozowo", hours: "24/7" },
-  { code: "LUB007", address: "ul. Toruńska 145 (Brzozowo)", city: "Brzozowo", hours: "24/7" },
-  { code: "LUB008", address: "ul. Dąbrowa 22", city: "Dąbrowa Chełmińska", hours: "24/7" },
-  { code: "LUB009", address: "ul. Główna 18 (Dąbrowa Chełmińska)", city: "Dąbrowa Chełmińska", hours: "24/7" },
-  { code: "LUB010", address: "ul. Łążyn 35", city: "Łążyn", hours: "24/7" },
-  { code: "LUB011", address: "ul. Leśna 8 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB012", address: "ul. Sportowa 15 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB013", address: "ul. Polna 28 (Brzozowo)", city: "Brzozowo", hours: "24/7" },
-  { code: "LUB014", address: "ul. Kwiatowa 7 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB015", address: "ul. Parkowa 19 (Łubianka)", city: "Łubianka", hours: "24/7" },
-  { code: "LUB016", address: "ul. Toruńska 220 (Łubianka)", city: "Łubianka", hours: "24/7" },
-
-  // GMINA ŁYSOMICE 
-  { code: "LYS001", address: "ul. Toruńska 56 (Łysomice, przy sklepie)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS002", address: "ul. Główna 12 (Łysomice)", city: "Łysomice", hours: "06:00-22:00" },
-  { code: "LYS003", address: "ul. Bydgoska 78 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS004", address: "ul. Szkolna 10 (Łysomice)", city: "Łysomice", hours: "06:00-22:00" },
-  { code: "LYS005", address: "ul. Toruńska 145 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS006", address: "ul. Sportowa 22 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS007", address: "ul. Turzno 15", city: "Turzno", hours: "24/7" },
-  { code: "LYS008", address: "ul. Toruńska 98 (Turzno)", city: "Turzno", hours: "24/7" },
-  { code: "LYS009", address: "ul. Gostkowo 25", city: "Gostkowo", hours: "24/7" },
-  { code: "LYS010", address: "ul. Główna 18 (Gostkowo)", city: "Gostkowo", hours: "24/7" },
-  { code: "LYS011", address: "ul. Różnowo 12", city: "Różnowo", hours: "24/7" },
-  { code: "LYS012", address: "ul. Nowa Wieś 33", city: "Nowa Wieś", hours: "24/7" },
-  { code: "LYS013", address: "ul. Leśna 8 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS014", address: "ul. Polna 19 (Turzno)", city: "Turzno", hours: "24/7" },
-  { code: "LYS015", address: "ul. Kwiatowa 7 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS016", address: "ul. Parkowa 22 (Łysomice)", city: "Łysomice", hours: "24/7" },
-  { code: "LYS017", address: "ul. Toruńska 220 (Łysomice)", city: "Łysomice", hours: "24/7" },
-
-  // MIASTO CHEŁMŻA 
-   { code: "CHL001", address: "ul. Toruńska 12 (Chełmża, centrum)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL002", address: "ul. Rynek 5 (Stare Miasto)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL003", address: "ul. 3 Maja 45 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL004", address: "ul. Bydgoska 67 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL005", address: "ul. Szkolna 8 (Chełmża)", city: "Chełmża", hours: "06:00-22:00" },
-  { code: "CHL006", address: "ul. Toruńska 120 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL007", address: "ul. Kościuszki 55", city: "Chełmża", hours: "24/7" },
-  { code: "CHL008", address: "ul. Mickiewicza 33", city: "Chełmża", hours: "24/7" },
-  { code: "CHL009", address: "ul. Piłsudskiego 78", city: "Chełmża", hours: "24/7" },
-  { code: "CHL010", address: "ul. Dworcowa 15 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL011", address: "ul. Chełmżyńska 22 (Bielczyny)", city: "Bielczyny", hours: "24/7" },
-  { code: "CHL012", address: "ul. Główna 18 (Kłódka)", city: "Kłódka", hours: "24/7" },
-  { code: "CHL013", address: "ul. Toruńska 89 (Grzywno)", city: "Grzywno", hours: "24/7" },
-  { code: "CHL014", address: "ul. Leśna 7 (Chełmża - okolice)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL015", address: "ul. Sportowa 12 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL016", address: "ul. Polna 44 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL017", address: "ul. Kwiatowa 19 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL018", address: "ul. Parkowa 28 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL019", address: "ul. Toruńska 210 (Chełmża)", city: "Chełmża", hours: "24/7" },
-  { code: "CHL020", address: "ul. Sienkiewicza 67 (Chełmża)", city: "Chełmża", hours: "24/7" },
-
-  // BYDGOSZCZ
-  { code: "BYD001", address: "ul. Gdańska 12 (Centrum)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD002", address: "ul. Jagiellońska 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD003", address: "ul. Fordońska 140 (Lidl, Fordon)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD004", address: "ul. Nakielska 55 (Biedronka)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD005", address: "ul. Szubińska 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD006", address: "ul. Grunwaldzka 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD007", address: "ul. Pomorska 65", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD008", address: "ul. Fordońska 280", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD009", address: "ul. Kromera 67 (Wyżyny)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD010", address: "ul. Pelplińska 23 (Fordon)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD011", address: "ul. Nakielska 140 (Błonie)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD012", address: "ul. Chodkiewicza 45 (Kapuściska)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD013", address: "ul. Okolna 18 (Okole)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD014", address: "ul. Leśna 45 (Leśne)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD015", address: "ul. Bartosza 22 (Bartodzieje)", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD016", address: "ul. Gdańska 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD017", address: "ul. 11 Listopada 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD018", address: "ul. Wojska Polskiego 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD019", address: "ul. Długa 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD020", address: "ul. Focha 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD021", address: "ul. Kossaka 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD022", address: "ul. Sienkiewicza 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD023", address: "ul. Mickiewicza 105", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD024", address: "ul. Paderewskiego 48", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD025", address: "ul. Wyzwolenia 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD026", address: "ul. Szpitalna 8", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD027", address: "ul. Seminaryjna 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD028", address: "ul. Kruszwicka 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD029", address: "ul. Toruńska 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD030", address: "ul. Inowrocławska 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD031", address: "ul. Kapuściska 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD032", address: "ul. Tatrzańska 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD033", address: "ul. Gdańska 210", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD034", address: "ul. Fordowska 390", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD035", address: "ul. Wyżynna 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD036", address: "ul. Bajeczna 8", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD037", address: "ul. Czerkaska 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD038", address: "ul. Modrzewiowa 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD039", address: "ul. Rekreacyjna 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD040", address: "ul. Podgórna 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD041", address: "ul. Szarych Szeregów 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD042", address: "ul. Smukalska 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD043", address: "ul. Rycerska 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD044", address: "ul. gen. Andersa 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD045", address: "ul. gen. Sikorskiego 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD046", address: "ul. gen. Maczka 25", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD047", address: "ul. gen. Hallera 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD048", address: "ul. gen. Dowbora-Muśnickiego 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD049", address: "ul. 11 Listopada 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD050", address: "ul. Piłsudskiego 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD051", address: "ul. Dworcowa 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD052", address: "ul. Pomorska 210", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD053", address: "ul. Kościuszki 145", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD054", address: "ul. Matejki 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD055", address: "ul. Mickiewicza 95", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD056", address: "ul. Sienkiewicza 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD057", address: "ul. Słowackiego 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD058", address: "ul. Krasińskiego 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD059", address: "ul. Konopnickiej 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD060", address: "ul. Reymonta 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD061", address: "ul. Staffa 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD062", address: "ul. Tuwima 28", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD063", address: "ul. Gałczyńskiego 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD064", address: "ul. Norwida 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD065", address: "ul. Asnyka 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD066", address: "ul. Fredry 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD067", address: "ul. Malczewskiego 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD068", address: "ul. Wybickiego 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD069", address: "ul. Modrzewiowa 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD070", address: "ul. Rekreacyjna 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD071", address: "ul. Modrzewiowa 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD072", address: "ul. Rekreacyjna 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD073", address: "ul. Bajeczna 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD074", address: "ul. Czerkaska 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD075", address: "ul. Smukalska 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD076", address: "ul. Rycerska 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD077", address: "ul. gen. Andersa 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD078", address: "ul. gen. Sikorskiego 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD079", address: "ul. gen. Maczka 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD080", address: "ul. gen. Hallera 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD081", address: "ul. gen. Dowbora-Muśnickiego 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD082", address: "ul. 11 Listopada 145", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD083", address: "ul. Piłsudskiego 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD084", address: "ul. Dworcowa 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD085", address: "ul. Pomorska 210", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD086", address: "ul. Kościuszki 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD087", address: "ul. Matejki 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD088", address: "ul. Mickiewicza 105", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD089", address: "ul. Sienkiewicza 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD090", address: "ul. Słowackiego 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD091", address: "ul. Krasińskiego 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD092", address: "ul. Konopnickiej 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD093", address: "ul. Reymonta 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD094", address: "ul. Staffa 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD095", address: "ul. Tuwima 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD096", address: "ul. Gałczyńskiego 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD097", address: "ul. Norwida 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD098", address: "ul. Asnyka 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD099", address: "ul. Fredry 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD100", address: "ul. Malczewskiego 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD101", address: "ul. Wybickiego 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD102", address: "ul. Modrzewiowa 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD103", address: "ul. Rekreacyjna 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD104", address: "ul. Bajeczna 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD105", address: "ul. Czerkaska 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD106", address: "ul. Smukalska 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD107", address: "ul. Rycerska 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD108", address: "ul. Andersa 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD109", address: "ul. Sikorskiego 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD110", address: "ul. Maczka 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD111", address: "ul. Hallera 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD112", address: "ul. Dowbora-Muśnickiego 15", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD113", address: "ul. 11 Listopada 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD114", address: "ul. Piłsudskiego 145", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD115", address: "ul. Dworcowa 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD116", address: "ul. Pomorska 190", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD117", address: "ul. Kościuszki 110", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD118", address: "ul. Matejki 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD119", address: "ul. Mickiewicza 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD120", address: "ul. Sienkiewicza 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD121", address: "ul. Krasińskiego 45", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD122", address: "ul. Konopnickiej 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD123", address: "ul. Reymonta 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD124", address: "ul. Staffa 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD125", address: "ul. Tuwima 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD126", address: "ul. Gałczyńskiego 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD127", address: "ul. Norwida 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD128", address: "ul. Asnyka 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD129", address: "ul. Fredry 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD130", address: "ul. Malczewskiego 12", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD131", address: "ul. Wybickiego 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD132", address: "ul. Modrzewiowa 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD133", address: "ul. Rekreacyjna 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD134", address: "ul. Bajeczna 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD135", address: "ul. Czerkaska 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD136", address: "ul. Smukalska 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD137", address: "ul. Rycerska 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD138", address: "ul. Andersa 145", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD139", address: "ul. Sikorskiego 90", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD140", address: "ul. Maczka 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD141", address: "ul. Hallera 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD142", address: "ul. Dowbora-Muśnickiego 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD143", address: "ul. 11 Listopada 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD144", address: "ul. Piłsudskiego 88", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD145", address: "ul. Dworcowa 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD146", address: "ul. Pomorska 190", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD147", address: "ul. Kościuszki 145", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD148", address: "ul. Matejki 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD149", address: "ul. Mickiewicza 120", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD150", address: "ul. Sienkiewicza 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD151", address: "ul. Słowackiego 90", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD152", address: "ul. Krasińskiego 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD153", address: "ul. Konopnickiej 19", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD154", address: "ul. Reymonta 55", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD155", address: "ul. Staffa 33", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD156", address: "ul. Tuwima 78", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD157", address: "ul. Gałczyńskiego 22", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD158", address: "ul. Norwida 67", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD159", address: "ul. Asnyka 44", city: "Bydgoszcz", hours: "24/7" },
-  { code: "BYD160", address: "ul. Fredry 19", city: "Bydgoszcz", hours: "24/7" },
-
-  // INOWROCŁAW
-  { code: "INO001", address: "ul. Toruńska 45 (Inowrocław, centrum)", city: "Inowrocław", hours: "24/7" },
-  { code: "INO002", address: "ul. Poznańska 67", city: "Inowrocław", hours: "24/7" },
-  { code: "INO003", address: "ul. 3 Maja 12", city: "Inowrocław", hours: "24/7" },
-  { code: "INO004", address: "ul. Solna 8 (Solanki)", city: "Inowrocław", hours: "24/7" },
-  { code: "INO005", address: "ul. Sienkiewicza 55", city: "Inowrocław", hours: "24/7" },
-  { code: "INO006", address: "ul. Bydgoska 78", city: "Inowrocław", hours: "24/7" },
-  { code: "INO007", address: "ul. Królowej Jadwigi 33", city: "Inowrocław", hours: "24/7" },
-  { code: "INO008", address: "ul. Ratuszowa 15", city: "Inowrocław", hours: "24/7" },
-  { code: "INO009", address: "ul. Toruńska 120", city: "Inowrocław", hours: "24/7" },
-  { code: "INO010", address: "ul. Sportowa 22", city: "Inowrocław", hours: "24/7" },
-
-  // GRUDZIĄDZ
-  { code: "GRU001", address: "ul. Toruńska 34 (Grudziądz)", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU002", address: "ul. Rynek 5 (Stare Miasto)", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU003", address: "ul. Długa 67", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU004", address: "ul. Legionów 12", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU005", address: "ul. Bydgoska 89", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU006", address: "ul. Piłsudskiego 55", city: "Grudziądz", hours: "24/7" },
-  { code: "GRU007", address: "ul. Chełmińska 33", city: "Grudziądz", hours: "24/7" },
-
-  // WŁOCŁAWEK
-  { code: "WLO001", address: "ul. Toruńska 78 (Włocławek)", city: "Włocławek", hours: "24/7" },
-  { code: "WLO002", address: "ul. Kopernika 12", city: "Włocławek", hours: "24/7" },
-  { code: "WLO003", address: "ul. 3 Maja 45", city: "Włocławek", hours: "24/7" },
-  { code: "WLO004", address: "ul. Brzezińska 67", city: "Włocławek", hours: "24/7" },
-  { code: "WLO005", address: "ul. Piłsudskiego 120", city: "Włocławek", hours: "24/7" },
-
-  // NAKŁO NAD NOTECIĄ
-  { code: "NAK001", address: "ul. 11 Listopada 45 (Nakło nad Notecią, centrum)", city: "Nakło nad Notecią", hours: "24/7" },
-  { code: "NAK002", address: "ul. Bydgoska 12", city: "Nakło nad Notecią", hours: "24/7" },
-  { code: "NAK003", address: "ul. Toruńska 67", city: "Nakło nad Notecią", hours: "24/7" },
-  { code: "NAK004", address: "ul. Szkolna 8", city: "Nakło nad Notecią", hours: "06:00-22:00" },
-  { code: "NAK005", address: "ul. Piłsudskiego 33", city: "Nakło nad Notecią", hours: "24/7" },
-  { code: "NAK006", address: "ul. Kościuszki 19", city: "Nakło nad Notecią", hours: "24/7" },
-
-  // BRODNICA
-  { code: "BRO001", address: "ul. Toruńska 56 (Brodnica, centrum)", city: "Brodnica", hours: "24/7" },
-  { code: "BRO002", address: "ul. Sądowa 12", city: "Brodnica", hours: "24/7" },
-  { code: "BRO003", address: "ul. 3 Maja 45", city: "Brodnica", hours: "24/7" },
-  { code: "BRO004", address: "ul. Kościuszki 78", city: "Brodnica", hours: "24/7" },
-  { code: "BRO005", address: "ul. Piłsudskiego 33", city: "Brodnica", hours: "24/7" },
-  { code: "BRO006", address: "ul. Chełmińska 19", city: "Brodnica", hours: "24/7" },
-  { code: "BRO007", address: "ul. Sienkiewicza 55", city: "Brodnica", hours: "24/7" },
-
-  // CHEŁMNO
-  { code: "CHM001", address: "ul. Toruńska 34 (Chełmno, centrum)", city: "Chełmno", hours: "24/7" },
-  { code: "CHM002", address: "ul. Rynek 5 (Stare Miasto)", city: "Chełmno", hours: "24/7" },
-  { code: "CHM003", address: "ul. 3 Maja 67", city: "Chełmno", hours: "24/7" },
-  { code: "CHM004", address: "ul. Grudziądzka 12", city: "Chełmno", hours: "24/7" },
-  { code: "CHM005", address: "ul. Piłsudskiego 45", city: "Chełmno", hours: "24/7" },
-  { code: "CHM006", address: "ul. Kościelna 8", city: "Chełmno", hours: "06:00-22:00" },
-  { code: "CHM007", address: "ul. Toruńska 120", city: "Chełmno", hours: "24/7" },
-
-  // TUCHOLA
-  { code: "TUC001", address: "ul. Kościuszki 45 (Tuchola, centrum)", city: "Tuchola", hours: "24/7" },
-  { code: "TUC002", address: "ul. Główna 12", city: "Tuchola", hours: "24/7" },
-  { code: "TUC003", address: "ul. Bydgoska 67", city: "Tuchola", hours: "24/7" },
-  { code: "TUC004", address: "ul. Szkolna 8", city: "Tuchola", hours: "06:00-22:00" },
-  { code: "TUC005", address: "ul. Piłsudskiego 33", city: "Tuchola", hours: "24/7" },
-  { code: "TUC006", address: "ul. Leśna 19", city: "Tuchola", hours: "24/7" },
-  { code: "TUC007", address: "ul. Toruńska 89", city: "Tuchola", hours: "24/7" },
-
-  // WARSZAWA
-  { code: "WAW001", address: "ul. Marszałkowska 104/106 (Centrum)", city: "Warszawa", hours: "24/7" },
-  { code: "WAW002", address: "ul. Świętokrzyska 30", city: "Warszawa", hours: "24/7" },
-  { code: "WAW003", address: "ul. Aleje Jerozolimskie 125", city: "Warszawa", hours: "24/7" },
-  { code: "WAW004", address: "ul. Puławska 145 (Mokotów)", city: "Warszawa", hours: "24/7" },
-  { code: "WAW005", address: "ul. Górczewska 212 (Bemowo)", city: "Warszawa", hours: "24/7" },
-  { code: "WAW006", address: "ul. Bielańska 12 (Stare Miasto)", city: "Warszawa", hours: "24/7" },
-
-  // KRAKÓW
-  { code: "KRK001", address: "ul. Floriańska 15 (Stare Miasto)", city: "Kraków", hours: "24/7" },
-  { code: "KRK002", address: "ul. Wielicka 259 (Podgórze)", city: "Kraków", hours: "24/7" },
-  { code: "KRK003", address: "ul. Zakopiańska 62", city: "Kraków", hours: "24/7" },
-  { code: "KRK004", address: "ul. Bora-Komorowskiego 25 (Nowa Huta)", city: "Kraków", hours: "24/7" },
-  { code: "KRK005", address: "ul. Mogilska 83", city: "Kraków", hours: "24/7" },
-
-  // POZNAŃ 
-  { code: "POZ001", address: "ul. Półwiejska 27 (Stare Miasto)", city: "Poznań", hours: "24/7" },
-  { code: "POZ002", address: "ul. Głogowska 416 (Grunwald)", city: "Poznań", hours: "24/7" },
-  { code: "POZ003", address: "ul. Hetmańska 33", city: "Poznań", hours: "24/7" },
-  { code: "POZ004", address: "ul. Winogrady 178", city: "Poznań", hours: "24/7" },
-  { code: "POZ005", address: "ul. Marcelińska 90", city: "Poznań", hours: "24/7" },
-
-  // WROCŁAW 
-  { code: "WRO001", address: "ul. Świdnicka 15 (Centrum)", city: "Wrocław", hours: "24/7" },
-  { code: "WRO002", address: "ul. Legnicka 58", city: "Wrocław", hours: "24/7" },
-  { code: "WRO003", address: "ul. Aleja Kromera 15 (Krzyki)", city: "Wrocław", hours: "24/7" },
-  { code: "WRO004", address: "ul. Grabiszyńska 241", city: "Wrocław", hours: "24/7" },
-
-  // GDAŃSK 
-  { code: "GDA001", address: "ul. Długa 41 (Główne Miasto)", city: "Gdańsk", hours: "24/7" },
-  { code: "GDA002", address: "ul. Grunwaldzka 211 (Wrzeszcz)", city: "Gdańsk", hours: "24/7" },
-  { code: "GDA003", address: "ul. Subisława 20 (Oliwa)", city: "Gdańsk", hours: "24/7" },
-
-  // ŁÓDŹ 
-  { code: "LDZ001", address: "ul. Piotrkowska 87", city: "Łódź", hours: "24/7" },
-  { code: "LDZ002", address: "ul. Pabianicka 92", city: "Łódź", hours: "24/7" },
-  { code: "LDZ003", address: "ul. Aleksandrowska 122", city: "Łódź", hours: "24/7" },
-
-  // KATOWICE 
-  { code: "KAT001", address: "ul. Mariacka 20", city: "Katowice", hours: "24/7" },
-  { code: "KAT002", address: "ul. Korfantego 51", city: "Katowice", hours: "24/7" },
-  { code: "KAT003", address: "ul. Chorzowska 107", city: "Katowice", hours: "24/7" },
-
-  // LUBLIN 
-  { code: "LUB001", address: "ul. Krakowskie Przedmieście 45", city: "Lublin", hours: "24/7" },
-  { code: "LUB002", address: "ul. 3 Maja 18", city: "Lublin", hours: "24/7" },
-
-  // SZCZECIN 
-  { code: "SZE001", address: "ul. Wojska Polskiego 45", city: "Szczecin", hours: "24/7" },
-  { code: "SZE002", address: "ul. Aleja Piastów 65", city: "Szczecin", hours: "24/7" },
-];
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedLocker, setSelectedLocker] = useState<Paczkomat | null>(null);
-
-  const filteredPaczkomaty = paczkomaty
-    .filter(p => 
-      p.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.code.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .slice(0, 80);
 
   const handleSelectLocker = (locker: Paczkomat) => {
     setSelectedLocker(locker);
-    setCustomer(prev => ({ ...prev, parcelLocker: `${locker.code} – ${locker.address}` }));
+    setCustomer((prev) => ({
+      ...prev,
+      parcelLocker: `${locker.code} – ${locker.address}, ${locker.city}`,
+    }));
+    setErrors((prev) => ({ ...prev, parcelLocker: undefined }));
+  };
+
+  const handleParcelLockerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSelectedLocker(null);
+    setCustomer((prev) => ({ ...prev, parcelLocker: value }));
+    if (errors.parcelLocker) {
+      setErrors((prev) => ({ ...prev, parcelLocker: undefined }));
+    }
   };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!customer.fullName.trim()) newErrors.fullName = "Imię i nazwisko jest wymagane";
-    if (!customer.phone.trim()) newErrors.phone = "Telefon jest wymagany";
-    if (!customer.email.trim()) newErrors.email = "Email jest wymagany";
+    if (!customer.fullName.trim()) {
+      newErrors.fullName = "Imię i nazwisko jest wymagane";
+    } else if (customer.fullName.trim().length < 3) {
+      newErrors.fullName = "Podaj pełne imię i nazwisko";
+    }
+
+    if (!customer.phone.trim()) {
+      newErrors.phone = "Telefon jest wymagany";
+    } else if (customer.phone.replace(/\D/g, "").length < 9) {
+      newErrors.phone = "Podaj poprawny numer telefonu (min. 9 cyfr)";
+    }
+
+    if (!customer.email.trim()) {
+      newErrors.email = "Email jest wymagany";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
+      newErrors.email = "Podaj poprawny adres email";
+    }
 
     if (customer.deliveryMethod === "address") {
-      if (!customer.street?.trim()) newErrors.street = "Ulica jest wymagana";
-      if (!customer.postalCode?.trim()) newErrors.postalCode = "Kod pocztowy jest wymagany";
+      if (!customer.street?.trim()) newErrors.street = "Ulica i numer są wymagane";
+      if (!customer.postalCode?.trim()) {
+        newErrors.postalCode = "Kod pocztowy jest wymagany";
+      } else if (!/^\d{2}-\d{3}$/.test(customer.postalCode.trim())) {
+        newErrors.postalCode = "Kod pocztowy w formacie XX-XXX";
+      }
       if (!customer.city?.trim()) newErrors.city = "Miasto jest wymagane";
     }
 
-    if (customer.deliveryMethod === "parcel" && !customer.parcelLocker) {
-      newErrors.parcelLocker = "Wybierz paczkomat lub wpisz kod ręcznie";
+    if (customer.deliveryMethod === "parcel") {
+      const locker = customer.parcelLocker?.trim() || "";
+      if (!locker) {
+        newErrors.parcelLocker = "Wybierz paczkomat z listy lub wpisz kod ręcznie";
+      } else if (locker.length < 3) {
+        newErrors.parcelLocker = "Kod paczkomatu jest za krótki";
+      }
     }
 
     setErrors(newErrors);
@@ -799,13 +211,16 @@ export default function KoszykPage() {
     try {
       await startStripeCheckout(items, {
         ...customer,
-        fullName: customer.fullName,
-        phone: customer.phone,
-        email: customer.email,
+        fullName: customer.fullName.trim(),
+        phone: customer.phone.trim(),
+        email: customer.email.trim(),
+        parcelLocker: customer.parcelLocker?.trim(),
+        street: customer.street?.trim(),
+        postalCode: customer.postalCode?.trim(),
+        city: customer.city?.trim(),
       });
-
       toast.success("Przekierowanie do płatności...");
-    } catch (error) {
+    } catch {
       toast.error("Błąd podczas inicjowania płatności");
     } finally {
       setIsSubmitting(false);
@@ -814,10 +229,13 @@ export default function KoszykPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F5EDE4] flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-serif mb-4">Twój koszyk jest pusty</h2>
-          <Button onClick={() => window.location.href = "/produkty"}>Przejdź do oferty</Button>
+      <div className="min-h-screen bg-[#F5EDE4] flex items-center justify-center px-6">
+        <div className="text-center max-w-md">
+          <h2 className="text-2xl font-serif text-brand-brown mb-4">Twój koszyk jest pusty</h2>
+          <p className="text-brand-brown/70 mb-8">
+            Dodaj produkty z oferty, aby przejść do finalizacji zamówienia.
+          </p>
+          <Button onClick={() => (window.location.href = "/produkty")}>Przejdź do oferty</Button>
         </div>
       </div>
     );
@@ -826,29 +244,110 @@ export default function KoszykPage() {
   return (
     <div className="bg-[#F5EDE4] min-h-screen pb-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-serif text-brand-brown mb-10">Koszyk</h1>
+        <div className="mb-10">
+          <Link
+            href="/produkty"
+            className="text-sm text-brand-gold hover:underline mb-3 inline-block"
+          >
+            ← Wróć do oferty
+          </Link>
+          <h1 className="text-4xl font-serif text-brand-brown">Koszyk i dostawa</h1>
+          <p className="text-brand-brown/70 mt-2">
+            Uzupełnij dane kontaktowe i wybierz sposób dostawy, aby przejść do płatności.
+          </p>
+        </div>
 
-        {/* Koszyk + Formularz */}
         <div className="grid lg:grid-cols-12 gap-10">
-          {/* Lewa kolumna - dane dostawy */}
-          <div className="lg:col-span-7">
+          {/* Lewa kolumna – formularz */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Dane kontaktowe – zawsze wymagane */}
             <div className="bg-white rounded-2xl shadow-sm p-8">
-              <h2 className="text-2xl font-medium mb-8">Dane dostawy</h2>
+              <h2 className="text-2xl font-medium text-brand-brown mb-6">Dane kontaktowe</h2>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-medium text-brand-brown mb-2">
+                    Imię i nazwisko <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="fullName"
+                    type="text"
+                    name="fullName"
+                    value={customer.fullName}
+                    onChange={handleChange}
+                    placeholder="Jan Kowalski"
+                    className={inputClass(!!errors.fullName)}
+                    autoComplete="name"
+                  />
+                  {errors.fullName && (
+                    <p className="text-red-500 text-xs mt-1.5">{errors.fullName}</p>
+                  )}
+                </div>
 
-              {/* Wybór metody dostawy */}
-              <div className="grid grid-cols-3 gap-4 mb-10">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-brand-brown mb-2">
+                      Telefon <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      name="phone"
+                      value={customer.phone}
+                      onChange={handleChange}
+                      placeholder="+48 500 000 000"
+                      className={inputClass(!!errors.phone)}
+                      autoComplete="tel"
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-brand-brown mb-2">
+                      Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      value={customer.email}
+                      onChange={handleChange}
+                      placeholder="jan@example.com"
+                      className={inputClass(!!errors.email)}
+                      autoComplete="email"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sposób dostawy */}
+            <div className="bg-white rounded-2xl shadow-sm p-8">
+              <h2 className="text-2xl font-medium text-brand-brown mb-6">Sposób dostawy</h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { id: "parcel", label: "Paczkomat", icon: Package },
-                  { id: "address", label: "Kurier", icon: Truck },
-                  { id: "pickup", label: "Odbiór osobisty", icon: User },
-                ].map(({ id, label, icon: Icon }) => (
+                  { id: "parcel" as const, label: "Paczkomat", icon: Package, cost: "14 zł" },
+                  { id: "address" as const, label: "Kurier", icon: Truck, cost: "16 zł" },
+                  { id: "pickup" as const, label: "Odbiór osobisty", icon: User, cost: "0 zł" },
+                ].map(({ id, label, icon: Icon, cost }) => (
                   <button
                     key={id}
-                    onClick={() => handleDeliveryChange(id as any)}
-                    className={`p-6 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${customer.deliveryMethod === id ? "border-brand-gold bg-brand-gold/5" : "border-gray-200 hover:border-gray-300"}`}
+                    type="button"
+                    onClick={() => handleDeliveryChange(id)}
+                    className={`p-5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 text-center ${
+                      customer.deliveryMethod === id
+                        ? "border-brand-gold bg-brand-gold/5 shadow-sm"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
                   >
-                    <Icon className="w-8 h-8" />
-                    <span className="font-medium">{label}</span>
+                    <Icon className="w-7 h-7 text-brand-brown" />
+                    <span className="font-medium text-brand-brown">{label}</span>
+                    <span className="text-xs text-brand-brown/60">{cost}</span>
                   </button>
                 ))}
               </div>
@@ -856,67 +355,348 @@ export default function KoszykPage() {
               <AnimatePresence mode="wait">
                 {/* Paczkomat */}
                 {customer.deliveryMethod === "parcel" && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <h3 className="font-medium mb-4">Wybierz paczkomat InPost</h3>
-                    <input
-                      type="text"
-                      placeholder="Wpisz miasto, kod lub adres..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl mb-4"
-                    />
+                  <motion.div
+                    key="parcel"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <h3 className="font-medium text-brand-brown mb-3">Wybierz paczkomat InPost</h3>
+                    <p className="text-sm text-brand-brown/70 mb-4">
+                      Wyszukaj po mieście, adresie lub kodzie paczkomatu.
+                    </p>
 
-                    <div className="max-h-80 overflow-auto border rounded-xl mb-6">
-                      {filteredPaczkomaty.map((p) => (
-                        <div
-                          key={p.code}
-                          onClick={() => handleSelectLocker(p)}
-                          className="px-4 py-3 border-b hover:bg-gray-50 cursor-pointer flex justify-between items-center"
-                        >
-                          <div>
-                            <div className="font-mono text-sm">{p.code}</div>
-                            <div>{p.address}</div>
-                          </div>
-                          <div className="text-xs text-gray-500">{p.hours}</div>
-                        </div>
-                      ))}
+                    <div className="relative mb-3">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-brown/40" />
+                      <input
+                        type="text"
+                        placeholder="Np. Toruń, Bydgoszcz, TOR045, ul. Mickiewicza..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-gold/30"
+                      />
                     </div>
 
-                    <div className="mt-6">
-                      <label className="block text-sm font-medium mb-2">Lub wpisz kod paczkomatu ręcznie</label>
+                    <p className="text-xs text-brand-brown/50 mb-2">
+                      {searchTerm
+                        ? `Znaleziono: ${filteredPaczkomaty.length}${filteredPaczkomaty.length === 80 ? "+" : ""} wyników`
+                        : `Pokazujemy pierwsze 80 z ${paczkomaty.length} paczkomatów – wpisz miasto lub kod, aby zawęzić`}
+                    </p>
+
+                    <div className="max-h-80 overflow-auto border border-brand-creamDark rounded-xl mb-4 bg-white">
+                      {filteredPaczkomaty.length === 0 ? (
+                        <div className="px-4 py-8 text-center text-sm text-brand-brown/60">
+                          Brak wyników dla „{searchTerm}". Wpisz kod paczkomatu ręcznie poniżej.
+                        </div>
+                      ) : (
+                        filteredPaczkomaty.map((p, index) => {
+                          const isSelected =
+                            selectedLocker?.code === p.code &&
+                            selectedLocker?.city === p.city &&
+                            selectedLocker?.address === p.address;
+                          return (
+                            <button
+                              key={`${p.code}-${p.city}-${index}`}
+                              type="button"
+                              onClick={() => handleSelectLocker(p)}
+                              className={`w-full text-left px-4 py-3 border-b border-brand-creamDark last:border-b-0 hover:bg-brand-cream/60 transition-colors flex justify-between items-start gap-3 ${
+                                isSelected ? "bg-brand-gold/10 border-l-4 border-l-brand-gold" : ""
+                              }`}
+                            >
+                              <div className="min-w-0">
+                                <div className="font-mono text-sm font-semibold text-brand-brown">
+                                  {p.code}
+                                </div>
+                                <div className="text-sm text-brand-brown/80">{p.address}</div>
+                                <div className="text-xs text-brand-brown/50 mt-0.5">{p.city}</div>
+                              </div>
+                              <div className="text-xs text-brand-brown/50 whitespace-nowrap flex-shrink-0">
+                                {p.hours}
+                              </div>
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="parcelLocker"
+                        className="block text-sm font-medium text-brand-brown mb-2"
+                      >
+                        Lub wpisz kod paczkomatu ręcznie <span className="text-red-500">*</span>
+                      </label>
                       <input
+                        id="parcelLocker"
                         type="text"
                         name="parcelLocker"
                         value={customer.parcelLocker || ""}
-                        onChange={handleChange}
-                        placeholder="Np. TOR045"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                        onChange={handleParcelLockerChange}
+                        placeholder="Np. TOR045, BYD012 lub pełny kod z aplikacji InPost"
+                        className={inputClass(!!errors.parcelLocker)}
                       />
+                      {errors.parcelLocker && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.parcelLocker}</p>
+                      )}
+                      <p className="text-xs text-brand-brown/60 mt-2">
+                        Możesz wpisać dowolny kod paczkomatu – nie musi być na liście.
+                      </p>
+                    </div>
+
+                    <div className="mt-5 p-4 bg-brand-cream/80 border border-brand-creamDark rounded-xl text-sm text-brand-brown/80 leading-relaxed">
+                      Nie znalazłeś swojego paczkomatu na liście? Napisz do nas w wiadomości po
+                      złożeniu zamówienia – wyślemy miód na dowolny paczkomat w Polsce.
                     </div>
                   </motion.div>
                 )}
 
-                {/* Kurier na adres */}
+                {/* Kurier */}
                 {customer.deliveryMethod === "address" && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    {/* pola: ulica, kod, miasto */}
+                  <motion.div
+                    key="address"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-4"
+                  >
+                    <h3 className="font-medium text-brand-brown mb-1">Adres dostawy kurierem</h3>
+                    <p className="text-sm text-brand-brown/70 mb-4">
+                      Podaj pełny adres, na który dostarczymy zamówienie.
+                    </p>
+
+                    <div>
+                      <label htmlFor="street" className="block text-sm font-medium text-brand-brown mb-2">
+                        Ulica i numer <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="street"
+                        type="text"
+                        name="street"
+                        value={customer.street || ""}
+                        onChange={handleChange}
+                        placeholder="ul. Przykładowa 12/3"
+                        className={inputClass(!!errors.street)}
+                        autoComplete="street-address"
+                      />
+                      {errors.street && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.street}</p>
+                      )}
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="postalCode"
+                          className="block text-sm font-medium text-brand-brown mb-2"
+                        >
+                          Kod pocztowy <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="postalCode"
+                          type="text"
+                          name="postalCode"
+                          value={customer.postalCode || ""}
+                          onChange={handleChange}
+                          placeholder="87-100"
+                          className={inputClass(!!errors.postalCode)}
+                          autoComplete="postal-code"
+                        />
+                        {errors.postalCode && (
+                          <p className="text-red-500 text-xs mt-1.5">{errors.postalCode}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label htmlFor="city" className="block text-sm font-medium text-brand-brown mb-2">
+                          Miasto <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="city"
+                          type="text"
+                          name="city"
+                          value={customer.city || ""}
+                          onChange={handleChange}
+                          placeholder="Toruń"
+                          className={inputClass(!!errors.city)}
+                          autoComplete="address-level2"
+                        />
+                        {errors.city && (
+                          <p className="text-red-500 text-xs mt-1.5">{errors.city}</p>
+                        )}
+                      </div>
+                    </div>
                   </motion.div>
                 )}
 
                 {/* Odbiór osobisty */}
                 {customer.deliveryMethod === "pickup" && (
-                  <motion.div className="text-center py-12 text-brand-brown/70">
-                    Topolno 45, 86-120 Pruszcz<br />
-                    Pon–Sob: 8:00 – 20:00
+                  <motion.div
+                    key="pickup"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="bg-brand-cream/60 border border-brand-creamDark rounded-2xl p-6 space-y-5">
+                      <h3 className="font-medium text-lg text-brand-brown">Odbiór w pasiece</h3>
+
+                      <div className="flex gap-4">
+                        <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="font-medium text-brand-brown">Jankesowa Pasieka</div>
+                          <div className="text-brand-brown/80">Topolno 45</div>
+                          <div className="text-brand-brown/70">86-120 Pruszcz</div>
+                          <div className="text-brand-brown/70">Kujawy nadwiślańskie</div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="font-medium text-brand-brown">Godziny odbioru</div>
+                          <div className="text-brand-brown/80">Poniedziałek – Sobota: 8:00 – 20:00</div>
+                          <div className="text-sm text-brand-brown/60 mt-1">
+                            Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <a
+                          href="tel:+48514070298"
+                          className="text-brand-brown hover:text-brand-gold transition-colors"
+                        >
+                          +48 514 070 298
+                        </a>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <a
+                          href="mailto:jankesowa.pasieka@gmail.com"
+                          className="text-brand-brown hover:text-brand-gold transition-colors"
+                        >
+                          jankesowa.pasieka@gmail.com
+                        </a>
+                      </div>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
           </div>
 
-          {/* Prawa kolumna - podsumowanie i płatność */}
+          {/* Prawa kolumna – podsumowanie */}
           <div className="lg:col-span-5">
-            {/* ... reszta podsumowania koszyka i przycisk Zapłać ... */}
+            <div className="bg-white rounded-2xl shadow-sm p-8 sticky top-6">
+              <h2 className="text-2xl font-medium text-brand-brown mb-6">Podsumowanie</h2>
+
+              <div className="space-y-4 mb-6 max-h-[420px] overflow-y-auto pr-1">
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-4 pb-4 border-b border-brand-creamDark last:border-b-0 last:pb-0"
+                  >
+                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-brand-cream flex-shrink-0 relative">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start gap-2">
+                        <p className="font-medium text-brand-brown text-sm leading-tight">
+                          {item.name}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-brand-brown/40 hover:text-red-600 transition p-0.5 flex-shrink-0"
+                          aria-label="Usuń produkt"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center border border-brand-brown/20 rounded-md">
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="px-2 py-1 text-brand-brown hover:bg-brand-cream rounded-l-md transition"
+                            disabled={item.quantity <= 1}
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="px-3 text-sm font-medium tabular-nums">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="px-2 py-1 text-brand-brown hover:bg-brand-cream rounded-r-md transition"
+                            disabled={item.quantity >= item.inStock}
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <p className="font-semibold text-brand-brown tabular-nums text-sm">
+                          {item.price * item.quantity} zł
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-2 text-sm border-t border-brand-creamDark pt-5">
+                <div className="flex justify-between text-brand-brown/70">
+                  <span>Wartość produktów</span>
+                  <span className="tabular-nums">{totalPrice} zł</span>
+                </div>
+                <div className="flex justify-between text-brand-brown/70">
+                  <span>
+                    Dostawa (
+                    {customer.deliveryMethod === "parcel"
+                      ? "paczkomat"
+                      : customer.deliveryMethod === "address"
+                        ? "kurier"
+                        : "odbiór"}
+                    )
+                  </span>
+                  <span className="tabular-nums">
+                    {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
+                  </span>
+                </div>
+                <div className="h-px bg-brand-creamDark my-2" />
+                <div className="flex justify-between text-lg font-semibold text-brand-brown">
+                  <span>Do zapłaty</span>
+                  <span className="tabular-nums">{grandTotal} zł</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleCheckout}
+                className="w-full py-3.5 text-base gap-2 mt-6"
+                disabled={isSubmitting}
+              >
+                <CreditCard className="w-4 h-4" />
+                {isSubmitting ? "Przekierowanie do płatności..." : `Zapłać ${grandTotal} zł`}
+              </Button>
+
+              <p className="text-[10px] text-center text-brand-brown/50 leading-snug mt-4">
+                Bezpieczna płatność online kartą, BLIK lub Przelewy24.
+                <br />
+                Po opłaceniu skontaktujemy się w sprawie dostawy.
+              </p>
+            </div>
           </div>
         </div>
       </div>

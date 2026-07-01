@@ -62,20 +62,88 @@ const COPY = {
     "Wybierz odbiór osobisty i przejdź do płatności – dane kontaktowe nie są wymagane.",
 } as const;
 
+const KUJAWSKO_POMORSKIE_CITIES = new Set(
+  [
+    "Toruń",
+    "Bydgoszcz",
+    "Chełmża",
+    "Inowrocław",
+    "Grudziądz",
+    "Włocławek",
+    "Świecie",
+    "Nakło nad Notecią",
+    "Brodnica",
+    "Tuchola",
+    "Chełmno",
+    "Lipno",
+    "Lubicz",
+    "Obrowo",
+    "Czernikowo",
+    "Łubianka",
+    "Zławieś Wielka",
+    "Łysomice",
+    "Aleksandrów Kujawski",
+    "Mogilno",
+    "Strzelno",
+    "Żnin",
+    "Koronowo",
+    "Osielsko",
+    "Pruszcz",
+    "Radziejów",
+    "Rypin",
+    "Sepólno Krajeńskie",
+    "Solec Kujawski",
+  ].map((city) => normalizeText(city))
+);
+
 function getNoSearchResultsMessage(term: string): string {
   return `Brak wyników dla: ${term}. Wpisz kod paczkomatu ręcznie poniżej.`;
 }
 
-function getSearchResultsHint(
-  hasQuery: boolean,
-  resultCount: number,
-  totalCount: number
-): string {
-  if (hasQuery) {
-    const suffix = resultCount === SEARCH_RESULTS_LIMIT ? "+" : "";
-    return `Znaleziono: ${resultCount}${suffix} wyników`;
+function isKujawskoPomorskie(locker: Paczkomat): boolean {
+  const province = locker.address_details?.province;
+  if (province && normalizeText(province).includes("kujawsko")) {
+    return true;
   }
-  return `Pokazujemy pierwsze ${SEARCH_RESULTS_LIMIT} z ${totalCount} paczkomatów – wpisz miasto lub kod, aby zawęzić`;
+
+  const city = normalizeText(getLockerCity(locker));
+  if (!city) return false;
+
+  if (KUJAWSKO_POMORSKIE_CITIES.has(city)) return true;
+
+  return Array.from(KUJAWSKO_POMORSKIE_CITIES).some(
+    (kpCity) => city.includes(kpCity) || kpCity.includes(city)
+  );
+}
+
+function sortByRegionalPriority(list: Paczkomat[]): Paczkomat[] {
+  const regional: Paczkomat[] = [];
+  const other: Paczkomat[] = [];
+
+  for (const locker of list) {
+    if (isKujawskoPomorskie(locker)) {
+      regional.push(locker);
+    } else {
+      other.push(locker);
+    }
+  }
+
+  return [...regional, ...other];
+}
+
+function formatResultsCount(totalMatches: number, displayedCount: number, hasQuery: boolean): string {
+  if (hasQuery) {
+    if (totalMatches > displayedCount) {
+      return `Znaleziono ${totalMatches} paczkomatów (wyświetlamy ${displayedCount})`;
+    }
+    return `Znaleziono ${totalMatches} paczkomatów`;
+  }
+
+  if (totalMatches > displayedCount) {
+    return `Znaleziono ${displayedCount} paczkomatów (woj. kujawsko-pomorskie na początku, łącznie ${totalMatches})`;
+  }
+
+  return `Znaleziono ${displayedCount} paczkomatów (woj. kujawsko-pomorskie na początku listy)`;
 }
 
 function getLockerCode(locker: Paczkomat): string {
@@ -106,21 +174,32 @@ function getLockerSearchBlob(locker: Paczkomat): string {
     locker.address_details?.city,
     locker.address_details?.street,
     locker.address_details?.post_code,
+    locker.address_details?.province,
   ]
     .filter(Boolean)
     .join(" ");
 }
 
-function filterPaczkomaty(list: Paczkomat[], search: string): Paczkomat[] {
+function searchPaczkomaty(
+  list: Paczkomat[],
+  search: string
+): { results: Paczkomat[]; totalMatches: number } {
   const queryParts = normalizeText(search).trim().split(/\s+/).filter(Boolean);
-  if (queryParts.length === 0) return list.slice(0, SEARCH_RESULTS_LIMIT);
 
-  return list
-    .filter((locker) => {
-      const blob = normalizeText(getLockerSearchBlob(locker));
-      return queryParts.every((part) => blob.includes(part));
-    })
-    .slice(0, SEARCH_RESULTS_LIMIT);
+  const matched =
+    queryParts.length === 0
+      ? list
+      : list.filter((locker) => {
+          const blob = normalizeText(getLockerSearchBlob(locker));
+          return queryParts.every((part) => blob.includes(part));
+        });
+
+  const sorted = sortByRegionalPriority(matched);
+
+  return {
+    results: sorted.slice(0, SEARCH_RESULTS_LIMIT),
+    totalMatches: matched.length,
+  };
 }
 
 function needsContactValidation(method: FormData["deliveryMethod"]): boolean {
@@ -216,7 +295,7 @@ export default function KoszykPage() {
 
     loadPaczkomaty()
       .then((loadedItems) => {
-        setPaczkomatyList(loadedItems);
+        setPaczkomatyList(sortByRegionalPriority(loadedItems));
         if (loadedItems.length === 0) {
           setPaczkomatyError(
             "Nie udało się wczytać listy paczkomatów. Możesz wpisać kod ręcznie poniżej."
@@ -265,10 +344,12 @@ export default function KoszykPage() {
   const shippingCost = getShippingCost(customer.deliveryMethod);
   const grandTotal = totalPrice + shippingCost;
 
-  const filteredPaczkomaty = useMemo(
-    () => filterPaczkomaty(paczkomatyList, debouncedSearch),
+  const { results: filteredPaczkomaty, totalMatches: totalMatchCount } = useMemo(
+    () => searchPaczkomaty(paczkomatyList, debouncedSearch),
     [paczkomatyList, debouncedSearch]
   );
+
+  const hasSearchQuery = !!debouncedSearch.trim();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -440,10 +521,10 @@ export default function KoszykPage() {
                     <p className="text-xs text-brand-brown/50 mb-2">
                       {paczkomatyLoading
                         ? COPY.loadingPaczkomaty
-                        : getSearchResultsHint(
-                            !!debouncedSearch.trim(),
+                        : formatResultsCount(
+                            hasSearchQuery ? totalMatchCount : paczkomatyList.length,
                             filteredPaczkomaty.length,
-                            paczkomatyList.length
+                            hasSearchQuery
                           )}
                     </p>
 
@@ -476,6 +557,7 @@ export default function KoszykPage() {
                           const code = getLockerCode(locker);
                           const address = getLockerAddress(locker);
                           const city = getLockerCity(locker);
+                          const isRegional = isKujawskoPomorskie(locker);
                           const isSelected =
                             selectedLocker !== null &&
                             getLockerCode(selectedLocker) === code &&
@@ -492,8 +574,15 @@ export default function KoszykPage() {
                               }`}
                             >
                               <div className="min-w-0">
-                                <div className="font-mono text-sm font-semibold text-brand-brown">
-                                  {code}
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-mono text-sm font-semibold text-brand-brown">
+                                    {code}
+                                  </span>
+                                  {isRegional && (
+                                    <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-brand-gold/15 text-brand-brown/70">
+                                      K-P
+                                    </span>
+                                  )}
                                 </div>
                                 <div className="text-sm text-brand-brown/80">{address}</div>
                                 <div className="text-xs text-brand-brown/50 mt-0.5">{city}</div>

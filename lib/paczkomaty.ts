@@ -3,7 +3,7 @@ export type Paczkomat = {
   name: string;
   display_name?: string;
   address?: { line1?: string; line2?: string };
-  address_details?: { city: string; post_code?: string; street?: string };
+  address_details?: { city: string; post_code?: string; street?: string; province?: string };
   opening_hours?: string;
 };
 

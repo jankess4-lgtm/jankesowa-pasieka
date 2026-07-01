@@ -11,7 +11,7 @@ export const products: Product[] = [
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
-    inStock: 42,
+    inStock: 30,        // aktualna ilość
     available: true,
   },
   {
@@ -24,7 +24,7 @@ export const products: Product[] = [
     unit: "350 ml (0,49 kg)",
     category: "miody",
     image: "/images/miod-mniszkowo-rzepakowy-049-kg.PNG",
-    inStock: 35,
+    inStock: 20,        // aktualna ilość
     available: true,
   },
   {
@@ -32,7 +32,7 @@ export const products: Product[] = [
     name: "Miód lipowy – 900 ml (1,2 kg)",
     slug: "miod-lipowy-900ml",
     description: "Intensywny, mentolowy, z wyraźnym aromatem kwitnącej lipy.",
-    longDescription: "Miód lipowy pozyskiwany z nektaru kwiatów lipy. Intensywny, mentolowy smak i aromat. Działa uspokajająco i wspiera odporność. Bardzo ceniony za walory zdrowotne.",
+    longDescription: "Miód lipowy pozyskiwany z nektaru kwiatów lipy. Intensywny, mentolowy smak i aromat. Działa uspokajająco i wspiera odporność.",
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
@@ -46,12 +46,12 @@ export const products: Product[] = [
     name: "Miód wielokwiatowy – 900 ml (1,2 kg)",
     slug: "miod-wielokwiatowy-900ml",
     description: "Delikatny, kwiatowy, o przyjemnym i złożonym smaku. Uniwersalny miód na co dzień.",
-    longDescription: "Miód wielokwiatowy to najbardziej uniwersalny miód w naszej ofercie. Zbierany z bogatej, zróżnicowanej bazy pożytkowej terenów nadwiślańskich Kujaw – łąk, zadrzewień i pól. Charakteryzuje się delikatnym, kwiatowym smakiem, przyjemnym aromatem i zrównoważonym profilem smakowym.",
+    longDescription: "Miód wielokwiatowy to najbardziej uniwersalny miód w naszej ofercie. Zbierany z bogatej, zróżnicowanej bazy pożytkowej terenów nadwiślańskich Kujaw.",
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-wielokwiatowy-1,2-kg.png",
-    inStock: 24,
+    inStock: 12,        // aktualna ilość
     available: true,
   },
   {
@@ -59,7 +59,7 @@ export const products: Product[] = [
     name: "Miód nawłociowy – 900 ml (1,2 kg)",
     slug: "miod-nawlocowy-900ml",
     description: "Złocisty miód jesienny z nektaru nawłoci. Intensywny, ziołowo-kwiatowy aromat.",
-    longDescription: "Miód nawłociowy pozyskiwany jest późnym latem i jesienią z nektaru nawłoci pospolitej rosnącej na łąkach i nieużytkach nadwiślańskich Kujaw. Charakteryzuje się piękną, złocistą barwą i intensywnym, ziołowo-kwiatowym aromatem.",
+    longDescription: "Miód nawłociowy pozyskiwany jest późnym latem i jesienią z nektaru nawłoci pospolitej.",
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
@@ -72,26 +72,26 @@ export const products: Product[] = [
     id: 5,
     name: "Miód akacjowy – 900 ml (1,2 kg)",
     slug: "miod-akacjowy-900ml",
-    description: "Jeden z najjaśniejszych i najdelikatniejszych miodów, o subtelnym kwiatowym zapachu. Bardzo wolno krystalizuje.",
-    longDescription: "Miód akacjowy to jeden z najdelikatniejszych i najbardziej cenionych miodów. Charakteryzuje się jasną, prawie przezroczystą barwą i subtelnym, kwiatowym aromatem akacji. Bardzo wolno krystalizuje, dzięki czemu długo pozostaje w płynnej formie. Idealny do herbaty, deserów i dla osób preferujących łagodne smaki.",
+    description: "Jeden z najjaśniejszych i najdelikatniejszych miodów, o subtelnym kwiatowym zapachu.",
+    longDescription: "Miód akacjowy to jeden z najdelikatniejszych i najbardziej cenionych miodów...",
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-akacjowy-1,2-kg.png",
-    inStock: 28,
+    inStock: 30,        // aktualna ilość
     available: true,
   },
   {
     id: 6,
     name: "Miód akacjowy – 350 ml (0,49 kg)",
     slug: "miod-akacjowy-350ml",
-    description: "Delikatny miód akacjowy w mniejszym słoiku. Subtelny kwiatowy smak i długo pozostaje płynny.",
-    longDescription: "Miód akacjowy w mniejszym opakowaniu – idealny na początek lub jako prezent. Zachowuje wszystkie cechy dużego słoika: jasną barwę, subtelny aromat i bardzo wolną krystalizację.",
+    description: "Delikatny miód akacjowy w mniejszym słoiku.",
+    longDescription: "Miód akacjowy w mniejszym opakowaniu – idealny na początek lub jako prezent.",
     price: 30,
     unit: "350 ml (0,49 kg)",
     category: "miody",
     image: "/images/miod-akacjowy-0,49-kg.png",
-    inStock: 35,
+    inStock: 20,        // aktualna ilość
     available: true,
   },
   {
@@ -99,12 +99,12 @@ export const products: Product[] = [
     name: "Plastry miodu",
     slug: "plastry-miodu",
     description: "Naturalny miód w plastrze – prosto z ula.",
-    longDescription: "Piękne, pełne plastry miodu prosto z naszych uli. Najczystsza i najbardziej naturalna forma miodu. Można spożywać razem z woskiem.",
+    longDescription: "Piękne, pełne plastry miodu prosto z naszych uli.",
     price: 55,
     unit: "plaster ok. 450–500 g",
     category: "produkty",
     image: "/images/plastry-miodu.PNG",
-    inStock: 12,
+    inStock: 4,         // aktualna ilość
     available: true,
   },
   {
@@ -112,12 +112,12 @@ export const products: Product[] = [
     name: "Świece z wosku pszczelego",
     slug: "swiece-z-wosku-pszczelego",
     description: "Naturalne świece 100% z wosku pszczelego.",
-    longDescription: "Ręcznie wytwarzane świece ze 100% czystego wosku pszczelego pozyskanego w naszej pasiece. Palą się czystym płomieniem i wydzielają delikatny miodowy zapach.",
+    longDescription: "Ręcznie wytwarzane świece ze 100% czystego wosku pszczelego.",
     price: 32,
     unit: "150 g",
     category: "produkty",
     image: "/images/swiece-z-wosku-pszczelego.PNG",
-    inStock: 31,
+    inStock: 10,        // aktualna ilość
     available: true,
   },
 ];

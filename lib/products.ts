@@ -10,7 +10,7 @@ export const products: Product[] = [
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
-    image: "/images/miod-mniszkowo-rzepakowy-12-kg.PNG",
+    image: "/images/miod-rzepakowo-mniszkowy-1-2-kg.webp",
     inStock: 30,        // aktualna ilość
     available: true,
   },
@@ -23,7 +23,7 @@ export const products: Product[] = [
     price: 30,
     unit: "350 ml (0,49 kg)",
     category: "miody",
-    image: "/images/miod-mniszkowo-rzepakowy-049-kg.PNG",
+    image: "/images/miod-rzepakowo-mniszkowy-0-49-kg.webp",
     inStock: 20,        // aktualna ilość
     available: true,
   },

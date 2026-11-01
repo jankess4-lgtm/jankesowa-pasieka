@@ -733,7 +733,7 @@ export default function KoszykPage() {
                         <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                         <div>
                           <div className="font-medium text-brand-brown">Godziny odbioru</div>
-                          <div className="text-brand-brown/80">Poniedziałek – Sobota: 8:00 – 20:00</div>
+                          <div className="text-brand-brown/80">Poniedziałek – Piątek: 8:00 – 20:00, Sobota: 8:00 – 13:00, Niedziela: nieczynne</div>
                           <div className="text-sm text-brand-brown/60 mt-1">
                             Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu.
                           </div>

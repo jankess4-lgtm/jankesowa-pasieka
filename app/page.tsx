@@ -31,21 +31,6 @@ const benefits = [
   },
 ];
 
-const testimonials = [
-  {
-    quote: "Najlepszy miód gryczany jaki jadłem w życiu. Intensywny, prawdziwy smak. Kupuję tu od kilku lat.",
-    author: "Marek K., Bydgoszcz",
-  },
-  {
-    quote: "Miód akacjowy to codzienność w naszej kuchni. Wyjątkowa jakość i smak.",
-    author: "Anna i Tomasz, Toruń",
-  },
-  {
-    quote: "Świece z wosku i miód nawłociowy — wszystko pachnie prawdziwą pasieką. Polecam z całego serca.",
-    author: "Joanna M., Gdańsk",
-  },
-];
-
 export default function HomePage() {
   return (
     <div className="bg-[#F5EDE4]">
@@ -155,22 +140,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <div className="text-center mb-12">
-          <div className="section-divider mb-4" />
-          <h2 className="font-serif text-4xl text-brand-brown tracking-tight">Głosy naszych klientów</h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="bg-white rounded-2xl p-8 border border-brand-creamDark flex flex-col">
-              <div className="text-6xl text-brand-gold/30 font-serif leading-none mb-3">„</div>
-              <p className="text-[15px] text-[#374151] flex-1 leading-relaxed">„{t.quote}”</p>
-              <div className="mt-6 pt-4 border-t border-brand-cream text-sm font-medium text-brand-brown/80">{t.author}</div>
-            </div>
-          ))}
-        </div>
+      {/* OPINIE GOOGLE */}
+      <section className="max-w-3xl mx-auto px-6 py-20 text-center">
+        <div className="section-divider mb-4" />
+        <h2 className="font-serif text-4xl text-brand-brown tracking-tight mb-4">Kupiłeś nasz miód?</h2>
+        <p className="text-[#374151] mb-8">
+          Zostaw opinię w Google – pomożesz innym znaleźć prawdziwy miód prosto z pasieki, a nam bardzo się to przyda.
+        </p>
+        <a href="https://g.page/r/CZ45MnMvHWX6EBM/review" target="_blank" rel="noopener noreferrer">
+          <Button size="lg">Zostaw opinię w Google</Button>
+        </a>
       </section>
 
       {/* FINAL CTA */}

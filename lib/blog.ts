@@ -207,14 +207,14 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Odbiór osobisty w Topolnie",
         paragraphs: [
-          "Jeśli mieszkasz w okolicy Świecia, Pruszcza, Chełmna czy Torunia, zapraszamy po miód prosto do pasieki: Topolno 45, 86-120 Pruszcz. Odbiór osobisty jest możliwy od poniedziałku do piątku w godzinach 8:00–20:00 oraz w soboty w godzinach 8:00–13:00. Prosimy o wcześniejszy telefon pod numer +48 514 070 298, żebyśmy na pewno byli na miejscu i przygotowali zamówienie.",
+          "Jeśli mieszkasz w okolicy Świecia, Pruszcza, Chełmna czy Torunia, zapraszamy po miód prosto do pasieki: Topolno 45, 86-120 Pruszcz. Odbiór osobisty jest możliwy od poniedziałku do piątku w godzinach 16:00–20:00 oraz w soboty w godzinach 8:00–13:00. Prosimy o wcześniejszy telefon pod numer +48 514 070 298, żebyśmy na pewno byli na miejscu i przygotowali zamówienie.",
           "Odbiór osobisty jest bezpłatny, a przy okazji można porozmawiać o miodzie i wybrać gatunek na miejscu.",
         ],
       },
       {
         heading: "Miód w Bydgoszczy – odbiór po umówieniu",
         paragraphs: [
-          "Mieszkasz w Bydgoszczy? Na co dzień bywam w Bydgoszczy, więc miód można odebrać również tam. Wystarczy zadzwonić pod numer +48 514 070 298 i umówić się na dogodne miejsce i godzinę przekazania zamówienia. To wygodna opcja dla osób, które chcą kupić miód od pszczelarza bez jazdy na wieś.",
+          "Mieszkasz w Bydgoszczy? Na co dzień bywam w Bydgoszczy, więc miód można odebrać również tam. Odbiór w Bydgoszczy jest możliwy w dni robocze po 15:00, po wcześniejszym telefonie pod numer +48 514 070 298 – umówimy dogodne miejsce przekazania zamówienia. To wygodna opcja dla osób, które chcą kupić miód od pszczelarza bez jazdy na wieś.",
         ],
       },
       {

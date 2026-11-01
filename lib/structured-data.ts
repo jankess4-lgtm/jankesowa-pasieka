@@ -25,7 +25,7 @@ export const organizationJsonLd = {
     {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
+      "opens": "16:00",
       "closes": "20:00"
     },
     {

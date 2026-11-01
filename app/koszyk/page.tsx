@@ -733,9 +733,9 @@ export default function KoszykPage() {
                         <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                         <div>
                           <div className="font-medium text-brand-brown">Godziny odbioru</div>
-                          <div className="text-brand-brown/80">Poniedziałek – Piątek: 8:00 – 20:00, Sobota: 8:00 – 13:00, Niedziela: nieczynne</div>
+                          <div className="text-brand-brown/80">Poniedziałek – Piątek: 16:00 – 20:00, Sobota: 8:00 – 13:00, Niedziela: nieczynne</div>
                           <div className="text-sm text-brand-brown/60 mt-1">
-                            Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu.
+                            Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu. Odbiór w Bydgoszczy w dni robocze po 15:00, po wcześniejszym telefonie (+48 514 070 298).
                           </div>
                         </div>
                       </div>

@@ -134,24 +134,73 @@ export const products: Product[] = [
     available: true,
     badgeText: "Oszczędzasz 10 zł",
   },
+  {
+    id: 21,
+    name: "Zestaw 3 małych słoików miodu – 3 × 350 ml (3 × 0,49 kg)",
+    slug: "zestaw-3-malych-sloikow-miodu-350ml",
+    description: "Trzy małe słoiki miodu 0,49 kg do wyboru za 80 zł zamiast 90 zł – oszczędzasz 10 zł, a wysyłka kosztuje tyle samo co za jeden słoik.",
+    longDescription: "Zestaw trzech małych słoików miodu 350 ml (0,49 kg) z naszej pasieki w Topolnie. Sam wybierasz trzy miody spośród dostępnych – możesz też wziąć kilka takich samych. Płacisz 80 zł zamiast 90 zł za trzy pojedyncze słoiki, czyli oszczędzasz 10 zł, a wysyłka kosztuje tyle samo co za jeden słoik. To ładny pomysł na prezent i dobry sposób, żeby spróbować kilku rodzajów miodu. Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    price: 80,
+    unit: "3 × 350 ml (3 × 0,49 kg)",
+    category: "zestawy",
+    image: "/images/miod-akacjowy-0-49-kg.webp",
+    inStock: 15,
+    available: true,
+    badgeText: "Oszczędzasz 10 zł",
+  },
 ];
 
-// ===== Zestaw 2 słoików 1,2 kg =====
-export const BUNDLE_ID = 20;
-export const BUNDLE_PRICE = 110;
-// Pozycja w koszyku ma id kodujące wybrane miody: 100000 + a*1000 + b (a <= b)
-const BUNDLE_CART_BASE = 100000;
-
-export function getBundleProduct(): Product {
-  return products.find((p) => p.id === BUNDLE_ID)!;
+// ===== Zestawy z wyborem miodów =====
+export interface BundleConfig {
+  id: number;
+  count: number;          // ile słoików w zestawie
+  varietyUnit: string;    // z jakich słoików wybiera klient
+  price: number;          // cena pilnowana przez serwer
+  regularPrice: number;   // cena słoików osobno
+  cartBase: number;       // id pozycji w koszyku = cartBase + zakodowane id miodów
+  labelPrefix: string;    // np. "Zestaw 2 × 1,2 kg"
+  jarLabel: string;       // np. "900 ml"
+  jarShort: string;       // np. "1,2 kg" (etykiety list wyboru)
+  feedNetWeightKg: number;
+  feedPackagingKg: number;
 }
 
-/** Miody 1,2 kg dostępne teraz (na stanie, nie "wkrótce") */
-export function getBundleVarieties(): Product[] {
+export const BUNDLES: BundleConfig[] = [
+  {
+    id: 20, count: 2, varietyUnit: "900 ml (1,2 kg)", price: 110, regularPrice: 120,
+    // 100000 + a*1000 + b (a <= b) – kodowanie bez zmian względem pierwszej wersji
+    cartBase: 100000, labelPrefix: "Zestaw 2 × 1,2 kg", jarLabel: "900 ml", jarShort: "1,2 kg",
+    feedNetWeightKg: 2.4, feedPackagingKg: 0.7,
+  },
+  {
+    id: 21, count: 3, varietyUnit: "350 ml (0,49 kg)", price: 80, regularPrice: 90,
+    cartBase: 2000000, labelPrefix: "Zestaw 3 × 350 ml", jarLabel: "350 ml", jarShort: "0,49 kg",
+    feedNetWeightKg: 1.47, feedPackagingKg: 0.6,
+  },
+];
+
+const BUNDLE_SLOT = 1000; // id miodów < 1000
+
+export function getBundleConfig(id: number): BundleConfig | undefined {
+  return BUNDLES.find((b) => b.id === id);
+}
+
+function bundleRangeEnd(b: BundleConfig): number {
+  return b.cartBase + Math.pow(BUNDLE_SLOT, b.count);
+}
+
+/** Konfiguracja zestawu dla id produktu albo id pozycji koszyka */
+export function findBundleForCartId(id: number): BundleConfig | undefined {
+  if (!Number.isInteger(id)) return undefined;
+  return BUNDLES.find((b) => id === b.id || (id > b.cartBase && id < bundleRangeEnd(b)));
+}
+
+/** Miody dostępne teraz (na stanie, nie "wkrótce") w rozmiarze danego zestawu */
+export function getBundleVarietiesFor(b: BundleConfig): Product[] {
   return products.filter(
     (p) =>
       p.category === "miody" &&
-      p.unit === "900 ml (1,2 kg)" &&
+      p.unit === b.varietyUnit &&
       p.available !== false &&
       p.inStock > 0
   );
@@ -161,38 +210,51 @@ export function varietyShortName(p: Product): string {
   return p.name.split(" – ")[0].replace(/^Miód\s+/, "");
 }
 
-export function bundleCartId(a: number, b: number): number {
-  const [x, y] = a <= b ? [a, b] : [b, a];
-  return BUNDLE_CART_BASE + x * 1000 + y;
+export function bundleCartIdFor(b: BundleConfig, ids: number[]): number {
+  const sorted = [...ids].sort((x, y) => x - y);
+  return b.cartBase + sorted.reduce((acc, v) => acc * BUNDLE_SLOT + v, 0);
 }
 
-/** Zwraca wybrane miody dla id pozycji zestawu albo null, jeśli id/wybór nieprawidłowy */
-export function parseBundleCartId(id: number): [Product, Product] | null {
-  if (!Number.isInteger(id) || id <= BUNDLE_CART_BASE || id >= BUNDLE_CART_BASE * 2) return null;
-  const rest = id - BUNDLE_CART_BASE;
-  const a = Math.floor(rest / 1000);
-  const b = rest % 1000;
-  const allowed = getBundleVarieties();
-  const pa = allowed.find((p) => p.id === a);
-  const pb = allowed.find((p) => p.id === b);
-  if (!pa || !pb) return null;
-  return [pa, pb];
+/** Wybrane miody dla id pozycji zestawu albo null, jeśli id/wybór nieprawidłowy */
+export function parseBundleCartIdFor(b: BundleConfig, id: number): Product[] | null {
+  if (!Number.isInteger(id) || id <= b.cartBase || id >= bundleRangeEnd(b)) return null;
+  let rest = id - b.cartBase;
+  const ids: number[] = [];
+  for (let i = 0; i < b.count; i++) {
+    ids.unshift(rest % BUNDLE_SLOT);
+    rest = Math.floor(rest / BUNDLE_SLOT);
+  }
+  const allowed = getBundleVarietiesFor(b);
+  const chosen = ids.map((v) => allowed.find((p) => p.id === v));
+  if (chosen.some((p) => !p)) return null;
+  return chosen as Product[];
 }
 
-export function bundleVarietiesLabel(pair: [Product, Product]): string {
-  return `${varietyShortName(pair[0])} + ${varietyShortName(pair[1])}`;
+export function bundleVarietiesLabel(chosen: Product[]): string {
+  return chosen.map(varietyShortName).join(" + ");
 }
 
 /** Pozycja koszyka dla zestawu z wybranymi miodami */
-export function makeBundleCartProduct(a: number, b: number): Product | null {
-  const id = bundleCartId(a, b);
-  const pair = parseBundleCartId(id);
-  const bundle = getBundleProduct();
-  if (!pair || !bundle) return null;
+export function makeBundleCartProductFor(b: BundleConfig, ids: number[]): Product | null {
+  if (ids.length !== b.count) return null;
+  const id = bundleCartIdFor(b, ids);
+  const chosen = parseBundleCartIdFor(b, id);
+  const bundle = products.find((p) => p.id === b.id);
+  if (!chosen || !bundle) return null;
   return {
     ...bundle,
     id,
-    name: `Zestaw 2 × 1,2 kg: ${bundleVarietiesLabel(pair)}`,
-    price: BUNDLE_PRICE,
+    name: `${b.labelPrefix}: ${bundleVarietiesLabel(chosen)}`,
+    price: b.price,
   };
+}
+
+// Zgodność wstecz: zestaw 2 słoików 1,2 kg
+export const BUNDLE_ID = 20;
+export const BUNDLE_PRICE = 110;
+export function getBundleProduct(): Product {
+  return products.find((p) => p.id === BUNDLE_ID)!;
+}
+export function getBundleVarieties(): Product[] {
+  return getBundleVarietiesFor(getBundleConfig(BUNDLE_ID)!);
 }

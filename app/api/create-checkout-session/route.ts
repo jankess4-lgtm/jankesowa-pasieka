@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { products, BUNDLE_ID, BUNDLE_PRICE, parseBundleCartId, bundleVarietiesLabel } from "@/lib/products";
+import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -24,27 +24,30 @@ export async function POST(request: NextRequest) {
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
     for (const item of items as any[]) {
       const quantity = Math.floor(Number(item?.quantity) || 1);
-      // Zestaw 2 słoików: id koduje wybrane miody, cena zawsze z serwera (110 zł)
-      const bundleProduct = products.find((p) => p.id === BUNDLE_ID);
-      if (Number(item?.id) === BUNDLE_ID || Number(item?.id) > 100000) {
-        const pair = parseBundleCartId(Number(item?.id));
-        if (!pair || !bundleProduct || bundleProduct.available === false) {
+      // Zestawy: id koduje wybrane miody, cena zawsze z serwera
+      const bundleCfg = findBundleForCartId(Number(item?.id));
+      if (bundleCfg) {
+        const bundleProduct = products.find((p) => p.id === bundleCfg.id);
+        const chosen = parseBundleCartIdFor(bundleCfg, Number(item?.id));
+        if (!chosen || !bundleProduct || bundleProduct.available === false) {
           return NextResponse.json(
-            { error: "Wybierz dwa dostępne miody 1,2 kg do zestawu" },
+            { error: bundleCfg.count === 2
+                ? "Wybierz dwa dostępne miody 1,2 kg do zestawu"
+                : `Wybierz ${bundleCfg.count} dostępne miody ${bundleCfg.jarLabel} do zestawu` },
             { status: 400 }
           );
         }
         if (quantity < 1 || quantity > 50) {
           return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
         }
-        const label = bundleVarietiesLabel(pair);
+        const label = bundleVarietiesLabel(chosen);
         lineItems.push({
           price_data: {
             currency: "pln",
-            unit_amount: BUNDLE_PRICE * 100,
+            unit_amount: bundleCfg.price * 100,
             product_data: {
-              name: `Zestaw 2 × 1,2 kg: ${label}`,
-              description: `Wybrane miody: ${label} (2 × 900 ml)`,
+              name: `${bundleCfg.labelPrefix}: ${label}`,
+              description: `Wybrane miody: ${label} (${bundleCfg.count} × ${bundleCfg.jarLabel})`,
               images: ["https://jankesowapasieka.pl/logo.png"],
             },
           },

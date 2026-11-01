@@ -143,6 +143,19 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
+  if (product.category === "zestawy" && product.id === 21) {
+    return {
+      richDescription: product.longDescription,
+      specs: [
+        { label: "W zestawie", value: "3 słoiki 350 ml (0,49 kg) – rodzaje wybierasz sam" },
+        { label: "Cena", value: "80 zł zamiast 90 zł – oszczędzasz 10 zł" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik" },
+        { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
+      ],
+      whyBuy: "Ładny pomysł na prezent i okazja, żeby spróbować kilku miodów.",
+    };
+  }
+
   if (product.category === "zestawy") {
     return {
       richDescription: product.longDescription,
@@ -296,7 +309,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {/* Actions */}
             <div className="pt-3">
               {product.category === "zestawy" ? (
-                <BundleActions />
+                <BundleActions bundleId={product.id} />
               ) : (
                 <ProductActions product={product} isAvailable={isAvailable} />
               )}

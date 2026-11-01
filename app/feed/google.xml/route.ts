@@ -1,4 +1,4 @@
-import { products } from "@/lib/products";
+import { products, getBundleConfig } from "@/lib/products";
 import { Product } from "@/lib/types";
 
 export const revalidate = 3600;
@@ -25,11 +25,12 @@ function netWeightKg(unit: string): number | null {
 
 function itemXml(p: Product) {
   const isHoney = p.category === "miody" || p.category === "zestawy" || p.slug === "plastry-miodu";
-  const weight = p.category === "zestawy" ? 2.4 : netWeightKg(p.unit);
+  const bundle = getBundleConfig(p.id);
+  const weight = bundle ? bundle.feedNetWeightKg : netWeightKg(p.unit);
   const fixedWeight = /^\d+(,\d+)?\s*kg\)?$/.test(p.unit.replace(/^.*\(/, "")) || /^\d+\s*g$/.test(p.unit);
   // Waga wysyłkowa: masa netto + szacunkowo słoik/opakowanie
   const shippingWeight =
-    weight !== null ? (weight + (p.category === "zestawy" ? 0.7 : isHoney ? 0.35 : 0.1)).toFixed(2) : p.slug === "plastry-miodu" ? "0.60" : null;
+    weight !== null ? (weight + (bundle ? bundle.feedPackagingKg : isHoney ? 0.35 : 0.1)).toFixed(2) : p.slug === "plastry-miodu" ? "0.60" : null;
 
   const lines = [
     `<g:id>${esc(p.slug!)}</g:id>`,

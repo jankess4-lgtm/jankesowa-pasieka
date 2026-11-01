@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { products } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -19,19 +20,33 @@ export async function POST(request: NextRequest) {
     const origin = request.headers.get("origin") || "http://localhost:3000";
     const logoUrl = "https://jankesowapasieka.pl/logo.png";
 
-    // Prepare line items for products
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map((item: any) => ({
-      price_data: {
-        currency: "pln",
-        unit_amount: Math.round(item.price * 100),
-        product_data: {
-          name: item.name,
-          description: item.unit || undefined,
-          images: ["https://jankesowapasieka.pl/logo.png"],
+    // Ceny i nazwy pobieramy z katalogu po stronie serwera (nie ufamy cenom z przeglądarki)
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+    for (const item of items as any[]) {
+      const product = products.find((p) => p.id === Number(item?.id));
+      const quantity = Math.floor(Number(item?.quantity) || 1);
+      if (!product || product.available === false) {
+        return NextResponse.json(
+          { error: `Produkt jest niedostępny: ${item?.name || item?.id}` },
+          { status: 400 }
+        );
+      }
+      if (quantity < 1 || quantity > 50) {
+        return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
+      }
+      lineItems.push({
+        price_data: {
+          currency: "pln",
+          unit_amount: Math.round(product.price * 100),
+          product_data: {
+            name: product.name,
+            description: product.unit || undefined,
+            images: ["https://jankesowapasieka.pl/logo.png"],
+          },
         },
-      },
-      quantity: item.quantity || 1,
-    }));
+        quantity,
+      });
+    }
 
     // Prepare shipping
     const deliveryMeta: Record<string, string> = {};

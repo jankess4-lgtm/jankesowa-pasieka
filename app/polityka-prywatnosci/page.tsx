@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Polityka prywatności",
+  description: "Polityka prywatności sklepu internetowego Jankesowa Pasieka.",
+  alternates: { canonical: "/polityka-prywatnosci" },
+};
 
 export default function PolitykaPrywatnosci() {
   return (

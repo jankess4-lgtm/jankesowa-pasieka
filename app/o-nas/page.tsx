@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Leaf, Award, Heart } from "lucide-react";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "O nas – rodzinna pasieka w Topolnie nad Wisłą",
+  description: "Poznaj Jankesową Pasiekę: rodzinna pasieka w Topolnie na Kujawach, między Świeciem a Toruniem. Miód wirowany na zimno, bez pasteryzacji, prosto z pasieki.",
+  alternates: { canonical: "/o-nas" },
+};
 
 export default function ONasPage() {
   return (

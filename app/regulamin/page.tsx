@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Regulamin sklepu",
+  description: "Regulamin sklepu internetowego Jankesowa Pasieka.",
+  alternates: { canonical: "/regulamin" },
+};
 
 export default function Regulamin() {
   return (

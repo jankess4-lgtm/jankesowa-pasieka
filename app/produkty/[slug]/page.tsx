@@ -4,6 +4,8 @@ import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "./ProductActions";
+import type { Metadata } from "next";
+import { productJsonLd } from "@/lib/structured-data";
 
 interface ProductPageProps {
   params: { slug: string };
@@ -152,6 +154,19 @@ function getProductDetails(product: Product): ProductDetails {
   };
 }
 
+export function generateMetadata({ params }: ProductPageProps): Metadata {
+  const product = products.find((p) => p.slug === params.slug);
+  if (!product) return {};
+  const title = `${product.name} – ${product.price} zł`;
+  const description = `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/produkty/${product.slug}` },
+    openGraph: { title, description, images: [{ url: product.image }] },
+  };
+}
+
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = params;
   const product = products.find((p) => p.slug === slug);
@@ -169,6 +184,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   return (
     <div className="bg-[#F5EDE4] min-h-screen py-10 md:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)) }}
+      />
       <div className="max-w-6xl mx-auto px-6">
         {/* Breadcrumb */}
         <div className="mb-8 text-sm text-brand-brown/70">

@@ -1,9 +1,10 @@
+import { Product } from "./types";
 // src/lib/structured-data.ts
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Jankesowa Pasieka",
-  "description": "Rodzinna pasieka na Kujawach nad Wisłą w Topolnie. Oferujemy naturalne miody wirowane na zimno, bez pasteryzacji i sztucznych dodatków. Miód lipowy, akacjowy, wielokwiatowy, gryczany oraz inne produkty pszczele prosto z ula.",
+  "description": "Rodzinna pasieka na Kujawach nad Wisłą w Topolnie (gmina Pruszcz, powiat świecki). Naturalne miody wirowane na zimno, bez pasteryzacji: akacjowy, wielokwiatowy, rzepakowo-mniszkowy, plastry miodu oraz świece z wosku pszczelego.",
   "url": "https://jankesowapasieka.pl",
   "telephone": "+48 514 070 298",
   "email": "jankesowa.pasieka@gmail.com",
@@ -32,10 +33,34 @@ export const organizationJsonLd = {
     "https://jankesowapasieka.pl/og-image.jpg"
   ],
   "sameAs": [
-    // dodaj tu linki do FB, IG itp. jeśli masz
+    "https://g.page/r/CZ45MnMvHWX6EBM",
+    // TODO: dodać linki do FB, IG
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Produkty pszczele Jankesowa Pasieka"
   }
 };
+
+export function productJsonLd(product: Product) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.longDescription || product.description,
+    image: `https://jankesowapasieka.pl${product.image}`,
+    sku: String(product.id),
+    brand: { "@type": "Brand", name: "Jankesowa Pasieka" },
+    offers: {
+      "@type": "Offer",
+      url: `https://jankesowapasieka.pl/produkty/${product.slug}`,
+      priceCurrency: "PLN",
+      price: product.price.toFixed(2),
+      availability:
+        product.available === false
+          ? "https://schema.org/PreOrder"
+          : "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: "Jankesowa Pasieka" },
+    },
+  };
+}

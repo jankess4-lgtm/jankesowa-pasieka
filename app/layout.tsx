@@ -35,6 +35,7 @@ export const metadata: Metadata = {
   },
   description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w okolicach Świecia i Torunia.",
   alternates: { canonical: "/" },
+  verification: { google: "xtNvLvCc66eNeXbXfqZvpFHdRVKvTArgEnvOWCqma-Q" },
   openGraph: {
     type: "website",
     locale: "pl_PL",

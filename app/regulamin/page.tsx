@@ -19,7 +19,8 @@ export default function Regulamin() {
               <h2 className="font-medium text-xl text-brand-brown mt-8 mb-3">§ 1. Postanowienia ogólne</h2>
               <p>1. Niniejszy Regulamin określa zasady dokonywania zakupów w sklepie internetowym Jankesowa Pasieka, prowadzonym przez:</p>
               <p className="mt-2"><strong>Jankesowa Pasieka</strong><br />Topolno 45<br />86-120 Pruszcz<br />Kujawy nadwiślańskie<br />e-mail: jankesowa.pasieka@gmail.com<br />tel.: +48 514 070 298</p>
-              <p className="mt-2">Sprzedaż bezpośrednia produktów pszczelich prowadzona na podstawie wpisu do rejestru Powiatowego Lekarza Weterynarii w Świeciu, weterynaryjny numer identyfikacyjny: 04145683 (decyzja nr 69/2026 z dnia 08.04.2026 r.).</p>
+              <p className="mt-2">Zakład (Topolno 45, 86-120 Pruszcz) zarejestrowany przez Powiatowego Lekarza Weterynarii w Świeciu w zakresie utrzymywania pszczół, weterynaryjny numer identyfikacyjny: WNI 04144713 (decyzja nr 13/2026 z dnia 16.04.2026 r.).</p>
+              <p className="mt-2">Sprzedaż bezpośrednia produktów pszczelich prowadzona na podstawie wpisu do rejestru Powiatowego Lekarza Weterynarii w Świeciu, numer: 04145683 (decyzja nr 69/2026 z dnia 08.04.2026 r.).</p>
               <p>2. Sklep oferuje naturalne miody i produkty pszczele.</p>
             </section>
 

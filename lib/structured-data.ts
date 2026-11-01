@@ -44,6 +44,12 @@ export const organizationJsonLd = {
     "https://g.page/r/CZ45MnMvHWX6EBM",
     // TODO: dodać linki do FB, IG
   ],
+  "areaServed": [
+    { "@type": "City", "name": "Toruń" },
+    { "@type": "City", "name": "Bydgoszcz" },
+    { "@type": "City", "name": "Świecie" },
+    { "@type": "City", "name": "Pruszcz" }
+  ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Produkty pszczele Jankesowa Pasieka"

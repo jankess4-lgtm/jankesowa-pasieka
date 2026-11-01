@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/lib/products";
+import { blogPosts } from "@/lib/blog";
 
 const BASE_URL = "https://jankesowapasieka.pl";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const pages = ["", "/produkty", "/o-nas", "/kontakt", "/regulamin", "/polityka-prywatnosci"].map((path) => ({
+  const pages = ["", "/produkty", "/o-nas", "/kontakt", "/blog", "/regulamin", "/polityka-prywatnosci"].map((path) => ({
     url: `${BASE_URL}${path}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
@@ -17,5 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: p.available === false ? 0.4 : 0.8,
   }));
-  return [...pages, ...productPages];
+  const blogPages = blogPosts.map((p) => ({
+    url: `${BASE_URL}/blog/${p.slug}`,
+    lastModified: new Date(p.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+  return [...pages, ...productPages, ...blogPages];
 }

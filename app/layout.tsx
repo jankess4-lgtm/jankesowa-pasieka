@@ -30,10 +30,10 @@ const satisfy = Satisfy({
 export const metadata: Metadata = {
   metadataBase: new URL("https://jankesowapasieka.pl"),
   title: {
-    default: "Jankesowa Pasieka – miód prosto z pasieki | Topolno, Świecie, Toruń",
+    default: "Jankesowa Pasieka – miód prosto z pasieki | Toruń, Bydgoszcz, Świecie",
     template: "%s | Jankesowa Pasieka",
   },
-  description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w okolicach Świecia i Torunia.",
+  description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w Topolnie i w Bydgoszczy, blisko Torunia i Świecia.",
   alternates: { canonical: "/" },
   verification: { google: "xtNvLvCc66eNeXbXfqZvpFHdRVKvTArgEnvOWCqma-Q" },
   openGraph: {

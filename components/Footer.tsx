@@ -37,6 +37,7 @@ export default function Footer() {
           <div className="space-y-2.5">
             <Link href="/produkty" className="block hover:text-white transition">Oferta produktów</Link>
             <Link href="/o-nas" className="block hover:text-white transition">O pasiece</Link>
+            <Link href="/blog" className="block hover:text-white transition">Blog pszczelarza</Link>
             <Link href="/kontakt" className="block hover:text-white transition">Kontakt i dojazd</Link>
             <Link href="/regulamin" className="block hover:text-white transition">Regulamin</Link>
             <Link href="/polityka-prywatnosci" className="block hover:text-white transition">Polityka prywatności</Link>

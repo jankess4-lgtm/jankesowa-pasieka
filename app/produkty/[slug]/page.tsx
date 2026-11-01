@@ -160,7 +160,7 @@ export function generateMetadata({ params }: ProductPageProps): Metadata {
   const title = `${product.name} – ${product.price} zł`;
   const description = `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
   return {
-    title,
+    title: { absolute: `${title} | Jankesowa Pasieka` },
     description,
     alternates: { canonical: `/produkty/${product.slug}` },
     openGraph: { title, description, images: [{ url: product.image }] },

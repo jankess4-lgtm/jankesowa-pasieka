@@ -1,5 +1,6 @@
 "use client";
 
+import PromoSwiecie from "@/components/PromoSwiecie";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -737,6 +738,7 @@ export default function KoszykPage() {
                           <div className="text-sm text-brand-brown/60 mt-1">
                             Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu. Odbiór w Bydgoszczy w dni robocze po 15:00, po wcześniejszym telefonie (+48 514 070 298).
                           </div>
+                          <PromoSwiecie className="mt-2" />
                         </div>
                       </div>
 

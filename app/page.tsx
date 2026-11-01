@@ -1,4 +1,5 @@
 // Full working homepage with current Jankesowa Pasieka data (Kujawy, Topolno, products, etc.)
+import PromoSwiecie from "@/components/PromoSwiecie";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { products } from "@/lib/products";
@@ -94,6 +95,10 @@ export default function HomePage() {
       </div>
 
       {/* BENEFITS */}
+      <div className="max-w-6xl mx-auto px-6 pt-8">
+        <PromoSwiecie className="text-center" />
+      </div>
+
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-20">
         <div className="text-center mb-10">
           <div className="section-divider mb-4" />

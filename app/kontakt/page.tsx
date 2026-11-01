@@ -1,4 +1,5 @@
 "use client";
+import PromoSwiecie from "@/components/PromoSwiecie";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { MapPin, Phone, Mail, Clock, Download } from "lucide-react";
@@ -93,6 +94,7 @@ export default function KontaktPage() {
                     Wizyty w pasiece<br />tylko po wcześniejszym uzgodnieniu
                   </div>
                 </div>
+                <PromoSwiecie />
               </div>
             </div>
 

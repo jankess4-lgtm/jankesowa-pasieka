@@ -3,27 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export default function Footer() {
-  const [visitCount, setVisitCount] = useState(0);
-
-  useEffect(() => {
-    // Pobierz aktualną liczbę odwiedzin i zwiększ
-    fetch('/api/visits', { 
-      method: 'GET',
-      cache: 'no-store'        // ważne - nie cache'uj
-    })
-      .then(res => res.json())
-      .then(data => {
-        setVisitCount(data.visits || 0);
-      })
-      .catch(err => {
-        console.error("Licznik error:", err);
-        setVisitCount(1248); // fallback
-      });
-  }, []);
-
   return (
     <footer className="bg-brand-green text-white/90 pt-14 pb-8">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-y-12">
@@ -86,13 +67,9 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Licznik odwiedzin */}
+      {/* Stopka */}
       <div className="mt-14 border-t border-white/15 pt-6 text-xs text-white/50 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-y-2 md:items-center md:justify-between">
         <div>© {new Date().getFullYear()} Jankesowa Pasieka. Wszelkie prawa zastrzeżone.</div>
-        
-        <div className="text-center md:text-right font-medium">
-          Odwiedziło nas już <span className="text-white">{visitCount.toLocaleString('pl-PL')}</span> osób
-        </div>
 
         <div>Tradycja • Natura • Jakość</div>
       </div>

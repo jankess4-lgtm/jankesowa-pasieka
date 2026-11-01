@@ -50,7 +50,7 @@ export const products: Product[] = [
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
-    image: "/images/miod-wielokwiatowy-1,2-kg.png",
+    image: "/images/miod-wielokwiatowy-1-2-kg.webp",
     inStock: 12,        // aktualna ilość
     available: true,
   },
@@ -77,7 +77,7 @@ export const products: Product[] = [
     price: 60,
     unit: "900 ml (1,2 kg)",
     category: "miody",
-    image: "/images/miod-akacjowy-1,2-kg.png",
+    image: "/images/miod-akacjowy-1-2-kg.webp",
     inStock: 30,        // aktualna ilość
     available: true,
   },
@@ -90,7 +90,7 @@ export const products: Product[] = [
     price: 30,
     unit: "350 ml (0,49 kg)",
     category: "miody",
-    image: "/images/miod-akacjowy-0,49-kg.png",
+    image: "/images/miod-akacjowy-0-49-kg.webp",
     inStock: 20,        // aktualna ilość
     available: true,
   },
@@ -100,10 +100,10 @@ export const products: Product[] = [
     slug: "plastry-miodu",
     description: "Naturalny miód w plastrze – prosto z ula.",
     longDescription: "Piękne, pełne plastry miodu prosto z naszych uli.",
-    price: 55,
+    price: 75,
     unit: "plaster ok. 450–500 g",
     category: "produkty",
-    image: "/images/plastry-miodu.PNG",
+    image: "/images/miod-w-plastrach.webp",
     inStock: 4,         // aktualna ilość
     available: true,
   },

@@ -38,7 +38,7 @@ export default function ProductActions({ product, isAvailable }: ProductActionsP
     return (
       <div className="space-y-3">
         <Button disabled size="lg" className="w-full">
-          Produkt sezonowy – już wkrótce
+          Wkrótce dostępny
         </Button>
         <p className="text-xs text-center text-brand-brown/50">
           Ten miód jest dostępny tylko sezonowo. Zapraszamy w odpowiednim terminie!

@@ -100,7 +100,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
                 disabled
                 className="gap-2 opacity-40 cursor-not-allowed bg-[#EDE4D6] text-[#8F7657] hover:bg-[#EDE4D6] active:bg-[#EDE4D6]"
               >
-                Dodaj do koszyka
+                Wkrótce dostępny
               </Button>
             </div>
           </div>

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Satisfy } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { organizationJsonLd } from "@/lib/structured-data";
@@ -77,6 +78,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <Toaster position="top-center" richColors closeButton />
+        <Analytics />
       </body>
     </html>
   );

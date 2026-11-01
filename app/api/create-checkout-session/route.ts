@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { products } from "@/lib/products";
+import { products, BUNDLE_ID, BUNDLE_PRICE, parseBundleCartId, bundleVarietiesLabel } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -23,8 +23,36 @@ export async function POST(request: NextRequest) {
     // Ceny i nazwy pobieramy z katalogu po stronie serwera (nie ufamy cenom z przeglądarki)
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
     for (const item of items as any[]) {
-      const product = products.find((p) => p.id === Number(item?.id));
       const quantity = Math.floor(Number(item?.quantity) || 1);
+      // Zestaw 2 słoików: id koduje wybrane miody, cena zawsze z serwera (110 zł)
+      const bundleProduct = products.find((p) => p.id === BUNDLE_ID);
+      if (Number(item?.id) === BUNDLE_ID || Number(item?.id) > 100000) {
+        const pair = parseBundleCartId(Number(item?.id));
+        if (!pair || !bundleProduct || bundleProduct.available === false) {
+          return NextResponse.json(
+            { error: "Wybierz dwa dostępne miody 1,2 kg do zestawu" },
+            { status: 400 }
+          );
+        }
+        if (quantity < 1 || quantity > 50) {
+          return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
+        }
+        const label = bundleVarietiesLabel(pair);
+        lineItems.push({
+          price_data: {
+            currency: "pln",
+            unit_amount: BUNDLE_PRICE * 100,
+            product_data: {
+              name: `Zestaw 2 × 1,2 kg: ${label}`,
+              description: `Wybrane miody: ${label} (2 × 900 ml)`,
+              images: ["https://jankesowapasieka.pl/logo.png"],
+            },
+          },
+          quantity,
+        });
+        continue;
+      }
+      const product = products.find((p) => p.id === Number(item?.id));
       if (!product || product.available === false) {
         return NextResponse.json(
           { error: `Produkt jest niedostępny: ${item?.name || item?.id}` },

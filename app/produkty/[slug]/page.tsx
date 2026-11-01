@@ -4,6 +4,7 @@ import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "./ProductActions";
+import BundleActions from "./BundleActions";
 import type { Metadata } from "next";
 import { productJsonLd } from "@/lib/structured-data";
 
@@ -139,6 +140,19 @@ function getProductDetails(product: Product): ProductDetails {
         { label: "Okres dostępności", value: "Wrzesień–grudzień" },
       ],
       whyBuy: "Późnoletni dar natury. Wspiera odporność w trudniejszym okresie roku.",
+    };
+  }
+
+  if (product.category === "zestawy") {
+    return {
+      richDescription: product.longDescription,
+      specs: [
+        { label: "W zestawie", value: "2 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
+        { label: "Cena", value: "110 zł zamiast 120 zł – oszczędzasz 10 zł" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik" },
+        { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
+      ],
+      whyBuy: "Więcej miodu w lepszej cenie – idealny zapas na zimę albo prezent.",
     };
   }
 
@@ -281,7 +295,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* Actions */}
             <div className="pt-3">
-              <ProductActions product={product} isAvailable={isAvailable} />
+              {product.category === "zestawy" ? (
+                <BundleActions />
+              ) : (
+                <ProductActions product={product} isAvailable={isAvailable} />
+              )}
             </div>
           </div>
         </div>

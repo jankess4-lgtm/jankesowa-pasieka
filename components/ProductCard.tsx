@@ -124,7 +124,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <div className="absolute top-3 left-3">
-            <Badge variant="gold">{product.category === "miody" ? "Miód" : "Produkt"}</Badge>
+            <Badge variant="gold">{product.category === "miody" ? "Miód" : product.category === "zestawy" ? "Zestaw" : "Produkt"}</Badge>
           </div>
         </div>
       </Link>
@@ -144,6 +144,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
               <div className="text-2xl font-semibold tabular-nums text-brand-brown">{product.price} <span className="text-base align-super font-normal">zł</span></div>
             </div>
 
+            {product.category === "zestawy" ? (
+              <Link href={`/produkty/${product.slug}`}>
+                <Button size="sm" variant="primary" className="gap-2">
+                  <ShoppingCart className="w-3.5 h-3.5" />
+                  Wybierz miody
+                </Button>
+              </Link>
+            ) : (
             <Button
               onClick={() => addToCart(product)}
               size="sm"
@@ -153,9 +161,11 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
               <ShoppingCart className="w-3.5 h-3.5" />
               {isInCart(product.id) ? "Dodano" : "Dodaj"}
             </Button>
+            )}
           </div>
 
           {/* Direct payment button */}
+          {product.category !== "zestawy" && (
           <Button
             onClick={handleStripeCheckout}
             size="sm"
@@ -166,6 +176,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             <CreditCard className="w-3.5 h-3.5" />
             {isStripeLoading ? "Przekierowanie do płatności..." : "Zapłać"}
           </Button>
+          )}
         </div>
       </div>
     </div>

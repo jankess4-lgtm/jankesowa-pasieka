@@ -120,4 +120,79 @@ export const products: Product[] = [
     inStock: 10,        // aktualna ilość
     available: true,
   },
+  {
+    id: 20,
+    name: "Zestaw 2 słoików miodu – 2 × 900 ml (2 × 1,2 kg)",
+    slug: "zestaw-2-sloikow-miodu-900ml",
+    description: "Dwa duże słoiki miodu 1,2 kg do wyboru za 110 zł – oszczędzasz 10 zł, a wysyłka kosztuje tyle samo co za jeden słoik.",
+    longDescription: "Zestaw dwóch dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz dwa rodzaje spośród dostępnych miodów – możesz też wziąć dwa takie same. Płacisz 110 zł zamiast 120 zł za dwa pojedyncze słoiki, czyli oszczędzasz 10 zł, a wysyłka kosztuje tyle samo co za jeden słoik. Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    price: 110,
+    unit: "2 × 900 ml (2 × 1,2 kg)",
+    category: "zestawy",
+    image: "/images/miod-rzepakowo-mniszkowy-1-2-kg.webp",
+    inStock: 15,
+    available: true,
+    badgeText: "Oszczędzasz 10 zł",
+  },
 ];
+
+// ===== Zestaw 2 słoików 1,2 kg =====
+export const BUNDLE_ID = 20;
+export const BUNDLE_PRICE = 110;
+// Pozycja w koszyku ma id kodujące wybrane miody: 100000 + a*1000 + b (a <= b)
+const BUNDLE_CART_BASE = 100000;
+
+export function getBundleProduct(): Product {
+  return products.find((p) => p.id === BUNDLE_ID)!;
+}
+
+/** Miody 1,2 kg dostępne teraz (na stanie, nie "wkrótce") */
+export function getBundleVarieties(): Product[] {
+  return products.filter(
+    (p) =>
+      p.category === "miody" &&
+      p.unit === "900 ml (1,2 kg)" &&
+      p.available !== false &&
+      p.inStock > 0
+  );
+}
+
+export function varietyShortName(p: Product): string {
+  return p.name.split(" – ")[0].replace(/^Miód\s+/, "");
+}
+
+export function bundleCartId(a: number, b: number): number {
+  const [x, y] = a <= b ? [a, b] : [b, a];
+  return BUNDLE_CART_BASE + x * 1000 + y;
+}
+
+/** Zwraca wybrane miody dla id pozycji zestawu albo null, jeśli id/wybór nieprawidłowy */
+export function parseBundleCartId(id: number): [Product, Product] | null {
+  if (!Number.isInteger(id) || id <= BUNDLE_CART_BASE || id >= BUNDLE_CART_BASE * 2) return null;
+  const rest = id - BUNDLE_CART_BASE;
+  const a = Math.floor(rest / 1000);
+  const b = rest % 1000;
+  const allowed = getBundleVarieties();
+  const pa = allowed.find((p) => p.id === a);
+  const pb = allowed.find((p) => p.id === b);
+  if (!pa || !pb) return null;
+  return [pa, pb];
+}
+
+export function bundleVarietiesLabel(pair: [Product, Product]): string {
+  return `${varietyShortName(pair[0])} + ${varietyShortName(pair[1])}`;
+}
+
+/** Pozycja koszyka dla zestawu z wybranymi miodami */
+export function makeBundleCartProduct(a: number, b: number): Product | null {
+  const id = bundleCartId(a, b);
+  const pair = parseBundleCartId(id);
+  const bundle = getBundleProduct();
+  if (!pair || !bundle) return null;
+  return {
+    ...bundle,
+    id,
+    name: `Zestaw 2 × 1,2 kg: ${bundleVarietiesLabel(pair)}`,
+    price: BUNDLE_PRICE,
+  };
+}

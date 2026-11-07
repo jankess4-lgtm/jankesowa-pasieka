@@ -18,6 +18,89 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "miod-na-odpornosc-jesienia",
+    title: "Miód na odporność jesienią – jak go jeść i który wybrać?",
+    description:
+      "Miód na odporność i na przeziębienie – co naprawdę wiadomo? Pszczelarz z Topolna podpowiada, jak jeść miód jesienią, dlaczego nie dodawać go do gorącej herbaty i który miód wybrać na chłodne dni.",
+    date: "2026-11-07",
+    image: "/images/miod-wielokwiatowy-1-2-kg.webp",
+    imageAlt: "Słoik miodu wielokwiatowego 1,2 kg z Jankesowej Pasieki",
+    intro:
+      "Gdy za oknem robi się szaro, a w pracy i w szkole zaczyna się sezon kichania, w naszej kuchni słoik miodu stoi zawsze pod ręką. Jesienią najczęściej słyszę pytanie: „Który miód jest najlepszy na odporność?”. Odpowiem uczciwie, jak pszczelarz, a nie jak sprzedawca cudownych środków: miód nie jest lekarstwem, ale może być smacznym i wartościowym elementem jesiennej codzienności. Poniżej opowiem, co o nim wiadomo, jak go jeść, żeby nie stracił swoich zalet, i który miód z naszej pasieki wybrać na chłodne dni.",
+    sections: [
+      {
+        heading: "Miód na odporność – co naprawdę wiadomo?",
+        paragraphs: [
+          "Naturalny miód to przede wszystkim cukry proste, ale zawiera też niewielkie ilości enzymów dodawanych przez pszczoły, kwasów organicznych, związków fenolowych i substancji pochodzących z pyłku. Część z tych składników ma właściwości przeciwutleniające, a sam miód od wieków jest obecny w domowych sposobach na chłodne dni.",
+          "Trzeba jednak jasno powiedzieć: miód nie leczy przeziębienia ani grypy i nie zastąpi wizyty u lekarza. Na odporność najbardziej wpływają sen, ruch na świeżym powietrzu, zróżnicowana dieta z warzywami i owocami oraz ograniczenie stresu. Miód może być przyjemnym dodatkiem do takiego stylu życia – na przykład zamiast cukru w herbacie czy owsiance.",
+        ],
+      },
+      {
+        heading: "Miód na przeziębienie i kaszel – domowy sposób",
+        paragraphs: [
+          "Łyżeczka miodu powoli rozpuszczana w ustach albo ciepły napój z miodem to sposób, który wiele osób stosuje, gdy drapie w gardle. Miód jest gęsty i otula gardło, dlatego daje przyjemne uczucie ulgi. Badania sugerują, że u dzieci powyżej 1. roku życia miód może łagodzić nocny kaszel, ale to wciąż wsparcie, a nie terapia.",
+          "Jeśli objawy się nasilają, pojawia się wysoka gorączka, duszność lub infekcja trwa dłużej niż kilka dni – nie czekaj, tylko skontaktuj się z lekarzem.",
+        ],
+      },
+      {
+        heading: "Nie dodawaj miodu do wrzątku",
+        paragraphs: [
+          "To najczęstszy błąd, jaki widzę. Wysoka temperatura niszczy enzymy i inne delikatne składniki miodu, a przy tym zmienia jego smak. Dlatego miód dodawaj do herbaty, naparu z lipy czy mleka dopiero wtedy, gdy napój przestygnie do temperatury około 40°C – czyli takiej, którą wygodnie się pije, bez dmuchania.",
+          "Ta sama zasada dotyczy upłynniania skrystalizowanego miodu: tylko w ciepłej kąpieli wodnej, nigdy w mikrofalówce ani na gazie.",
+        ],
+      },
+      {
+        heading: "Jesienne sposoby na miód",
+        paragraphs: [
+          "Oto kilka prostych pomysłów, które u nas w domu sprawdzają się każdej jesieni:",
+        ],
+        list: [
+          "ciepła (nie gorąca!) woda z cytryną, plastrem imbiru i łyżeczką miodu – najlepiej rano,",
+          "herbata z lipy, malin lub rumianku osłodzona miodem po przestygnięciu,",
+          "owsianka z jabłkiem, cynamonem, orzechami i miodem,",
+          "jogurt naturalny z miodem i garścią pestek dyni,",
+          "kawałek miodu w plastrze prosto z ramki – razem z woskiem, jak jedli nasi dziadkowie.",
+        ],
+      },
+      {
+        heading: "Który miód wybrać na jesień?",
+        paragraphs: [
+          "Każdy naturalny, niepodgrzewany miód będzie dobrym wyborem – najważniejsze, żeby smakował i był jedzony regularnie, w rozsądnych ilościach. Z naszej obecnej oferty polecam:",
+        ],
+        list: [
+          "Miód wielokwiatowy – z letnich łąk i zadrzewień nad Wisłą, o bogatszym, wyrazistym smaku. Jesienią to mój osobisty faworyt do herbaty.",
+          "Miód akacjowy – najłagodniejszy, długo płynny, chętnie jedzony przez dzieci (powyżej 1. roku życia) i osoby, które nie lubią intensywnych miodów.",
+          "Miód mniszkowo-rzepakowy – kremowy, łagodny, idealny do smarowania pieczywa i do owsianki.",
+          "Miód w plastrach – miód w najbardziej naturalnej postaci, prosto z ula, razem z woskiem pszczelim.",
+        ],
+      },
+      {
+        heading: "Ważne: kto powinien uważać?",
+        paragraphs: [
+          "Miodu nie podajemy dzieciom poniżej 1. roku życia – nawet w niewielkiej ilości, w kaszce czy na smoczku. Może on zawierać przetrwalniki bakterii, z którymi układ pokarmowy niemowlęcia jeszcze sobie nie radzi.",
+          "Miód to nadal źródło cukrów, dlatego osoby z cukrzycą lub insulinoopornością powinny skonsultować jego spożycie z lekarzem lub dietetykiem. Ostrożność zachowują też alergicy, szczególnie uczuleni na pyłki lub produkty pszczele. Dla dorosłych rozsądną porcją jest jedna–dwie łyżeczki dziennie.",
+        ],
+      },
+      {
+        heading: "Jak przechowywać miód zimą?",
+        paragraphs: [
+          "W szczelnie zamkniętym słoiku, w suchym i ciemnym miejscu, w temperaturze pokojowej lub nieco niższej. Lodówka nie jest potrzebna. Nabieraj miód zawsze suchą łyżeczką. Jeśli miód skrystalizuje – to znak, że jest naturalny, a nie wada. Tak przechowywany miód spokojnie wystarczy na całą zimę.",
+        ],
+      },
+    ],
+    cta: {
+      text: "Zrób jesienny zapas miodu prosto z pasieki w Topolnie. Zestawy słoików wychodzą taniej niż pojedyncze sztuki – możesz w nich dowolnie wybrać gatunki.",
+      links: [
+        { href: "/produkty/miod-wielokwiatowy-900ml", label: "Miód wielokwiatowy 1,2 kg" },
+        { href: "/produkty/miod-akacjowy-900ml", label: "Miód akacjowy 1,2 kg" },
+        { href: "/produkty/miod-rzepakowo-mniszkowy-900ml", label: "Miód mniszkowo-rzepakowy 1,2 kg" },
+        { href: "/produkty/plastry-miodu", label: "Miód w plastrach" },
+        { href: "/produkty/zestaw-2-sloikow-miodu-900ml", label: "Zestaw 2 słoików 2 × 1,2 kg – 110 zł" },
+        { href: "/produkty/zestaw-3-malych-sloikow-miodu-350ml", label: "Zestaw 3 małych słoików 3 × 0,49 kg – 80 zł" },
+      ],
+    },
+  },
+  {
     slug: "dlaczego-miod-rzepakowy-sie-krystalizuje",
     title: "Dlaczego miód rzepakowy się krystalizuje i czy to dobrze?",
     description:

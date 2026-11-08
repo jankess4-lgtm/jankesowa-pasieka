@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel } from "@/lib/products";
+import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -22,6 +22,16 @@ export async function POST(request: NextRequest) {
 
     // Ceny i nazwy pobieramy z katalogu po stronie serwera (nie ufamy cenom z przeglądarki)
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+    // Zużycie stanów magazynowych i liczenie paczek
+    const used = new Map<number, number>();
+    let largeJars = 0, smallJars = 0, otherUnits = 0;
+    const countJar = (p: { id: number } & any, q: number) => {
+      used.set(p.id, (used.get(p.id) || 0) + q);
+      const size = jarSize(p);
+      if (size === "large") largeJars += q;
+      else if (size === "small") smallJars += q;
+      else if (p.id === 12) otherUnits += q; // plaster miodu zajmuje 1 miejsce
+    };
     for (const item of items as any[]) {
       const quantity = Math.floor(Number(item?.quantity) || 1);
       // Zestawy: id koduje wybrane miody, cena zawsze z serwera
@@ -40,6 +50,8 @@ export async function POST(request: NextRequest) {
         if (quantity < 1 || quantity > 50) {
           return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
         }
+        for (const c of chosen) countJar(c, quantity);
+        used.set(bundleCfg.id, (used.get(bundleCfg.id) || 0) + quantity);
         const label = bundleVarietiesLabel(chosen);
         lineItems.push({
           price_data: {
@@ -65,6 +77,7 @@ export async function POST(request: NextRequest) {
       if (quantity < 1 || quantity > 50) {
         return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
       }
+      countJar(product, quantity);
       lineItems.push({
         price_data: {
           currency: "pln",
@@ -78,6 +91,20 @@ export async function POST(request: NextRequest) {
         quantity,
       });
     }
+
+    // Sprawdzenie stanów magazynowych (zestawy zużywają słoiki z miodów)
+    for (const [id, qty] of Array.from(used.entries())) {
+      const p = products.find((x) => x.id === id);
+      if (p && qty > p.inStock) {
+        return NextResponse.json(
+          { error: p.inStock > 0
+              ? `Za mało na stanie: ${p.name} (dostępne: ${p.inStock} szt.)`
+              : `Produkt chwilowo niedostępny: ${p.name}` },
+          { status: 400 }
+        );
+      }
+    }
+    const packages = Math.max(packagesNeeded(largeJars, smallJars, otherUnits), 1);
 
     // Prepare shipping
     const deliveryMeta: Record<string, string> = {};
@@ -115,13 +142,14 @@ export async function POST(request: NextRequest) {
           unit_amount: shippingCost * 100,
           product_data: {
             name: shippingName,
-            description: "Koszt dostawy",
+            description: packages > 1 ? `Koszt dostawy – ${packages} paczki (bezpieczne pakowanie słoików)` : "Koszt dostawy",
             images: ["https://jankesowapasieka.pl/logo.png"],
           },
         },
-        quantity: 1,
+        quantity: packages,
       });
     }
+    deliveryMeta.packages = String(packages);
 
     console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 

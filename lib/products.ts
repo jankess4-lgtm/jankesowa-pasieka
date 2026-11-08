@@ -11,7 +11,7 @@ export const products: Product[] = [
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-rzepakowo-mniszkowy-1-2-kg.webp",
-    inStock: 30,        // aktualna ilość
+    inStock: 25,        // aktualna ilość
     available: true,
   },
   {
@@ -24,7 +24,7 @@ export const products: Product[] = [
     unit: "350 ml (0,49 kg)",
     category: "miody",
     image: "/images/miod-rzepakowo-mniszkowy-0-49-kg.webp",
-    inStock: 20,        // aktualna ilość
+    inStock: 15,        // aktualna ilość
     available: true,
   },
   {
@@ -51,7 +51,7 @@ export const products: Product[] = [
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-wielokwiatowy-1-2-kg.webp",
-    inStock: 12,        // aktualna ilość
+    inStock: 15,        // aktualna ilość
     available: true,
   },
   {
@@ -78,7 +78,7 @@ export const products: Product[] = [
     unit: "900 ml (1,2 kg)",
     category: "miody",
     image: "/images/miod-akacjowy-1-2-kg.webp",
-    inStock: 30,        // aktualna ilość
+    inStock: 25,        // aktualna ilość
     available: true,
   },
   {
@@ -91,7 +91,7 @@ export const products: Product[] = [
     unit: "350 ml (0,49 kg)",
     category: "miody",
     image: "/images/miod-akacjowy-0-49-kg.webp",
-    inStock: 20,        // aktualna ilość
+    inStock: 15,        // aktualna ilość
     available: true,
   },
   {
@@ -257,4 +257,41 @@ export function getBundleProduct(): Product {
 }
 export function getBundleVarieties(): Product[] {
   return getBundleVarietiesFor(getBundleConfig(BUNDLE_ID)!);
+}
+
+// ===== Pakowanie: duży słoik = 2 miejsca, mały = 1; paczka max 8 miejsc i max 6 małych =====
+export const PACKAGE_UNITS = 8;
+export const PACKAGE_MAX_SMALL = 6;
+export const PACKING_NOTE =
+  "Dla bezpieczeństwa słoików pakujemy maks. 4 duże (1,2 kg) albo 6 małych słoików w jednej paczce (1 duży = 2 małe). Większe zamówienie wyślemy w kilku paczkach – koszt dostawy liczony jest za każdą paczkę.";
+
+/** Ile paczek potrzeba dla podanej liczby dużych i małych słoików oraz innych produktów */
+export function packagesNeeded(large: number, small: number, other = 0): number {
+  const units = large * 2 + small + other;
+  if (units <= 0) return 0;
+  return Math.max(Math.ceil(units / PACKAGE_UNITS), Math.ceil(small / PACKAGE_MAX_SMALL), 1);
+}
+
+/** Rozmiar słoika dla produktu miodowego */
+export function jarSize(p: Product): "large" | "small" | null {
+  if (p.category !== "miody") return null;
+  return p.unit.includes("350") ? "small" : "large";
+}
+
+/** Liczba paczek dla koszyka (pozycje produktów i zestawów) */
+export function packagesForCart(items: { id: number; quantity: number }[]): number {
+  let large = 0, small = 0, other = 0;
+  for (const it of items) {
+    const q = it.quantity || 0;
+    const b = findBundleForCartId(it.id);
+    const chosen = b ? parseBundleCartIdFor(b, it.id) : null;
+    const list = chosen ?? [products.find((p) => p.id === it.id)].filter(Boolean) as Product[];
+    for (const p of list) {
+      const s = jarSize(p);
+      if (s === "large") large += q;
+      else if (s === "small") small += q;
+      else if (p.id === 12) other += q;
+    }
+  }
+  return Math.max(packagesNeeded(large, small, other), 1);
 }

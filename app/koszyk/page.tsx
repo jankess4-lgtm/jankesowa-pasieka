@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/useCart";
+import { packagesForCart, PACKING_NOTE } from "@/lib/products";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
 import { loadPaczkomaty, normalizeText, Paczkomat } from "@/lib/paczkomaty";
 
@@ -342,7 +343,8 @@ export default function KoszykPage() {
   }, [customer]);
 
   const requiresContact = needsContactValidation(customer.deliveryMethod);
-  const shippingCost = getShippingCost(customer.deliveryMethod);
+  const packages = packagesForCart(items);
+  const shippingCost = getShippingCost(customer.deliveryMethod) * packages;
   const grandTotal = totalPrice + shippingCost;
 
   const { results: filteredPaczkomaty, totalMatches: totalMatchCount } = useMemo(
@@ -931,12 +933,15 @@ export default function KoszykPage() {
                       : customer.deliveryMethod === "address"
                         ? "kurier"
                         : "odbiór"}
-                    )
+                    {shippingCost > 0 && packages > 1 ? `, ${packages} paczki` : ""})
                   </span>
                   <span className="tabular-nums">
                     {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
                   </span>
                 </div>
+                {customer.deliveryMethod !== "pickup" && (
+                  <p className="text-xs text-brand-brown/60 leading-snug">{PACKING_NOTE}</p>
+                )}
                 <div className="h-px bg-brand-creamDark my-2" />
                 <div className="flex justify-between text-lg font-semibold text-brand-brown">
                   <span>Do zapłaty</span>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/useCart";
+import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart, CreditCard } from "lucide-react";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
@@ -12,7 +13,11 @@ interface ProductActionsProps {
   isAvailable: boolean;
 }
 
-export default function ProductActions({ product, isAvailable }: ProductActionsProps) {
+export default function ProductActions({ product: baseProduct, isAvailable: baseAvailable }: ProductActionsProps) {
+  const live = useLiveStock(baseProduct.id);
+  const product = live === undefined ? baseProduct : { ...baseProduct, inStock: live };
+  const soldOut = baseAvailable && live === 0;
+  const isAvailable = baseAvailable && !soldOut;
   const { addToCart, isInCart } = useCart();
   const [isStripeLoading, setIsStripeLoading] = useState(false);
 
@@ -38,10 +43,10 @@ export default function ProductActions({ product, isAvailable }: ProductActionsP
     return (
       <div className="space-y-3">
         <Button disabled size="lg" className="w-full">
-          Wkrótce dostępny
+          {soldOut ? "Chwilowo niedostępny" : "Wkrótce dostępny"}
         </Button>
         <p className="text-xs text-center text-brand-brown/50">
-          Ten miód jest dostępny tylko sezonowo. Zapraszamy w odpowiednim terminie!
+          {soldOut ? "Ten miód właśnie się wyprzedał – wkrótce uzupełnimy zapas. Zadzwoń: +48 514 070 298." : "Ten miód jest dostępny tylko sezonowo. Zapraszamy w odpowiednim terminie!"}
         </p>
       </div>
     );

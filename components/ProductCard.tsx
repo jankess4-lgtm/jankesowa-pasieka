@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/useCart";
+import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
 import { ShoppingCart, CreditCard } from "lucide-react";
@@ -16,9 +17,11 @@ interface ProductCardProps {
   compact?: boolean;
 }
 
-export default function ProductCard({ product, compact = false }: ProductCardProps) {
+export default function ProductCard({ product: baseProduct, compact = false }: ProductCardProps) {
   const { items, addToCart, isInCart } = useCart();
-  const isAvailable = product.available !== false;
+  const live = useLiveStock(baseProduct.id);
+  const product = live === undefined ? baseProduct : { ...baseProduct, inStock: live };
+  const isAvailable = product.available !== false && live !== 0;
 
   const [isStripeLoading, setIsStripeLoading] = useState(false);
 

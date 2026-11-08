@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
+import { decrementStock } from "@/lib/inventory";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -52,6 +53,14 @@ export async function POST(request: NextRequest) {
     };
 
     console.log("✅ NOWE ZAMÓWIENIE OTRZYMANE:", JSON.stringify(orderInfo, null, 2));
+
+    try {
+      if (session.payment_status === "paid" && session.metadata?.stock) {
+        await decrementStock(session.id, JSON.parse(session.metadata.stock));
+      }
+    } catch (e) {
+      console.error("❌ BŁĄD aktualizacji stanów:", e);
+    }
 
     await sendAdminEmail(orderInfo);
     await sendAdminSMS(orderInfo);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -93,12 +94,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Sprawdzenie stanów magazynowych (zestawy zużywają słoiki z miodów)
+    const liveStock = await getStock();
+    const stockUsed: Record<string, number> = {};
     for (const [id, qty] of Array.from(used.entries())) {
       const p = products.find((x) => x.id === id);
-      if (p && qty > p.inStock) {
+      const available = TRACKED_IDS.includes(id) ? liveStock[id] : p?.inStock ?? 0;
+      if (TRACKED_IDS.includes(id)) stockUsed[String(id)] = qty;
+      if (p && qty > available) {
         return NextResponse.json(
-          { error: p.inStock > 0
-              ? `Za mało na stanie: ${p.name} (dostępne: ${p.inStock} szt.)`
+          { error: available > 0
+              ? `Za mało na stanie: ${p.name} (dostępne: ${available} szt.)`
               : `Produkt chwilowo niedostępny: ${p.name}` },
           { status: 400 }
         );
@@ -150,6 +155,7 @@ export async function POST(request: NextRequest) {
       });
     }
     deliveryMeta.packages = String(packages);
+    deliveryMeta.stock = JSON.stringify(stockUsed);
 
     console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 

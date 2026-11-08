@@ -18,6 +18,47 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "ostatnie-sloiki-miodu-z-sezonu-2026",
+    title: "Ostatnie słoiki tegorocznego miodu – dlaczego warto zrobić zapas teraz",
+    description:
+      "Sezon pszczelarski 2026 się zakończył i nowego miodu nie będzie do czerwca. W Jankesowej Pasiece w Topolnie zostały ostatnie słoiki miodu akacjowego, mniszkowo-rzepakowego i wielokwiatowego.",
+    date: "2026-11-08",
+    image: "/images/ule-pasieka-topolno.webp",
+    imageAlt: "Ule Jankesowej Pasieki w Topolnie jesienią",
+    intro:
+      "Sezon pszczelarski 2026 już się zakończył. Od jesieni do wiosny pszczoły nie zbierają nektaru, tylko zimują na własnych zapasach. Miód, który mamy dziś w pracowni, to cały tegoroczny zbiór – nowego nie będzie aż do czerwca przyszłego roku.",
+    sections: [
+      {
+        heading: "Ostatnie słoiki z naszej pasieki",
+        paragraphs: [
+          "W naszej pasiece w Topolnie zostały ostatnie słoiki miodu akacjowego, mniszkowo-rzepakowego i wielokwiatowego. Miód wielokwiatowy jest już tylko w dużych słoikach 1,2 kg.",
+          "Prawdziwego miodu prosto od pszczelarza jest zawsze tyle, ile pszczoły zebrały w sezonie. Jesienią i zimą wielu pszczelarzom kończą się zapasy, a na sklepowych półkach zostają głównie mieszanki miodów z różnych krajów.",
+        ],
+      },
+      {
+        heading: "Miód spokojnie przetrwa zimę",
+        paragraphs: [
+          "Miód się nie psuje, jeśli przechowujesz go w zakręconym słoiku, w suchym i ciemnym miejscu. Z czasem może się skrystalizować – to naturalny proces i znak, że miód jest prawdziwy. Wystarczy wstawić słoik do ciepłej wody, do około 40°C.",
+        ],
+      },
+      {
+        heading: "Na zimę i pod choinkę",
+        paragraphs: [
+          "Jeśli chcesz mieć naturalny miód na całą zimę, do herbaty z cytryną albo na prezent pod choinkę, to dobry moment, żeby go zamówić. Wysyłamy paczkomatem lub kurierem, a z mieszkańcami Świecia i powiatu świeckiego umawiamy się na odbiór osobisty.",
+        ],
+      },
+    ],
+    cta: {
+      text: "Zamów, póki są jeszcze słoiki z tegorocznego zbioru:",
+      links: [
+        { href: "/produkty/miod-wielokwiatowy-900ml", label: "Miód wielokwiatowy 1,2 kg" },
+        { href: "/produkty/miod-akacjowy-900ml", label: "Miód akacjowy 1,2 kg" },
+        { href: "/produkty/miod-rzepakowo-mniszkowy-900ml", label: "Miód mniszkowo-rzepakowy 1,2 kg" },
+        { href: "/produkty", label: "Cała oferta pasieki" },
+      ],
+    },
+  },
+  {
     slug: "miod-na-odpornosc-jesienia",
     title: "Miód na odporność jesienią – jak go jeść i który wybrać?",
     description:

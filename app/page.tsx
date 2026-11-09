@@ -39,7 +39,7 @@ const benefits = [
 export default function HomePage() {
   return (
     <div className="bg-[#F5EDE4]">
-      <section className="relative min-h-[220px] h-[34vh] max-h-[320px] sm:min-h-[280px] sm:h-[42vh] sm:max-h-[420px] flex items-center justify-center overflow-hidden">
+      <section className="relative flex items-center justify-center overflow-hidden py-10 sm:py-14 min-h-[280px] sm:min-h-[320px] sm:h-[42vh] sm:max-h-[420px]">
         <Image
           src="/images/pasieka.jpg"
           alt="Jankesowa Pasieka - widok z ulami na tle łąk"
@@ -49,7 +49,7 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />
 
-        <div className="relative z-10 max-w-4xl px-6 text-center text-white py-8">
+        <div className="relative z-10 max-w-4xl px-6 text-center text-white">
           <div className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur text-[10px] sm:text-xs tracking-[3px] mb-3 border border-white/30">
             TERENY NADWIŚLAŃSKIE KUJAW
           </div>
@@ -68,25 +68,34 @@ export default function HomePage() {
               </Button>
             </Link>
             <Link href="/o-nas">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-7 py-3 border-white/70 text-white hover:bg-white/10 hover:text-white">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto text-base px-7 py-3 !bg-white !text-brand-brown !border-2 !border-white shadow-xl hover:!bg-white/90 hover:!text-brand-brown"
+              >
                 Poznaj naszą pasiekę
               </Button>
             </Link>
           </div>
-          <div className="mt-5 text-[10px] tracking-widest text-white/70">RĘCZNIE • BEZ PASTERYZACJI • BEZ POŚREDNIKÓW</div>
+          <div className="mt-5 text-[10px] leading-relaxed tracking-[0.14em] sm:tracking-widest text-white/85 px-1">
+            RĘCZNIE • BEZ PASTERYZACJI • BEZ POŚREDNIKÓW
+          </div>
         </div>
       </section>
 
       <div className="border-b border-brand-brown/10 bg-white py-4">
-        <div className="max-w-6xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-10 gap-y-3 text-sm text-brand-brown/70 tracking-wider">
-          <div>RODZINNA PASIEKA</div>
-          <div className="text-brand-gold">•</div>
-          <div>NATURALNY WOSK</div>
-          <div className="text-brand-gold">•</div>
-          <div>BEZ CUKRU DODANEGO</div>
-          <div className="text-brand-gold">•</div>
-          <div>KUJAWY NAD WIŚLĄ</div>
-        </div>
+        <ul className="max-w-6xl mx-auto px-6 grid grid-cols-2 gap-x-4 gap-y-2.5 text-[11px] sm:text-sm text-brand-brown/80 tracking-wide md:flex md:flex-wrap md:justify-center md:items-center md:gap-0 md:tracking-wider">
+          {["RODZINNA PASIEKA", "NATURALNY WOSK", "BEZ CUKRU DODANEGO", "KUJAWY NAD WIŚLĄ"].map((label, i) => (
+            <li key={label} className="flex items-center gap-2 min-w-0 md:px-1">
+              {i > 0 && (
+                <span className="hidden md:inline text-brand-gold px-3" aria-hidden>
+                  •
+                </span>
+              )}
+              <span className="md:hidden w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0" aria-hidden />
+              <span className="leading-snug">{label}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <section className="bg-white py-10 border-b border-brand-brown/10">

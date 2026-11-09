@@ -6,6 +6,11 @@ import { getHomepageFeaturedProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { Leaf, Award, Users, Heart } from "lucide-react";
 import Image from "next/image";
+import GoogleReviews from "@/components/GoogleReviews";
+import { getGoogleReviews } from "@/lib/google-reviews";
+
+/** Refresh homepage (and Places reviews) at most once per day when API is configured. */
+export const revalidate = 86400;
 
 const featuredProducts = getHomepageFeaturedProducts();
 
@@ -36,7 +41,9 @@ const benefits = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const googleReviews = await getGoogleReviews();
+
   return (
     <div className="bg-[#F5EDE4]">
       <section className="relative flex items-center justify-center overflow-hidden py-10 sm:py-14 min-h-[280px] sm:min-h-[320px] sm:h-[42vh] sm:max-h-[420px]">
@@ -153,22 +160,14 @@ export default function HomePage() {
         <PromoSwiecie className="text-center" />
       </div>
 
-      <section className="max-w-3xl mx-auto px-6 py-16 text-center">
-        <div className="section-divider mb-4" />
-        <h2 className="font-serif text-4xl text-brand-brown tracking-tight mb-4">Opinie w Google</h2>
-        <p className="text-[#374151] mb-8">
-          Zapraszamy do naszego profilu w Google — tam znajdziesz opinie klientów,
-          a po zakupie możesz zostawić swoją. Pomożesz innym znaleźć prawdziwy miód prosto z pasieki.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <a href={GOOGLE_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-            <Button size="lg" variant="outline">Zobacz profil w Google</Button>
-          </a>
-          <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
-            <Button size="lg">Zostaw opinię w Google</Button>
-          </a>
-        </div>
-      </section>
+      <GoogleReviews
+        profileUrl={GOOGLE_PROFILE_URL}
+        reviewUrl={GOOGLE_REVIEW_URL}
+        reviews={googleReviews.reviews}
+        rating={googleReviews.rating}
+        userRatingCount={googleReviews.userRatingCount}
+        source={googleReviews.source}
+      />
 
       <section className="bg-brand-green text-white py-16">
         <div className="max-w-xl mx-auto text-center px-6">

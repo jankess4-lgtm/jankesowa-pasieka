@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/useCart";
+import { firePurchaseConversion } from "@/lib/consent";
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
@@ -65,6 +66,7 @@ function SuccessContent() {
 
   const { clearCart } = useCart();
   const cartClearedRef = useRef(false);
+  const conversionFiredRef = useRef(false);
 
   useEffect(() => {
     if (!sessionId) {
@@ -105,6 +107,32 @@ function SuccessContent() {
 
     fetchSession();
   }, [sessionId, clearCart]);
+
+  // Google Ads purchase conversion — once per Stripe session / browser tab
+  useEffect(() => {
+    if (!sessionData?.id || sessionData.payment_status !== "paid") return;
+    if (conversionFiredRef.current) return;
+
+    const storageKey = `gads_conv_${sessionData.id}`;
+    try {
+      if (sessionStorage.getItem(storageKey)) return;
+      sessionStorage.setItem(storageKey, "1");
+    } catch {
+      // If sessionStorage is blocked, ref below still prevents double fire
+    }
+
+    conversionFiredRef.current = true;
+
+    const value =
+      typeof sessionData.amount_total === "number"
+        ? sessionData.amount_total / 100
+        : undefined;
+
+    firePurchaseConversion({
+      value,
+      transactionId: sessionData.orderRef || sessionData.id,
+    });
+  }, [sessionData]);
 
   const formatAmount = (amount: number | null | undefined) => {
     if (amount == null) return "—";

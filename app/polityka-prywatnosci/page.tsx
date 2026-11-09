@@ -74,7 +74,7 @@ export default function PolitykaPrywatnosci() {
 
             <section>
               <h2 className="font-medium text-xl text-brand-brown mt-8 mb-3">7. Pliki cookies</h2>
-              <p>Nasza strona korzysta z plików cookies niezbędnych do funkcjonowania sklepu. Nie używamy cookies marketingowych bez Twojej zgody.</p>
+              <p>Nasza strona korzysta z plików cookies niezbędnych do funkcjonowania sklepu (np. koszyk, sesja). Za Twoją zgodą możemy też używać cookies analitycznych i reklamowych (m.in. Google Ads / Google tag), aby mierzyć skuteczność reklam i statystyki. Możesz w każdej chwili zmienić wybór w stopce strony („Ustawienia cookies”). Nie używamy cookies marketingowych bez Twojej zgody.</p>
             </section>
 
             <section>

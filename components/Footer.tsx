@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { openCookieSettings } from "@/lib/consent";
 
 export default function Footer() {
   return (
@@ -41,6 +42,13 @@ export default function Footer() {
             <Link href="/kontakt" className="block hover:text-white transition">Kontakt i dojazd</Link>
             <Link href="/regulamin" className="block hover:text-white transition">Regulamin</Link>
             <Link href="/polityka-prywatnosci" className="block hover:text-white transition">Polityka prywatności</Link>
+            <button
+              type="button"
+              onClick={openCookieSettings}
+              className="block hover:text-white transition text-left"
+            >
+              Ustawienia cookies
+            </button>
           </div>
         </div>
 

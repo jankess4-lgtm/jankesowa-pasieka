@@ -154,13 +154,13 @@ export function isProductListedAsAvailable(p: Product): boolean {
   return p.available !== false && p.inStock > 0;
 }
 
-/** Zestawy oraz 3 dostępne duże słoiki — na górę strony głównej, bez produktów sezonowych. */
+/** Dwa zestawy i dwa duże słoiki — równy rząd 4 produktów na komputerze. */
 export function getHomepageFeaturedProducts(): Product[] {
   const sets = products.filter((p) => p.category === "zestawy" && isProductListedAsAvailable(p));
   const honeys = products.filter(
     (p) => p.category === "miody" && isProductListedAsAvailable(p) && !p.unit.includes("350")
   );
-  return [...sets, ...honeys.slice(0, 3)];
+  return [...sets, ...honeys.slice(0, 2)];
 }
 
 export function sortProductsForCatalog(list: Product[]): Product[] {

@@ -114,7 +114,7 @@ export async function getGoogleReviews(): Promise<GoogleReviewsPayload> {
   }
 
   try {
-    const url = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`;
+    const url = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=pl`;
     const res = await fetch(url, {
       method: "GET",
       headers: {

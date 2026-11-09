@@ -2,7 +2,7 @@
 import PromoSwiecie from "@/components/PromoSwiecie";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { MapPin, Phone, Mail, Clock, Download } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Download, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function KontaktPage() {
@@ -11,8 +11,10 @@ export default function KontaktPage() {
     email: "",
     phone: "",
     message: "",
+    website: "", // honeypot
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,28 +27,32 @@ export default function KontaktPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        toast.success("Wiadomość wysłana pomyślnie", {
-          description: "Dziękujemy! Odpowiemy w ciągu 1-2 dni roboczych.",
+        setSubmitted(true);
+        setFormData({ name: "", email: "", phone: "", message: "", website: "" });
+        toast.success("Wiadomość wysłana", {
+          description: "Na Twój e-mail poszło potwierdzenie.",
         });
-        setFormData({ name: "", email: "", phone: "", message: "" });
       } else {
-        toast.error("Wystąpił błąd podczas wysyłania wiadomości");
+        const data = await response.json().catch(() => ({}));
+        toast.error(data?.error || "Wystąpił błąd podczas wysyłania wiadomości");
       }
-    } catch (error) {
+    } catch {
       toast.error("Nie udało się wysłać wiadomości. Spróbuj później.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -63,10 +69,9 @@ export default function KontaktPage() {
         <div className="grid lg:grid-cols-5 gap-12">
           {/* Lewa kolumna */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Dane kontaktowe */}
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
               <h3 className="font-medium text-brand-brown mb-5 text-lg">Jankesowa Pasieka</h3>
-             
+
               <div className="space-y-6 text-sm">
                 <div className="flex gap-4">
                   <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
@@ -98,11 +103,10 @@ export default function KontaktPage() {
               </div>
             </div>
 
-            {/* Wizytówka do pobrania */}
             <div className="bg-white rounded-2xl border border-brand-creamDark p-8">
               <h4 className="font-medium text-brand-brown mb-4">Pobierz wizytówkę</h4>
               <p className="text-sm text-brand-brown/70 mb-5">Zapisz nasze dane w telefonie lub wydrukuj.</p>
-             
+
               <div className="space-y-3">
                 <a href="/wizytowka.pdf" download className="flex items-center gap-3 w-full bg-brand-gold hover:bg-amber-600 text-white py-3.5 px-5 rounded-xl transition font-medium">
                   <Download className="w-5 h-5" />
@@ -119,7 +123,6 @@ export default function KontaktPage() {
               </div>
             </div>
 
-            {/* Mapa Google */}
             <div className="bg-white rounded-2xl border border-brand-creamDark overflow-hidden">
               <div className="p-4 border-b border-brand-creamDark">
                 <h4 className="font-medium text-brand-brown">Jak do nas dojechać</h4>
@@ -138,64 +141,116 @@ export default function KontaktPage() {
             </div>
           </div>
 
-          {/* Formularz kontaktowy */}
+          {/* Formularz / potwierdzenie */}
           <div className="lg:col-span-3">
-            <form onSubmit={handleSubmit} className="bg-white rounded-3xl border border-brand-creamDark p-8 md:p-9 space-y-6">
-              <div className="grid sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-medium text-brand-brown mb-1.5">Imię i nazwisko *</label>
+            {submitted ? (
+              <div
+                className="bg-white rounded-3xl border border-brand-creamDark p-8 md:p-10 text-center"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
+                  <CheckCircle2 className="h-9 w-9 text-emerald-600" aria-hidden />
+                </div>
+                <h2 className="font-serif text-3xl text-brand-brown mb-3">
+                  Dziękujemy za wiadomość!
+                </h2>
+                <p className="text-lg text-[#374151] leading-relaxed max-w-md mx-auto">
+                  Odpowiemy niezwłocznie, zwykle w ciągu <strong>24 godzin</strong>.
+                  Na Twój e-mail wysłaliśmy też potwierdzenie z kopią wiadomości.
+                </p>
+                <p className="mt-4 text-sm text-brand-brown/70">
+                  Kontakt:{" "}
+                  <a href="mailto:kontakt@jankesowapasieka.pl" className="text-brand-gold underline">
+                    kontakt@jankesowapasieka.pl
+                  </a>
+                </p>
+                <Button
+                  type="button"
+                  className="mt-8 px-6 py-3"
+                  onClick={() => setSubmitted(false)}
+                >
+                  Napisz kolejną wiadomość
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="relative bg-white rounded-3xl border border-brand-creamDark p-8 md:p-9 space-y-6">
+                {/* Honeypot — ukryte przed użytkownikami */}
+                <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                  <label htmlFor="website">Strona www</label>
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    id="website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-brand-brown mb-1.5">Imię i nazwisko *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="input"
+                      required
+                      maxLength={120}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-brand-brown mb-1.5">Telefon</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="input"
+                      placeholder="Opcjonalnie"
+                      maxLength={40}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-brand-brown mb-1.5">Adres e-mail *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
                     className="input"
                     required
+                    maxLength={200}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-brand-brown mb-1.5">Telefon</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
+                  <label className="block text-sm font-medium text-brand-brown mb-1.5">Wiadomość *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
-                    className="input"
-                    placeholder="Opcjonalnie"
+                    className="textarea h-32"
+                    placeholder="Napisz czym możemy Ci pomóc..."
+                    required
+                    maxLength={4000}
                   />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-brand-brown mb-1.5">Adres e-mail *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="input"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-brand-brown mb-1.5">Wiadomość *</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="textarea h-32"
-                  placeholder="Napisz czym możemy Ci pomóc..."
-                  required
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full py-3 text-base"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
-              </Button>
-              <p className="text-center text-[10px] text-brand-brown/50">Odpowiadamy zwykle w ciągu 1–2 dni roboczych.</p>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full py-3 text-base"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
+                </Button>
+                <p className="text-center text-[10px] text-brand-brown/50">
+                  Odpowiadamy zwykle w ciągu 24 godzin. Po wysłaniu dostaniesz potwierdzenie e-mailem.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </div>

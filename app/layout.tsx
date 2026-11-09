@@ -75,36 +75,34 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
-        {process.env.NEXT_PUBLIC_GADS_ID ? (
-          <script
-            id="google-consent-default"
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                window.gtag = gtag;
-                gtag('consent', 'default', {
-                  ad_storage: 'denied',
-                  ad_user_data: 'denied',
-                  ad_personalization: 'denied',
-                  analytics_storage: 'denied',
-                  wait_for_update: 500
-                });
-                try {
-                  var c = localStorage.getItem('${CONSENT_STORAGE_KEY}');
-                  if (c === 'granted') {
-                    gtag('consent', 'update', {
-                      ad_storage: 'granted',
-                      ad_user_data: 'granted',
-                      ad_personalization: 'granted',
-                      analytics_storage: 'granted'
-                    });
-                  }
-                } catch (e) {}
-              `,
-            }}
-          />
-        ) : null}
+        <script
+          id="google-consent-default"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('consent', 'default', {
+                ad_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied',
+                analytics_storage: 'denied',
+                wait_for_update: 500
+              });
+              try {
+                var c = localStorage.getItem('${CONSENT_STORAGE_KEY}');
+                if (c === 'granted') {
+                  gtag('consent', 'update', {
+                    ad_storage: 'granted',
+                    ad_user_data: 'granted',
+                    ad_personalization: 'granted',
+                    analytics_storage: 'granted'
+                  });
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
         <GoogleAdsScripts />

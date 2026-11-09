@@ -1,7 +1,21 @@
 export const CONSENT_STORAGE_KEY = "jankesowa_cookie_consent";
 export const OPEN_COOKIE_SETTINGS_EVENT = "jankesowa-open-cookie-settings";
 
+/** Public Google Ads / Google tag ID (safe to expose client-side). */
+export const DEFAULT_GADS_ID = "AW-18561285258";
+
 export type ConsentChoice = "granted" | "denied";
+
+export type PurchaseItem = {
+  item_id?: string;
+  item_name?: string;
+  quantity?: number;
+  price?: number;
+};
+
+export function getGadsId(): string {
+  return process.env.NEXT_PUBLIC_GADS_ID || DEFAULT_GADS_ID;
+}
 
 export function getStoredConsent(): ConsentChoice | null {
   if (typeof window === "undefined") return null;
@@ -45,25 +59,46 @@ declare global {
   }
 }
 
+/**
+ * Fires the standard GA4/Ads `purchase` event (event-based conversion).
+ * If NEXT_PUBLIC_GADS_PURCHASE_LABEL is set, also fires classic `conversion` with send_to.
+ */
 export function firePurchaseConversion(opts: {
   value?: number;
   transactionId?: string;
+  items?: PurchaseItem[];
 }): void {
-  const id = process.env.NEXT_PUBLIC_GADS_ID;
-  const label = process.env.NEXT_PUBLIC_GADS_PURCHASE_LABEL;
-  if (!id || !label) return;
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
 
-  const payload: Record<string, string | number> = {
-    send_to: `${id}/${label}`,
+  const id = getGadsId();
+  const label = process.env.NEXT_PUBLIC_GADS_PURCHASE_LABEL;
+
+  const purchasePayload: Record<string, unknown> = {
     currency: "PLN",
   };
   if (typeof opts.value === "number" && Number.isFinite(opts.value)) {
-    payload.value = opts.value;
+    purchasePayload.value = opts.value;
   }
   if (opts.transactionId) {
-    payload.transaction_id = opts.transactionId;
+    purchasePayload.transaction_id = opts.transactionId;
+  }
+  if (opts.items && opts.items.length > 0) {
+    purchasePayload.items = opts.items;
   }
 
-  window.gtag("event", "conversion", payload);
+  window.gtag("event", "purchase", purchasePayload);
+
+  if (label) {
+    const conversionPayload: Record<string, string | number> = {
+      send_to: `${id}/${label}`,
+      currency: "PLN",
+    };
+    if (typeof opts.value === "number" && Number.isFinite(opts.value)) {
+      conversionPayload.value = opts.value;
+    }
+    if (opts.transactionId) {
+      conversionPayload.transaction_id = opts.transactionId;
+    }
+    window.gtag("event", "conversion", conversionPayload);
+  }
 }

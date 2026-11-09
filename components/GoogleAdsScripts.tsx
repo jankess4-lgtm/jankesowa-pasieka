@@ -1,12 +1,12 @@
 import Script from "next/script";
+import { getGadsId } from "@/lib/consent";
 
 /**
  * Loads Google tag (gtag.js) after consent defaults are set in root layout <head>.
- * Renders nothing when NEXT_PUBLIC_GADS_ID is unset.
+ * Uses NEXT_PUBLIC_GADS_ID or the public fallback AW-18561285258.
  */
 export default function GoogleAdsScripts() {
-  const gadsId = process.env.NEXT_PUBLIC_GADS_ID;
-  if (!gadsId) return null;
+  const gadsId = getGadsId();
 
   const configScript = `
     window.dataLayer = window.dataLayer || [];

@@ -128,9 +128,29 @@ function SuccessContent() {
         ? sessionData.amount_total / 100
         : undefined;
 
+    const items = (sessionData.line_items || [])
+      .filter(
+        (item) =>
+          !item.description?.toLowerCase().includes("dostawa") &&
+          !item.description?.toLowerCase().includes("paczkomat")
+      )
+      .map((item) => {
+        const qty = item.quantity && item.quantity > 0 ? item.quantity : 1;
+        const unit =
+          typeof item.amount_total === "number"
+            ? item.amount_total / 100 / qty
+            : undefined;
+        return {
+          item_name: item.description || undefined,
+          quantity: qty,
+          ...(typeof unit === "number" ? { price: Math.round(unit * 100) / 100 } : {}),
+        };
+      });
+
     firePurchaseConversion({
       value,
       transactionId: sessionData.orderRef || sessionData.id,
+      items: items.length > 0 ? items : undefined,
     });
   }, [sessionData]);
 

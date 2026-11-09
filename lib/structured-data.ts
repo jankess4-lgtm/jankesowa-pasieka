@@ -7,7 +7,7 @@ export const organizationJsonLd = {
   "description": "Rodzinna pasieka na Kujawach nad Wisłą w Topolnie (gmina Pruszcz, powiat świecki). Naturalne miody wirowane na zimno, bez pasteryzacji: akacjowy, wielokwiatowy, rzepakowo-mniszkowy, plastry miodu oraz świece z wosku pszczelego.",
   "url": "https://jankesowapasieka.pl",
   "telephone": "+48 514 070 298",
-  "email": "jankesowa.pasieka@gmail.com",
+  "email": "kontakt@jankesowapasieka.pl",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Topolno 45",

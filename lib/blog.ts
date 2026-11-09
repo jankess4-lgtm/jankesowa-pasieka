@@ -356,7 +356,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Masz pytania? Zadzwoń",
         paragraphs: [
-          "Chętnie doradzę, który miód wybrać – na prezent, dla dzieci (pamiętaj: nie dla niemowląt poniżej 1. roku życia), do herbaty czy na kanapki. Zadzwoń pod numer +48 514 070 298 lub napisz na jankesowa.pasieka@gmail.com.",
+          "Chętnie doradzę, który miód wybrać – na prezent, dla dzieci (pamiętaj: nie dla niemowląt poniżej 1. roku życia), do herbaty czy na kanapki. Zadzwoń pod numer +48 514 070 298 lub napisz na kontakt@jankesowapasieka.pl.",
         ],
       },
     ],

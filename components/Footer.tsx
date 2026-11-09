@@ -68,9 +68,9 @@ export default function Footer() {
               <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>+48 514 070 298</span>
             </a>
-            <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-3 hover:text-white transition">
+            <a href="mailto:kontakt@jankesowapasieka.pl" className="flex gap-3 hover:text-white transition">
               <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>jankesowa.pasieka@gmail.com</span>
+              <span>kontakt@jankesowapasieka.pl</span>
             </a>
           </div>
         </div>

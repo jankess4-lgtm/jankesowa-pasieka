@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: "Jankesowa Pasieka <kontakt@jankesowapasieka.pl>",
       to: "jankesowa.pasieka@gmail.com",
+      replyTo: email,
       subject: `Nowa wiadomość od ${name}`,
       html: `
         <h2>Nowa wiadomość z formularza kontaktowego</h2>

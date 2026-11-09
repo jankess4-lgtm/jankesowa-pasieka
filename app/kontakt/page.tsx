@@ -84,9 +84,9 @@ export default function KontaktPage() {
                     <div className="text-xs text-brand-brown/60">Odbiór w Bydgoszczy w dni robocze po 15:00, po wcześniejszym telefonie (+48 514 070 298)</div>
                   </div>
                 </a>
-                <a href="mailto:jankesowa.pasieka@gmail.com" className="flex gap-4 group hover:text-brand-gold transition">
+                <a href="mailto:kontakt@jankesowapasieka.pl" className="flex gap-4 group hover:text-brand-gold transition">
                   <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
-                  <div>jankesowa.pasieka@gmail.com</div>
+                  <div>kontakt@jankesowapasieka.pl</div>
                 </a>
                 <div className="flex gap-4 pt-2 border-t border-brand-creamDark">
                   <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />

@@ -757,10 +757,10 @@ export default function KoszykPage() {
                       <div className="flex gap-4">
                         <Mail className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                         <a
-                          href="mailto:jankesowa.pasieka@gmail.com"
+                          href="mailto:kontakt@jankesowapasieka.pl"
                           className="text-brand-brown hover:text-brand-gold transition-colors"
                         >
-                          jankesowa.pasieka@gmail.com
+                          kontakt@jankesowapasieka.pl
                         </a>
                       </div>
                     </div>

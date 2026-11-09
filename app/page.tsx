@@ -63,14 +63,14 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/produkty">
-              <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3 shadow-xl">
+              <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3 shadow-xl border-2 border-transparent">
                 Zobacz ofertę
               </Button>
             </Link>
             <Link href="/o-nas">
               <Button
                 size="lg"
-                className="w-full sm:w-auto text-base px-7 py-3 !bg-white !text-brand-brown !border-2 !border-white shadow-xl hover:!bg-white/90 hover:!text-brand-brown"
+                className="w-full sm:w-auto text-base px-8 py-3 !bg-white !text-brand-brown !border-2 !border-white shadow-xl hover:!bg-[#F5EDE4] hover:!text-brand-brown"
               >
                 Poznaj naszą pasiekę
               </Button>

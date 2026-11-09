@@ -1,23 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { products } from "@/lib/products";
+import { products, sortProductsForCatalog } from "@/lib/products";
+import ShippingNote from "@/components/ShippingNote";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
-type CategoryFilter = "all" | "miody" | "produkty";
+type CategoryFilter = "all" | "miody" | "zestawy" | "produkty";
 
 export default function ProduktyPage() {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
-  const filteredProducts = activeFilter === "all" 
-    ? products 
-    : products.filter((p) => p.category === activeFilter);
+  const filteredProducts = sortProductsForCatalog(
+    activeFilter === "all"
+      ? products
+      : activeFilter === "miody"
+        ? products.filter((p) => p.category === "miody" || p.category === "zestawy")
+        : products.filter((p) => p.category === activeFilter)
+  );
 
   const filters: { label: string; value: CategoryFilter }[] = [
     { label: "Wszystkie", value: "all" },
     { label: "Miody", value: "miody" },
+    { label: "Zestawy", value: "zestawy" },
     { label: "Produkty pszczele", value: "produkty" },
   ];
 
@@ -35,6 +41,7 @@ export default function ProduktyPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-10">
+        <ShippingNote className="mb-8 max-w-3xl mx-auto" />
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-9 justify-center">
           {filters.map((f) => (

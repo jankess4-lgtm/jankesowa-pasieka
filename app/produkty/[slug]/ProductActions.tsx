@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "@/components/ui/Button";
-import { ShoppingCart, CreditCard } from "lucide-react";
-import { startStripeCheckout } from "@/lib/stripeCheckout";
+import { ShoppingCart } from "lucide-react";
 
 interface ProductActionsProps {
   product: Product;
@@ -18,26 +16,7 @@ export default function ProductActions({ product: baseProduct, isAvailable: base
   const product = live === undefined ? baseProduct : { ...baseProduct, inStock: live };
   const soldOut = baseAvailable && live === 0;
   const isAvailable = baseAvailable && !soldOut;
-  const { addToCart, isInCart } = useCart();
-  const [isStripeLoading, setIsStripeLoading] = useState(false);
-
-  const handleStripeCheckout = async () => {
-    if (!isAvailable) return;
-
-    setIsStripeLoading(true);
-
-    try {
-      await startStripeCheckout([{
-        ...product,
-        quantity: 1,
-      } as any]);
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || "Nie udało się rozpocząć płatności. Spróbuj ponownie.");
-    } finally {
-      setIsStripeLoading(false);
-    }
-  };
+  const { addToCart, addToCartAndCheckout, isInCart } = useCart();
 
   if (!isAvailable) {
     return (
@@ -67,14 +46,13 @@ export default function ProductActions({ product: baseProduct, isAvailable: base
       </div>
 
       <Button
-        onClick={handleStripeCheckout}
+        onClick={() => addToCartAndCheckout(product)}
         size="lg"
         variant="outline"
-        disabled={isStripeLoading}
         className="w-full gap-2 border-brand-gold/70 text-brand-brown hover:bg-brand-gold/5"
       >
-        <CreditCard className="w-4 h-4" />
-        {isStripeLoading ? "Przekierowanie do płatności..." : "Zapłać"}
+        <ShoppingCart className="w-4 h-4" />
+        Zapłać
       </Button>
 
       <p className="text-[10px] text-center text-brand-brown/50">

@@ -1,13 +1,17 @@
-// Full working homepage with current Jankesowa Pasieka data (Kujawy, Topolno, products, etc.)
 import PromoSwiecie from "@/components/PromoSwiecie";
+import ShippingNote from "@/components/ShippingNote";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { products } from "@/lib/products";
+import { getHomepageFeaturedProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { Leaf, Award, Users, Heart } from "lucide-react";
 import Image from "next/image";
 
-const featuredProducts = products.slice(0, 4);
+const featuredProducts = getHomepageFeaturedProducts();
+
+const GOOGLE_PROFILE_URL =
+  "https://www.google.com/search?q=Jankesowa+Pasieka&ludocid=18042859571763100062";
+const GOOGLE_REVIEW_URL = "https://g.page/r/CZ45MnMvHWX6EBM/review";
 
 const benefits = [
   {
@@ -35,53 +39,44 @@ const benefits = [
 export default function HomePage() {
   return (
     <div className="bg-[#F5EDE4]">
-      {/* HERO */}
-      <section className="relative h-[92vh] min-h-[620px] flex items-center justify-center overflow-hidden">
-        <Image 
-          src="/images/pasieka.jpg" 
-          alt="Jankesowa Pasieka - widok z ulami na tle łąk" 
-          fill 
-          className="object-cover" 
-          priority 
+      <section className="relative min-h-[220px] h-[34vh] max-h-[320px] sm:min-h-[280px] sm:h-[42vh] sm:max-h-[420px] flex items-center justify-center overflow-hidden">
+        <Image
+          src="/images/pasieka.jpg"
+          alt="Jankesowa Pasieka - widok z ulami na tle łąk"
+          fill
+          className="object-cover"
+          priority
         />
-        {/* Dark elegant overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />
-        
-        <div className="relative z-10 max-w-4xl px-6 text-center text-white">
-          <div className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur text-xs tracking-[3px] mb-4 border border-white/30">
+
+        <div className="relative z-10 max-w-4xl px-6 text-center text-white py-8">
+          <div className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur text-[10px] sm:text-xs tracking-[3px] mb-3 border border-white/30">
             TERENY NADWIŚLAŃSKIE KUJAW
           </div>
-          
-          <h1 className="font-serif text-[72px] sm:text-[88px] leading-[0.92] tracking-[-2.5px] mb-4">
+
+          <h1 className="font-serif text-[40px] sm:text-[64px] leading-[0.94] tracking-[-1.5px] mb-3">
             Jankesowa<br />Pasieka
           </h1>
-          <p className="text-2xl sm:text-3xl font-light tracking-tight text-white/90 mb-10">
+          <p className="text-lg sm:text-2xl font-light tracking-tight text-white/90 mb-6">
             Najczystsze miody prosto z ula
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/produkty">
-              <Button size="lg" className="w-full sm:w-auto text-lg px-10 py-4 shadow-xl">
+              <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3 shadow-xl">
                 Zobacz ofertę
               </Button>
             </Link>
             <Link href="/o-nas">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-9 py-4 border-white/70 text-white hover:bg-white/10 hover:text-white">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-7 py-3 border-white/70 text-white hover:bg-white/10 hover:text-white">
                 Poznaj naszą pasiekę
               </Button>
             </Link>
           </div>
-          <div className="mt-8 text-xs tracking-widest text-white/70">RĘCZNIE • BEZ PASTERYZACJI • BEZ POŚREDNIKÓW</div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/60 text-[10px] tracking-[1.5px]">
-          PRZEWIN
-          <div className="h-8 w-px bg-white/40 mt-2" />
+          <div className="mt-5 text-[10px] tracking-widest text-white/70">RĘCZNIE • BEZ PASTERYZACJI • BEZ POŚREDNIKÓW</div>
         </div>
       </section>
 
-      {/* TRUST BAR */}
       <div className="border-b border-brand-brown/10 bg-white py-4">
         <div className="max-w-6xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-10 gap-y-3 text-sm text-brand-brown/70 tracking-wider">
           <div>RODZINNA PASIEKA</div>
@@ -94,12 +89,39 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* BENEFITS */}
-      <div className="max-w-6xl mx-auto px-6 pt-8">
-        <PromoSwiecie className="text-center" />
-      </div>
+      <section className="bg-white py-10 border-b border-brand-brown/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-1">DOSTĘPNE TERAZ</div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-brand-brown tracking-tight">Miody i zestawy</h2>
+              <p className="mt-2 text-sm text-[#374151] max-w-xl">
+                Zestaw dwóch dużych słoików za 110 zł albo trzech małych za 80 zł — oszczędzasz 10 zł,
+                a wysyłka kosztuje tyle samo co za jeden słoik.
+              </p>
+            </div>
+            <Link href="/produkty" className="hidden md:block text-sm font-medium text-brand-gold hover:underline">
+              Zobacz całą ofertę →
+            </Link>
+          </div>
 
-      <section className="max-w-6xl mx-auto px-6 pt-16 pb-20">
+          <ShippingNote className="mb-6" />
+
+          <div className="products-grid">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          <div className="text-center mt-8 md:hidden">
+            <Link href="/produkty">
+              <Button variant="outline">Zobacz pełną ofertę</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-12">
         <div className="text-center mb-10">
           <div className="section-divider mb-4" />
           <h2 className="font-serif text-4xl text-brand-brown tracking-tight">Dlaczego wybierają nas</h2>
@@ -118,46 +140,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS */}
-      <section className="bg-white py-16 border-y border-brand-brown/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-9">
-            <div>
-              <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-1">NAJLEPSZE WYBORY</div>
-              <h2 className="font-serif text-4xl text-brand-brown tracking-tight">Polecane produkty</h2>
-            </div>
-            <Link href="/produkty" className="hidden md:block text-sm font-medium text-brand-gold hover:underline">
-              Zobacz całą ofertę →
-            </Link>
-          </div>
+      <div className="max-w-6xl mx-auto px-6 pb-8">
+        <PromoSwiecie className="text-center" />
+      </div>
 
-          <div className="products-grid">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          <div className="text-center mt-9 md:hidden">
-            <Link href="/produkty">
-              <Button variant="outline">Zobacz pełną ofertę</Button>
-            </Link>
-          </div>
+      <section className="max-w-3xl mx-auto px-6 py-16 text-center">
+        <div className="section-divider mb-4" />
+        <h2 className="font-serif text-4xl text-brand-brown tracking-tight mb-4">Opinie w Google</h2>
+        <p className="text-[#374151] mb-8">
+          Zapraszamy do naszego profilu w Google — tam znajdziesz opinie klientów,
+          a po zakupie możesz zostawić swoją. Pomożesz innym znaleźć prawdziwy miód prosto z pasieki.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href={GOOGLE_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" variant="outline">Zobacz profil w Google</Button>
+          </a>
+          <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
+            <Button size="lg">Zostaw opinię w Google</Button>
+          </a>
         </div>
       </section>
 
-      {/* OPINIE GOOGLE */}
-      <section className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <div className="section-divider mb-4" />
-        <h2 className="font-serif text-4xl text-brand-brown tracking-tight mb-4">Kupiłeś nasz miód?</h2>
-        <p className="text-[#374151] mb-8">
-          Zostaw opinię w Google – pomożesz innym znaleźć prawdziwy miód prosto z pasieki, a nam bardzo się to przyda.
-        </p>
-        <a href="https://g.page/r/CZ45MnMvHWX6EBM/review" target="_blank" rel="noopener noreferrer">
-          <Button size="lg">Zostaw opinię w Google</Button>
-        </a>
-      </section>
-
-      {/* FINAL CTA */}
       <section className="bg-brand-green text-white py-16">
         <div className="max-w-xl mx-auto text-center px-6">
           <h2 className="font-serif text-4xl tracking-tight mb-4">Chcesz poznać pełną ofertę?</h2>

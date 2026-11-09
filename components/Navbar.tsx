@@ -37,7 +37,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="sticky top-0 z-40 bg-[#F5EDE4]/95 backdrop-blur-md border-b border-brand-brown/10">
-        <div className="max-w-7xl mx-auto px-6 h-28 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 h-20 md:h-28 flex items-center justify-between">
           {/* Logo + Brand Name */}
           <Link href="/" className="flex items-center gap-4 group" aria-label="Jankesowa Pasieka - Strona główna">
             <Image 
@@ -45,11 +45,11 @@ export default function Navbar() {
               alt="Jankesowa Pasieka" 
               width={270} 
               height={80} 
-              className="h-16 md:h-20 w-auto object-contain" 
+              className="h-12 md:h-20 w-auto object-contain" 
               priority 
             />
             <span 
-              className="text-[#78350F] text-2xl md:text-3xl tracking-[0.5px] font-normal leading-none"
+              className="hidden sm:inline text-[#78350F] text-2xl md:text-3xl tracking-[0.5px] font-normal leading-none"
               style={{ fontFamily: "'Kristen ITC', cursive" }}
             >
               JANKESOWA PASIEKA

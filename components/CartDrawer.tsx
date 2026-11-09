@@ -35,9 +35,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     window.location.href = "/koszyk";
   };
 
-  const shippingCost = totalPrice > 150 ? 0 : 14;
-  const finalTotal = totalPrice + shippingCost;
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -159,22 +156,16 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <span>Wartość produktów</span>
                       <span className="tabular-nums">{totalPrice} zł</span>
                     </div>
-                    <div className="flex justify-between text-brand-brown/70">
-                      <span className="flex items-center gap-1.5">
-                        Dostawa
-                        {shippingCost === 0 && <span className="text-emerald-600 text-xs">(darmowa)</span>}
-                      </span>
-                      <span className="tabular-nums">{shippingCost} zł</span>
-                    </div>
                     <div className="h-px bg-brand-creamDark my-1" />
                     <div className="flex justify-between text-lg font-semibold text-brand-brown pt-1">
-                      <span>Do zapłaty</span>
-                      <span className="tabular-nums">{finalTotal} zł</span>
+                      <span>Produkty</span>
+                      <span className="tabular-nums">{totalPrice} zł</span>
                     </div>
                   </div>
 
-                  <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80">
-                    Koszt dostawy: 14–16 zł (zależnie od metody). Szczegóły przy finalizacji.
+                  <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80 leading-relaxed">
+                    Dostawa doliczana przy finalizacji: paczkomat 14 zł, kurier 16 zł,
+                    odbiór osobisty 0 zł. W zestawie wysyłka kosztuje tyle samo co za jeden słoik.
                   </div>
 
                   <Button
@@ -183,7 +174,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     disabled={isCheckingOut}
                   >
                     <CreditCard className="w-4 h-4" />
-                    {isCheckingOut ? "Przekierowanie do płatności..." : "Zapłać"}
+                    {isCheckingOut ? "Przekierowanie..." : "Wybierz dostawę i zapłać"}
                   </Button>
 
                   <p className="text-[10px] text-center text-brand-brown/50 leading-snug">

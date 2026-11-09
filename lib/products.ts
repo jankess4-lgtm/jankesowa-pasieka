@@ -150,6 +150,30 @@ export const products: Product[] = [
   },
 ];
 
+export function isProductListedAsAvailable(p: Product): boolean {
+  return p.available !== false && p.inStock > 0;
+}
+
+/** Zestawy oraz 3 dostępne duże słoiki — na górę strony głównej, bez produktów sezonowych. */
+export function getHomepageFeaturedProducts(): Product[] {
+  const sets = products.filter((p) => p.category === "zestawy" && isProductListedAsAvailable(p));
+  const honeys = products.filter(
+    (p) => p.category === "miody" && isProductListedAsAvailable(p) && !p.unit.includes("350")
+  );
+  return [...sets, ...honeys.slice(0, 3)];
+}
+
+export function sortProductsForCatalog(list: Product[]): Product[] {
+  return [...list].sort((a, b) => {
+    const rank = (p: Product) => {
+      if (!isProductListedAsAvailable(p)) return 2;
+      if (p.category === "zestawy") return 0;
+      return 1;
+    };
+    return rank(a) - rank(b);
+  });
+}
+
 // ===== Zestawy z wyborem miodów =====
 export interface BundleConfig {
   id: number;

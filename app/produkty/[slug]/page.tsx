@@ -4,6 +4,7 @@ import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "./ProductActions";
+import ShippingNote from "@/components/ShippingNote";
 import BundleActions from "./BundleActions";
 import type { Metadata } from "next";
 import { productJsonLd } from "@/lib/structured-data";
@@ -307,12 +308,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
 
             {/* Actions */}
-            <div className="pt-3">
+            <div className="pt-3 space-y-4">
               {product.category === "zestawy" ? (
                 <BundleActions bundleId={product.id} />
               ) : (
                 <ProductActions product={product} isAvailable={isAvailable} />
               )}
+              <ShippingNote />
             </div>
           </div>
         </div>

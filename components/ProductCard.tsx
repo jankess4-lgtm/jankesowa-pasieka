@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
-import { ShoppingCart, CreditCard } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { startStripeCheckout } from "@/lib/stripeCheckout";
-import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
@@ -18,45 +15,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product: baseProduct, compact = false }: ProductCardProps) {
-  const { items, addToCart, isInCart } = useCart();
+  const { addToCart, addToCartAndCheckout, isInCart } = useCart();
   const live = useLiveStock(baseProduct.id);
   const product = live === undefined ? baseProduct : { ...baseProduct, inStock: live };
   const isAvailable = product.available !== false && live !== 0;
-
-  const [isStripeLoading, setIsStripeLoading] = useState(false);
-
-  const handleStripeCheckout = async () => {
-    if (!isAvailable) return;
-
-    setIsStripeLoading(true);
-
-    try {
-      // Checkout using current cart items (as requested)
-      // Ensure the clicked product is included in the checkout
-      const isAlreadyInCart = items.some((item) => item.id === product.id);
-      if (!isAlreadyInCart) {
-        addToCart(product);
-      }
-
-      let checkoutItems = [...items];
-      if (!isAlreadyInCart) {
-        checkoutItems = [...checkoutItems, { ...product, quantity: 1 } as any];
-      }
-
-      if (checkoutItems.length === 0) {
-        checkoutItems = [{ ...product, quantity: 1 } as any];
-      }
-
-      await startStripeCheckout(checkoutItems);
-    } catch (err: any) {
-      console.error(err);
-      toast.error("Błąd płatności", {
-        description: err.message || "Nie udało się rozpocząć płatności.",
-      });
-    } finally {
-      setIsStripeLoading(false);
-    }
-  };
 
   // UNAVAILABLE PRODUCT — full card faded logo, no product photo, desaturated, elegant message
   if (!isAvailable) {
@@ -167,17 +129,15 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
             )}
           </div>
 
-          {/* Direct payment button */}
           {product.category !== "zestawy" && (
           <Button
-            onClick={handleStripeCheckout}
+            onClick={() => addToCartAndCheckout(product)}
             size="sm"
             variant="outline"
-            disabled={isStripeLoading}
             className="w-full gap-2 text-xs tracking-[0.5px] border-brand-gold/60 text-brand-brown hover:bg-brand-gold/5 active:bg-brand-gold/10"
           >
-            <CreditCard className="w-3.5 h-3.5" />
-            {isStripeLoading ? "Przekierowanie do płatności..." : "Zapłać"}
+            <ShoppingCart className="w-3.5 h-3.5" />
+            Zapłać
           </Button>
           )}
         </div>

@@ -62,31 +62,47 @@ export function useCart() {
     }
   }, [items, isLoaded]);
 
+  const nextCartItems = (current: CartItem[], product: Product, quantity: number = 1): CartItem[] => {
+    const existing = current.findIndex((item) => item.id === product.id);
+
+    if (existing !== -1) {
+      const updated = [...current];
+      const newQty = Math.min(updated[existing].quantity + quantity, product.inStock);
+      updated[existing] = { ...updated[existing], quantity: newQty };
+      return updated;
+    }
+
+    return [...current, { ...product, quantity: Math.min(quantity, product.inStock) }];
+  };
+
   const addToCart = useCallback((product: Product, quantity: number = 1) => {
-    setItems((current) => {
-      const existing = current.findIndex((item) => item.id === product.id);
-      
-      if (existing !== -1) {
-        // Increase quantity
-        const updated = [...current];
-        const newQty = Math.min(updated[existing].quantity + quantity, product.inStock);
-        updated[existing] = { ...updated[existing], quantity: newQty };
-        return updated;
-      } else {
-        return [...current, { ...product, quantity: Math.min(quantity, product.inStock) }];
-      }
-    });
+    setItems((current) => nextCartItems(current, product, quantity));
 
     toast.success(`Dodano ${product.name} do koszyka`, {
       description: `${quantity} × ${product.price} zł`,
       action: {
         label: "Zobacz koszyk",
         onClick: () => {
-          // This will be handled by opening cart drawer via context or custom event if needed
           window.dispatchEvent(new CustomEvent("open-cart"));
         },
       },
     });
+  }, []);
+
+  /** Dodaje produkt, zapisuje koszyk i otwiera stronę dostawy — żeby wysyłka nie została pominięta. */
+  const addToCartAndCheckout = useCallback((product: Product, quantity: number = 1) => {
+    setItems((current) => {
+      const next = nextCartItems(current, product, quantity);
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(next));
+      } catch (error) {
+        console.error("Błąd zapisu koszyka:", error);
+      }
+      return next;
+    });
+
+    toast.success(`Dodano ${product.name} do koszyka`);
+    window.location.href = "/koszyk";
   }, []);
 
   const removeFromCart = useCallback((id: number) => {
@@ -128,6 +144,7 @@ export function useCart() {
   return {
     items,
     addToCart,
+    addToCartAndCheckout,
     removeFromCart,
     updateQuantity,
     clearCart,

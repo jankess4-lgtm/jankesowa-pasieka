@@ -17,7 +17,7 @@ export default function PolitykaPrywatnosci() {
           <div className="prose prose-brand max-w-none text-brand-brown/90 leading-relaxed space-y-6">
             <section>
               <h2 className="font-medium text-xl text-brand-brown mt-8 mb-3">1. Administrator danych</h2>
-              <p>Administratorem danych osobowych jest Jankesowa Pasieka, Topolno 45, 86-120 Pruszcz (Kujawy nadwiślańskie), e-mail: kontakt@jankesowapasieka.pl, tel. +48 514 070 298.</p>
+              <p>Administratorem danych osobowych jest Jankesowa Pasieka, Topolno 45, 86-120 Pruszcz, województwo kujawsko-pomorskie, e-mail: kontakt@jankesowapasieka.pl, tel. +48 514 070 298.</p>
             </section>
 
             <section>

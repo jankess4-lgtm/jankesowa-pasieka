@@ -5,6 +5,7 @@ import { Inter, Playfair_Display, Satisfy } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GoogleAdsScripts from "@/components/GoogleAdsScripts";
@@ -106,6 +107,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
         <GoogleAdsScripts />
+        <AnnouncementBar />
         <Navbar />
         <main>{children}</main>
         <Footer />

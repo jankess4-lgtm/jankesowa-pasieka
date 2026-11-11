@@ -6,6 +6,7 @@ import { getHomepageFeaturedProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { Leaf, Award, Users, Heart } from "lucide-react";
 import Image from "next/image";
+import HowToShop from "@/components/HowToShop";
 import GoogleReviews from "@/components/GoogleReviews";
 import { getGoogleReviews } from "@/lib/google-reviews";
 
@@ -159,6 +160,8 @@ export default async function HomePage() {
       <div className="max-w-6xl mx-auto px-6 pb-8">
         <PromoSwiecie className="text-center" />
       </div>
+
+      <HowToShop />
 
       <GoogleReviews
         profileUrl={GOOGLE_PROFILE_URL}

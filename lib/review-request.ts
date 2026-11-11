@@ -43,7 +43,7 @@ export function buildReviewRequestEmail(input: { customerName?: string }): Revie
 
   const text = `${greeting}
 
-minął już około tydzień od Twojego zamówienia w Jankesowej Pasiece. Mam nadzieję, że miód dobrze do Was dotarł i smakuje.
+minął już około tydzień od Twojego zamówienia w Jankesowej Pasiece. Mam nadzieję, że przesyłka dotarła w dobrym stanie, a miód smakuje.
 
 Jeśli masz chwilę, będę wdzięczny za szczerą opinię w Google. Pomaga to innym znaleźć miód prosto z pasieki — od pszczelarza, bez pośredników.
 
@@ -74,7 +74,7 @@ To jednorazowa wiadomość związana z Twoim zamówieniem, nie zapisujemy Cię d
     <h1 style="margin:0 0 24px;font-size:28px;font-weight:normal;line-height:1.25;color:#78350F;">${subject}</h1>
     <div style="background:#ffffff;border:1px solid #E8D9C8;border-radius:16px;padding:28px 28px 24px;">
       <p style="margin:0 0 16px;font-size:17px;line-height:1.6;">${greetingHtml}</p>
-      <p style="margin:0 0 16px;font-size:17px;line-height:1.6;">minął już około tydzień od Twojego zamówienia w Jankesowej Pasiece. Mam nadzieję, że miód dobrze do Was dotarł i smakuje.</p>
+      <p style="margin:0 0 16px;font-size:17px;line-height:1.6;">minął już około tydzień od Twojego zamówienia w Jankesowej Pasiece. Mam nadzieję, że przesyłka dotarła w dobrym stanie, a miód smakuje.</p>
       <p style="margin:0 0 24px;font-size:17px;line-height:1.6;">Jeśli masz chwilę, będę wdzięczny za szczerą opinię w Google. Pomaga to innym znaleźć miód prosto z pasieki — od pszczelarza, bez pośredników.</p>
       <p style="margin:0 0 24px;text-align:center;">
         <a href="${GOOGLE_WRITE_REVIEW_URL}" style="display:inline-block;background:#92400E;color:#F5EDE4;text-decoration:none;padding:12px 22px;border-radius:999px;font-family:Arial,Helvetica,sans-serif;font-size:15px;">Wystaw opinię w Google</a>

@@ -7,6 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import { Leaf, Award, Users, Heart } from "lucide-react";
 import Image from "next/image";
 import HowToShop from "@/components/HowToShop";
+import PasiekaGallery from "@/components/PasiekaGallery";
 import GoogleReviews from "@/components/GoogleReviews";
 import { getGoogleReviews } from "@/lib/google-reviews";
 
@@ -49,13 +50,15 @@ export default async function HomePage() {
     <div className="bg-[#F5EDE4]">
       <section className="relative flex items-center justify-center overflow-hidden py-10 sm:py-14 min-h-[280px] sm:min-h-[320px] sm:h-[42vh] sm:max-h-[420px]">
         <Image
-          src="/images/pasieka.jpg"
-          alt="Jankesowa Pasieka - widok z ulami na tle łąk"
+          src="/images/pasieka/ramka-miod-hero.webp"
+          alt="Ramka z zasklepionym i płynnym miodem oraz pszczołami z Jankesowej Pasieki"
           fill
-          className="object-cover"
+          className="object-cover object-center"
+          sizes="100vw"
+          quality={80}
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-black/70" />
 
         <div className="relative z-10 max-w-4xl px-6 text-center text-white">
           <div className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur text-[10px] sm:text-xs tracking-[3px] mb-3 border border-white/30">
@@ -162,6 +165,8 @@ export default async function HomePage() {
       </div>
 
       <HowToShop />
+
+      <PasiekaGallery />
 
       <GoogleReviews
         profileUrl={GOOGLE_PROFILE_URL}

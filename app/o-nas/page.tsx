@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Leaf, Award, Heart } from "lucide-react";
 import Image from "next/image";
+import PasiekaGallery from "@/components/PasiekaGallery";
 
 export const metadata: Metadata = {
   title: "O nas – rodzinna pasieka w Topolnie nad Wisłą",
@@ -16,10 +17,12 @@ export default function ONasPage() {
       {/* Hero section with apiary photo */}
       <div className="relative h-[380px] flex items-center justify-center overflow-hidden">
         <Image 
-          src="/images/pasieka.PNG" 
-          alt="Jankesowa Pasieka - widok z ulami na tle łąk" 
-          fill 
-          className="object-cover" 
+          src="/images/pasieka/ule-lyson-hero.webp"
+          alt="Otwarte niebieskie ule Łysoń z ramkami w Jankesowej Pasiece"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          quality={80}
           priority 
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
@@ -29,7 +32,7 @@ export default function ONasPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-16 space-y-14 text-[#2F2A23]">
+      <div className="max-w-4xl mx-auto px-6 pt-16 pb-8 space-y-14 text-[#2F2A23]">
         {/* Main description - exactly as provided, warm & professional */}
         <div className="prose prose-lg max-w-none text-[15.5px] leading-relaxed text-[#2F2A23]">
           <p className="text-xl md:text-2xl leading-tight font-light text-brand-brown mb-8">
@@ -52,7 +55,11 @@ export default function ONasPage() {
             Mała skala produkcji gwarantuje, że każdy słoik trafiający do Ciebie jest pełen naturalnej mocy prosto z kujawskich terenów nadwiślańskich.
           </p>
         </div>
+      </div>
 
+      <PasiekaGallery />
+
+      <div className="max-w-4xl mx-auto px-6 pb-16 space-y-14 text-[#2F2A23]">
         {/* Values / Principles */}
         <div className="bg-white border border-brand-creamDark rounded-3xl p-9 md:p-12">
           <h3 className="font-serif text-3xl text-brand-brown mb-8 tracking-tight">Nasze zasady</h3>

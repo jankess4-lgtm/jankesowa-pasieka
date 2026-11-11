@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/useCart";
 import { firePurchaseConversion } from "@/lib/consent";
+import { GOOGLE_WRITE_REVIEW_URL } from "@/lib/google-profile";
 
 const STORAGE_KEY = "jankesowa_checkout_form";
 
@@ -513,6 +514,19 @@ function SuccessContent() {
               </div>
             </div>
           </div>
+
+          <p className="mx-8 md:mx-12 mb-6 text-center text-sm text-brand-brown/70 leading-relaxed">
+            Jeśli miód smakuje, możesz{" "}
+            <a
+              href={GOOGLE_WRITE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-brand-gold transition-colors"
+            >
+              Wystaw nam opinię
+            </a>
+            {" "}w Google. To oczywiście nieobowiązkowe — będziemy po prostu wdzięczni.
+          </p>
 
           {/* Actions */}
           <div className="px-8 md:px-12 pb-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center border-t border-brand-creamDark pt-8">

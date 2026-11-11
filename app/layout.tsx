@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import GoogleAdsScripts from "@/components/GoogleAdsScripts";
 import CookieBanner from "@/components/CookieBanner";
 import { CONSENT_STORAGE_KEY } from "@/lib/consent";
-import { organizationJsonLd } from "@/lib/structured-data";
+import { organizationJsonLd, jsonLdString } from "@/lib/structured-data";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -39,7 +39,6 @@ export const metadata: Metadata = {
     template: "%s | Jankesowa Pasieka",
   },
   description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w Topolnie i w Bydgoszczy, blisko Torunia i Świecia.",
-  alternates: { canonical: "/" },
   verification: { google: "xtNvLvCc66eNeXbXfqZvpFHdRVKvTArgEnvOWCqma-Q" },
   openGraph: {
     type: "website",
@@ -73,7 +72,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd),
+            __html: jsonLdString(organizationJsonLd),
           }}
         />
         <script

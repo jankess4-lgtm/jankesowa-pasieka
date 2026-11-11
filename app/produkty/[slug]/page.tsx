@@ -8,6 +8,8 @@ import ShippingNote from "@/components/ShippingNote";
 import BundleActions from "./BundleActions";
 import type { Metadata } from "next";
 import { productJsonLd } from "@/lib/structured-data";
+import JsonLd from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface ProductPageProps {
   params: { slug: string };
@@ -212,19 +214,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   return (
     <div className="bg-[#F5EDE4] min-h-screen py-10 md:py-14">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)) }}
-      />
+      <JsonLd data={productJsonLd(product)} />
       <div className="max-w-6xl mx-auto px-6">
-        {/* Breadcrumb */}
-        <div className="mb-8 text-sm text-brand-brown/70">
-          <Link href="/" className="hover:text-brand-gold transition-colors">Strona główna</Link>
-          {" / "}
-          <Link href="/produkty" className="hover:text-brand-gold transition-colors">Oferta</Link>
-          {" / "}
-          <span className="text-brand-brown">{product.name}</span>
-        </div>
+        <Breadcrumbs
+          items={[
+            { name: "Strona główna", href: "/" },
+            { name: "Oferta", href: "/produkty" },
+            { name: product.name, href: `/produkty/${product.slug}` },
+          ]}
+        />
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
           {/* IMAGE SECTION */}

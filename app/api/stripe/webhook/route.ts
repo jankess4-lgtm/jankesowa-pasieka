@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { decrementStock } from "@/lib/inventory";
+import { scheduleReviewRequestEmail } from "@/lib/review-request";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -64,6 +65,27 @@ export async function POST(request: NextRequest) {
 
     await sendAdminEmail(orderInfo);
     await sendAdminSMS(orderInfo);
+
+    // Prośba o opinię Google — domyślnie tylko log, bez wysyłki.
+    // Włączenie: REVIEW_REQUEST_LIVE=true (klienci) albo REVIEW_REQUEST_TEST=true
+    // (wyłącznie na jankesowa.pasieka@gmail.com). Harmonogram: +7 dni (Resend scheduledAt).
+    try {
+      const reviewEmail =
+        orderInfo.customerEmail && orderInfo.customerEmail !== "Brak"
+          ? orderInfo.customerEmail
+          : "";
+      const reviewName =
+        orderInfo.customerName && orderInfo.customerName !== "Nie podano"
+          ? orderInfo.customerName
+          : undefined;
+      await scheduleReviewRequestEmail({
+        sessionId: session.id,
+        customerEmail: reviewEmail,
+        customerName: reviewName,
+      });
+    } catch (reviewErr) {
+      console.error("Prośba o opinię nie została zaplanowana:", reviewErr);
+    }
   }
 
   return NextResponse.json({ received: true });

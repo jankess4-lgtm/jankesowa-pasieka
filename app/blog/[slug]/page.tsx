@@ -4,6 +4,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { blogPosts, getPost } from "@/lib/blog";
 import { Button } from "@/components/ui/Button";
+import { articleJsonLd } from "@/lib/structured-data";
+import JsonLd from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import RichText from "@/components/RichText";
 
 const BASE_URL = "https://jankesowapasieka.pl";
 
@@ -37,33 +41,17 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const post = getPost(params.slug);
   if (!post) notFound();
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.description,
-    image: `${BASE_URL}${post.image}`,
-    datePublished: post.date,
-    dateModified: post.date,
-    inLanguage: "pl-PL",
-    mainEntityOfPage: `${BASE_URL}/blog/${post.slug}`,
-    author: { "@type": "Person", name: "Krzysztof", worksFor: { "@type": "Organization", name: "Jankesowa Pasieka" } },
-    publisher: {
-      "@type": "Organization",
-      name: "Jankesowa Pasieka",
-      logo: { "@type": "ImageObject", url: `${BASE_URL}/logo.png` },
-    },
-  };
-
   return (
     <div className="bg-[#F5EDE4] min-h-screen py-10 md:py-14">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <JsonLd data={articleJsonLd(post)} />
       <article className="max-w-3xl mx-auto px-6">
-        <div className="mb-8 text-sm text-brand-brown/70">
-          <Link href="/" className="hover:text-brand-gold transition-colors">Strona główna</Link>
-          {" / "}
-          <Link href="/blog" className="hover:text-brand-gold transition-colors">Blog</Link>
-        </div>
+        <Breadcrumbs
+          items={[
+            { name: "Strona główna", href: "/" },
+            { name: "Blog", href: "/blog" },
+            { name: post.title, href: `/blog/${post.slug}` },
+          ]}
+        />
 
         <h1 className="font-serif text-4xl md:text-5xl leading-tight text-brand-brown tracking-[-1px] mb-4">{post.title}</h1>
         <div className="text-sm text-brand-brown/60 mb-8">
@@ -75,17 +63,17 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         <div className="text-[17px] leading-relaxed text-[#374151] space-y-5">
-          <p className="text-lg">{post.intro}</p>
+          <p className="text-lg"><RichText text={post.intro} /></p>
           {post.sections.map((section) => (
             <section key={section.heading} className="space-y-4">
               <h2 className="font-serif text-2xl md:text-3xl text-brand-brown pt-6">{section.heading}</h2>
-              {section.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
+              {section.paragraphs.map((paragraph, i) => (
+                <p key={i}><RichText text={paragraph} /></p>
               ))}
               {section.list && (
                 <ul className="list-disc pl-6 space-y-2">
-                  {section.list.map((li, i) => (
-                    <li key={i}>{li}</li>
+                  {section.list.map((item, i) => (
+                    <li key={i}><RichText text={item} /></li>
                   ))}
                 </ul>
               )}

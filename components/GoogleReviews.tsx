@@ -138,7 +138,7 @@ export default function GoogleReviews({
         </a>
         <a href={reviewUrl} target="_blank" rel="noopener noreferrer">
           <Button size="lg" className="w-full sm:w-auto">
-            Zostaw opinię w Google
+            Wystaw nam opinię
           </Button>
         </a>
       </div>

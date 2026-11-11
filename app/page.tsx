@@ -10,15 +10,19 @@ import HowToShop from "@/components/HowToShop";
 import PasiekaGallery from "@/components/PasiekaGallery";
 import GoogleReviews from "@/components/GoogleReviews";
 import { getGoogleReviews } from "@/lib/google-reviews";
+import { GOOGLE_WRITE_REVIEW_URL, GOOGLE_PROFILE_URL } from "@/lib/google-profile";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /** Refresh homepage (and Places reviews) at most once per day when API is configured. */
 export const revalidate = 86400;
 
 const featuredProducts = getHomepageFeaturedProducts();
 
-const GOOGLE_PROFILE_URL =
-  "https://www.google.com/search?q=Jankesowa+Pasieka&ludocid=18042859571763100062";
-const GOOGLE_REVIEW_URL = "https://g.page/r/CZ45MnMvHWX6EBM/review";
+const GOOGLE_REVIEW_URL = GOOGLE_WRITE_REVIEW_URL;
 
 const benefits = [
   {

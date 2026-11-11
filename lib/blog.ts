@@ -18,6 +18,90 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "miod-na-prezent-swiateczny-jak-wybrac",
+    title: "Miód na prezent świąteczny – jak wybrać",
+    description:
+      "Jak wybrać miód na prezent na święta: odmiany z pasieki na Kujawach, gotowe zestawy i praktyczne wskazówki. Miód naturalny z okolic Bydgoszczy i Torunia, z wysyłką w całej Polsce.",
+    date: "2026-11-11",
+    image: "/images/pasieka/ramka-miod-hero.webp",
+    imageAlt: "Ramka z zasklepionym miodem z Jankesowej Pasieki w Topolnie – inspiracja na prezent świąteczny",
+    intro:
+      "Święta to czas, w którym chcemy wręczyć coś prostego i szczerego. Dobrze wybrany słoik miodu spełnia tę rolę lepiej niż niejedna ozdobna rzecz, która po kilku dniach ląduje w szafce. Miód z małej pasieki ma smak, historię i praktyczne zastosowanie przy stole – od śniadania po herbatę wieczorem. W tym tekście podpowiadam, jak wybrać miód na prezent świąteczny, żeby trafić w gust obdarowanej osoby. Piszę z perspektywy pszczelarza z Topolna, z pasieki na Kujawach, skąd wysyłamy miód naturalny do Bydgoszczy, Torunia i okolic, a także w całą Polskę.",
+    sections: [
+      {
+        heading: "Dlaczego miód dobrze sprawdza się jako prezent na święta",
+        paragraphs: [
+          "Prezent na święta nie musi być drogi ani skomplikowany. Ma być przemyślany. Miód naturalny z niewielkiej pasieki różni się od tego, co często stoi na sklepowej półce: pochodzi z konkretnego miejsca i sezonu, nie jest pasteryzowany, a na etykiecie jasno widać, kto go odwirował.",
+          "Taki słoik łatwo wkomponować w świąteczny stół. Można go postawić obok piernika, dodać do herbaty albo zostawić na później – miód, odpowiednio przechowywany, długo zachowuje swoje walory. Dla osób, które już „wszystko mają”, to prezent, z którego naprawdę korzystają.",
+          "Ważne jest też opakowanie, które już jest: szklany słoik, czytelna etykieta i ewentualnie zestaw dwóch albo trzech odmian. Nie trzeba kombinować z wielkim pakowaniem. Wystarczy wstążka, kartka z życzeniami i tyle.",
+        ],
+      },
+      {
+        heading: "Miód z Kujaw – co oznacza „z naszej pasieki”",
+        paragraphs: [
+          "Nasze ule stoją w Topolnie, w gminie Pruszcz, na Kujawach nad Wisłą. To krajobraz pól, łąk i zadrzewień, z których pszczoły zbierają nektar. Miód z Kujaw, który trafia do słoików w Jankesowej Pasiece, powstaje tu, na miejscu: od wirowania po nalewanie.",
+          "Kiedy ktoś szuka miodu naturalnego w Bydgoszczy, Toruniu i okolicach, często chce po prostu wiedzieć, skąd pochodzi to, co stawia na stole. W naszym sklepie nie pośredniczymy w sprzedaży cudzych partii. Opisuję odmiany tak, jak je znam z kolejnych pożytków. Jeśli którejś już nie ma – jak lipowego czy nawłociowego w tej chwili – mówię o tym wprost i wracam do niej, gdy pszczoły znów dadzą taki zbiór.",
+          "To uczciwe założenie na prezent: obdarowana osoba dostaje konkretny miód z konkretnego sezonu, a nie uniwersalny produkt „miodopodobny”.",
+        ],
+      },
+      {
+        heading: "Jak dobrać odmianę do osoby, którą chcesz obdarować",
+        paragraphs: [
+          "Wybór odmiany to najważniejsza część decyzji. Nie ma jednej „najlepszej” – jest ta, która pasuje do smaku i sposobu, w jaki ktoś jada miód.",
+          "Miód akacjowy jest jasny, delikatny i długo pozostaje płynny. To dobry wybór dla osób, które nie lubią intensywnego aromatu i chętnie słodzą nim herbatę albo naleśniki. Mamy go w [słoiku 900 ml](/produkty/miod-akacjowy-900ml) oraz w [mniejszym, 350 ml](/produkty/miod-akacjowy-350ml) – ten drugi wygodnie włożyć do koszyka prezentowego albo wręczyć samodzielnie, gdy chce się zostawić miejsce na coś jeszcze.",
+          "Miód wielokwiatowy jest bardziej codzienny i uniwersalny. Jego smak zależy od tego, co w danym momencie kwitło na naszych pożytkach, dlatego każdy sezon ma trochę inny charakter. Osobie, która lubi klasyczny miód do kanapek, owsianki i wypieków, chętnie polecam [duży słoik wielokwiatowego](/produkty/miod-wielokwiatowy-900ml).",
+          "Miód rzepakowo-mniszkowy szybko krystalizuje i nabiera kremowej, łatwej do smarowania konsystencji. To nie wada, tylko cecha tych pożytków. Jeśli obdarowujesz kogoś, kto jada miód głównie na pieczywie, ta odmiana często wypada lepiej niż bardzo płynny miód. Dostępny jest w [słoiku 900 ml](/produkty/miod-rzepakowo-mniszkowy-900ml) i w [wersji 350 ml](/produkty/miod-rzepakowo-mniszkowy-350ml).",
+          "Przy wyborze warto też pomyśleć o wielkości słoika. 900 ml to solidny zapas na kilka miesięcy w domu, w którym miód naprawdę się je. 350 ml jest lżejszym gestem – na przykład do biura, dla sąsiada albo jako dodatek do większego prezentu.",
+        ],
+      },
+      {
+        heading: "Zestawy – gdy nie chcesz stawiać na jedną odmianę",
+        paragraphs: [
+          "Najwygodniejszym prezentem na święta jest często zestaw. Zamiast zgadywać, czy ktoś woli akację, czy wielokwiatowy, można dać kilka mniejszych albo dwa duże słoiki i pozwolić, żeby domownicy porównali smaki przy wspólnym stole.",
+          "[Zestaw dwóch słoików 900 ml](/produkty/zestaw-2-sloikow-miodu-900ml) (110 zł) to wyraźny, rodzinny prezent: dużo miodu, dwie odmiany, łatwo postawić pod choinką. [Zestaw trzech małych słoików 350 ml](/produkty/zestaw-3-malych-sloikow-miodu-350ml) (80 zł) jest z kolei zręczny, gdy chcesz pokazać różnorodność bez dużego słoika. Taki komplet dobrze wygląda w koszyku i nie wymaga dodatkowego tłumaczenia – etykiety mówią, co jest w środku.",
+          "W sklepie zestaw kompletujesz z dostępnych odmian. Jeśli któregoś miodu chwilowo nie ma, wybierzesz spośród tych, które właśnie są w magazynie. To proste i uczciwe: prezent jedzie taki, jaki naprawdę mamy w pasiece, a nie na zamówienie z hurtowni.",
+        ],
+      },
+      {
+        heading: "Na co zwrócić uwagę przed zamówieniem",
+        paragraphs: [
+          "Kilka praktycznych rzeczy, o których warto pamiętać, zanim miód trafi pod choinkę.",
+          "Po pierwsze, czas dostawy. Wysyłamy w ciągu 1–3 dni roboczych, do Paczkomatu InPost (14 zł) albo kurierem (16 zł). Przy zamówieniach świątecznych lepiej nie zostawiać tego na ostatnią chwilę – grudzień bywa intensywny zarówno w poczcie, jak i u przewoźników. Aktualne koszty i terminy zawsze widać w koszyku przed płatnością.",
+          "Po drugie, odbiór osobisty. Miód można odebrać w pasiece w Topolnie (po umówieniu) albo, również po wcześniejszym kontakcie, w Bydgoszczy. To wygodne, jeśli prezent ma trafić do kogoś z Bydgoszczy, Torunia albo ze Świecia i chcesz uniknąć przesyłki.",
+          "Po trzecie, krystalizacja. Miód naturalny z czasem gęstnieje – jedne odmiany szybciej, inne wolniej. To naturalny proces, nie oznaka zepsucia. Jeśli chcesz, żeby słoik w dniu wręczenia był bardziej płynny, akacja zwykle dłużej taka pozostaje. Rzepakowo-mniszkowy raczej będzie już kremowy, i właśnie tak go lubi wiele osób.",
+          "Po czwarte, przechowywanie. Wystarczy suche, zacienione miejsce, bez silnych zapachów w pobliżu. Nie trzeba trzymać miodu w lodówce. Przy okazji wręczenia można dopisać na kartce tę jedną wskazówkę – bywa przydatna, zwłaszcza gdy obdarowujesz kogoś, kto bierze miód rzadziej.",
+          "I jeszcze jedna, ważna sprawa: miodu nie podajemy niemowlętom poniżej 1. roku życia. Jeśli prezent ma trafić do rodziny z małym dzieckiem, warto o tym wspomnieć. Starsze dzieci i dorośli mogą spokojnie korzystać z miodu przy stole.",
+        ],
+      },
+      {
+        heading: "Krótka lista, która ułatwia decyzję",
+        paragraphs: [
+          "Na koniec kilka prostych podpowiedzi, gdy wciąż się wahasz.",
+        ],
+        list: [
+          "Lubi delikatny, jasny miód do herbaty? Zacznij od akacjowego.",
+          "Jada miód codziennie, do pieczywa i owsianki? Wielokwiatowy albo rzepakowo-mniszkowy będą trafione.",
+          "Nie wiesz, którą odmianę wybrać? Weź [zestaw](/produkty/zestaw-3-malych-sloikow-miodu-350ml) – to najbezpieczniejszy prezent na święta.",
+          "Szukasz mniejszego gestu? Słoik 350 ml albo trzy małe w komplecie.",
+          "Chcesz wesprzeć lokalną pasiekę i dać miód z Kujaw, a nie anonimowy słoik z półki? Zamówienie w naszym sklepie właśnie to robi.",
+        ],
+      },
+      {
+        heading: "Zamówienie na czas świąt",
+        paragraphs: [
+          "Miód naturalny z okolic Bydgoszczy i Torunia, pozyskany w Topolnie, to prezent, który nie wymaga wielkich słów. Wystarczy dobry słoik, chwila na wybór odmiany i wysyłka albo odbiór na czas. Jeśli wahasz się między dwoma wariantami, napisz albo zadzwoń – chętnie podpowiem, co aktualnie mamy i co lepiej sprawdzi się u konkretnej osoby.",
+        ],
+      },
+    ],
+    cta: {
+      text: "Zobacz miody i zestawy na prezent świąteczny w sklepie Jankesowej Pasieki. Wysyłka w całej Polsce, odbiór w Topolnie i po umówieniu w Bydgoszczy.",
+      links: [
+        { href: "/produkty", label: "Zobacz wszystkie miody i zestawy" },
+        { href: "/kontakt", label: "Kontakt i odbiór osobisty" },
+      ],
+    },
+  },
+  {
     slug: "ostatnie-sloiki-miodu-z-sezonu-2026",
     title: "Ostatnie słoiki tegorocznego miodu – dlaczego warto zrobić zapas teraz",
     description:

@@ -9,6 +9,16 @@ export const metadata: Metadata = {
   title: "O nas – rodzinna pasieka w Topolnie nad Wisłą",
   description: "Poznaj Jankesową Pasiekę: rodzinna pasieka w Topolnie na Kujawach, między Świeciem a Toruniem. Miód wirowany na zimno, bez pasteryzacji, prosto z pasieki.",
   alternates: { canonical: "/o-nas" },
+  openGraph: {
+    images: [
+      {
+        url: "/images/pasieka/ule-lyson-hero.webp",
+        width: 1600,
+        height: 900,
+        alt: "Ule Jankesowej Pasieki w Topolnie",
+      },
+    ],
+  },
 };
 
 export default function ONasPage() {

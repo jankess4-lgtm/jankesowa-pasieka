@@ -213,7 +213,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const nextProduct = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
 
   return (
-    <div className="bg-[#F5EDE4] min-h-screen py-10 md:py-14">
+    <div className="bg-[#F5EDE4] min-h-screen pt-10 pb-28 md:py-14">
       <JsonLd data={productJsonLd(product)} />
       <div className="max-w-6xl mx-auto px-6">
         <Breadcrumbs
@@ -227,7 +227,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
           {/* IMAGE SECTION */}
           <div className="space-y-4">
-            <div className="relative aspect-[4/3.6] lg:aspect-square rounded-3xl overflow-hidden bg-white border border-brand-creamDark shadow-sm">
+            <div className="relative h-[220px] w-full sm:h-auto sm:aspect-[4/3.6] lg:aspect-square rounded-3xl overflow-hidden bg-white border border-brand-creamDark shadow-sm">
               {isAvailable ? (
                 <Image
                   src={product.image}
@@ -262,7 +262,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           {/* Info section */}
           <div className="space-y-6 lg:pt-2">
             <div>
-              <h1 className="font-serif text-[42px] md:text-[48px] leading-none text-brand-brown tracking-[-1.2px] mb-3">
+              <h1 className="font-serif text-[32px] sm:text-[42px] md:text-[48px] leading-none text-brand-brown tracking-[-1.2px] mb-3">
                 {product.name}
               </h1>
               <div className="flex items-baseline gap-2">
@@ -278,6 +278,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Produkt z naszej pasieki</span>
               <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Niepasteryzowany</span>
               <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Szklane opakowanie</span>
+            </div>
+
+            {/* Actions first so add-to-cart is close to the price on a phone */}
+            <div className="pt-1 space-y-4">
+              {product.category === "zestawy" ? (
+                <BundleActions bundleId={product.id} />
+              ) : (
+                <ProductActions product={product} isAvailable={isAvailable} />
+              )}
+              <ShippingNote />
             </div>
 
             {/* Rich description */}
@@ -303,16 +313,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   </tbody>
                 </table>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="pt-3 space-y-4">
-              {product.category === "zestawy" ? (
-                <BundleActions bundleId={product.id} />
-              ) : (
-                <ProductActions product={product} isAvailable={isAvailable} />
-              )}
-              <ShippingNote />
             </div>
           </div>
         </div>

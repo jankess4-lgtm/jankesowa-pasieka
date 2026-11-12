@@ -63,6 +63,13 @@ export default function BundleActions({ bundleId }: { bundleId: number }) {
       <p className="text-[11px] text-center text-brand-brown/60">
         Możesz wybrać {cfg.count === 2 ? "dwa takie same miody" : "kilka takich samych miodów"}. Wysyłka kosztuje tyle samo co za jeden słoik.
       </p>
+
+      <div className="lg:hidden fixed inset-x-0 bottom-0 z-30 border-t border-brand-brown/15 bg-[#F5EDE4]/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-6px_20px_rgba(60,40,20,0.10)]">
+        <Button onClick={handleAdd} className="w-full max-w-lg mx-auto py-3 gap-2">
+          <ShoppingCart className="w-4 h-4" />
+          Dodaj zestaw – {cfg.price} zł
+        </Button>
+      </div>
     </div>
   );
 }

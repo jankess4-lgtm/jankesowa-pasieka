@@ -453,7 +453,7 @@ export default function KoszykPage() {
   }
 
   return (
-    <div className="bg-[#F5EDE4] min-h-screen pb-20">
+    <div className="bg-[#F5EDE4] min-h-screen pb-32 lg:pb-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-10">
           <Link
@@ -965,6 +965,23 @@ export default function KoszykPage() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="lg:hidden fixed inset-x-0 bottom-0 z-30 border-t border-brand-brown/15 bg-white/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-6px_20px_rgba(60,40,20,0.10)]">
+        <div className="flex items-center gap-3 max-w-lg mx-auto">
+          <div className="min-w-0">
+            <div className="text-[11px] text-brand-brown/60">Do zapłaty</div>
+            <div className="text-lg font-semibold tabular-nums text-brand-brown leading-tight">{grandTotal} zł</div>
+          </div>
+          <Button
+            onClick={handleCheckout}
+            className="flex-1 py-3 text-base gap-2"
+            disabled={isSubmitting}
+          >
+            <CreditCard className="w-4 h-4" />
+            {isSubmitting ? "Przekierowanie..." : `Zapłać ${grandTotal} zł`}
+          </Button>
         </div>
       </div>
     </div>

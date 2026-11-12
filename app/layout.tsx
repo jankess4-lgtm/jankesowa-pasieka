@@ -110,7 +110,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
-        <Toaster position="top-center" richColors closeButton />
+        <Toaster position="top-center" richColors closeButton offset={120} mobileOffset={120} />
         <Analytics />
         <CookieBanner />
       </body>

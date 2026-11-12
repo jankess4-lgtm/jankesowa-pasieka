@@ -485,7 +485,7 @@ function SuccessContent() {
                       )}
                       {deliveryMethod === "pickup" && (
                         <div className="text-sm text-brand-brown/75 mt-0.5">
-                          Pasieka Jankesowa • Topolno nad Wisłą
+                          Topolno, Bydgoszcz (ul. Jagiellońska, koło hotelu City) lub Świecie – po umówieniu
                         </div>
                       )}
                     </div>

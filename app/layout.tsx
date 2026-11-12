@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     default: "Jankesowa Pasieka – miód prosto z pasieki | Toruń, Bydgoszcz, Świecie",
     template: "%s | Jankesowa Pasieka",
   },
-  description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w Topolnie i w Bydgoszczy, blisko Torunia i Świecia.",
+  description: "Naturalny miód prosto z pasieki w Topolnie (gm. Pruszcz) na Kujawach: miód akacjowy, wielokwiatowy, rzepakowo-mniszkowy i plastry miodu. Bez pasteryzacji. Wysyłka w całej Polsce, odbiór osobisty w Topolnie, w Bydgoszczy i w Świeciu.",
   verification: { google: "xtNvLvCc66eNeXbXfqZvpFHdRVKvTArgEnvOWCqma-Q" },
   openGraph: {
     type: "website",

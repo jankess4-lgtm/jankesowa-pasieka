@@ -813,12 +813,12 @@ export default function KoszykPage() {
                     transition={{ duration: 0.2 }}
                   >
                     <div className="bg-brand-cream/60 border border-brand-creamDark rounded-2xl p-6 space-y-5">
-                      <h3 className="font-medium text-lg text-brand-brown">Odbiór w pasiece</h3>
+                      <h3 className="font-medium text-lg text-brand-brown">Odbiór osobisty w Topolnie, Bydgoszczy lub Świeciu</h3>
 
                       <div className="flex gap-4">
                         <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="font-medium text-brand-brown">Jankesowa Pasieka</div>
+                          <div className="font-medium text-brand-brown">Pasieka w Topolnie</div>
                           <div className="text-brand-brown/80">Topolno 45</div>
                           <div className="text-brand-brown/70">86-120 Pruszcz</div>
                           <div className="text-brand-brown/70">Kujawy nadwiślańskie</div>
@@ -828,14 +828,36 @@ export default function KoszykPage() {
                       <div className="flex gap-4">
                         <Clock className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="font-medium text-brand-brown">Godziny odbioru</div>
+                          <div className="font-medium text-brand-brown">Godziny odbioru w pasiece</div>
                           <div className="text-brand-brown/80">Poniedziałek – Piątek: 16:00 – 20:00, Sobota: 8:00 – 13:00, Niedziela: nieczynne</div>
                           <div className="text-sm text-brand-brown/60 mt-1">
-                            Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu. Odbiór w Bydgoszczy w dni robocze po 15:00, po wcześniejszym telefonie (+48 514 070 298).
+                            Wizyta w pasiece tylko po wcześniejszym uzgodnieniu terminu.
                           </div>
-                          <PromoSwiecie className="mt-2" />
                         </div>
                       </div>
+
+                      <div className="flex gap-4">
+                        <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="font-medium text-brand-brown">Bydgoszcz</div>
+                          <div className="text-brand-brown/80">ul. Jagiellońska (koło hotelu City)</div>
+                          <div className="text-sm text-brand-brown/60 mt-1">
+                            W dni robocze po 15:00, po wcześniejszym telefonie: +48 514 070 298.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <MapPin className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="font-medium text-brand-brown">Świecie</div>
+                          <div className="text-sm text-brand-brown/60 mt-1">
+                            Zawsze po wcześniejszym umówieniu telefonem: +48 514 070 298.
+                          </div>
+                        </div>
+                      </div>
+
+                      <PromoSwiecie />
 
                       <div className="flex gap-4">
                         <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />

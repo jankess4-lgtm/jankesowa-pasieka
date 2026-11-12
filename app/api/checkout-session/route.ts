@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     if (deliveryMethod === "parcel") {
       deliverySummary = meta.parcel_locker || "Paczkomat InPost";
     } else if (deliveryMethod === "pickup") {
-      deliverySummary = meta.pickup_location || "Odbiór osobisty w pasiece";
+      deliverySummary = meta.pickup_location || "Odbiór osobisty (Topolno, Bydgoszcz lub Świecie)";
     } else {
       deliverySummary = [meta.shipping_street, meta.shipping_postal_code, meta.shipping_city]
         .filter(Boolean)

@@ -18,7 +18,7 @@ export const organizationJsonLd = {
   name: "Jankesowa Pasieka",
   legalName: "Jankesowa Pasieka",
   description:
-    "Rodzinna pasieka w Topolnie na Kujawach. Naturalny miód: akacjowy, wielokwiatowy, rzepakowo-mniszkowy. Wysyłka w całej Polsce, odbiór w Topolnie i Bydgoszczy.",
+    "Rodzinna pasieka w Topolnie na Kujawach. Naturalny miód: akacjowy, wielokwiatowy, rzepakowo-mniszkowy. Wysyłka w całej Polsce, odbiór w Topolnie, Bydgoszczy i Świeciu.",
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   image: [`${SITE_URL}/logo.png`, `${SITE_URL}/og-image.jpg`, ...pasiekaImageUrls],

@@ -85,8 +85,9 @@ export default function KontaktPage() {
                   <Phone className="w-5 h-5 text-brand-gold mt-0.5 flex-shrink-0" />
                   <div>
                     <div>+48 514 070 298</div>
-                    <div className="text-xs text-brand-brown/60">Poniedziałek – Piątek: 16:00 – 20:00, Sobota: 8:00 – 13:00, Niedziela: nieczynne</div>
-                    <div className="text-xs text-brand-brown/60">Odbiór w Bydgoszczy w dni robocze po 15:00, po wcześniejszym telefonie (+48 514 070 298)</div>
+                    <div className="text-xs text-brand-brown/60">Pasieka w Topolnie: poniedziałek – piątek 16:00 – 20:00, sobota 8:00 – 13:00, niedziela nieczynne</div>
+                    <div className="text-xs text-brand-brown/60">Odbiór w Bydgoszczy: ul. Jagiellońska (koło hotelu City), w dni robocze po 15:00, po wcześniejszym telefonie</div>
+                    <div className="text-xs text-brand-brown/60">Odbiór w Świeciu: zawsze po wcześniejszym umówieniu</div>
                   </div>
                 </a>
                 <a href="mailto:kontakt@jankesowapasieka.pl" className="flex gap-4 group hover:text-brand-gold transition">

@@ -152,7 +152,7 @@ function getProductDetails(product: Product): ProductDetails {
       specs: [
         { label: "W zestawie", value: "3 słoiki 350 ml (0,49 kg) – rodzaje wybierasz sam" },
         { label: "Cena", value: "80 zł zamiast 90 zł – oszczędzasz 10 zł" },
-        { label: "Wysyłka", value: "Tyle samo co za jeden słoik" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 110 zł darmowa" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Ładny pomysł na prezent i okazja, żeby spróbować kilku miodów.",
@@ -165,7 +165,7 @@ function getProductDetails(product: Product): ProductDetails {
       specs: [
         { label: "W zestawie", value: "2 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
         { label: "Cena", value: "110 zł za dwa duże słoiki do wyboru" },
-        { label: "Wysyłka", value: "Tyle samo co za jeden słoik" },
+        { label: "Wysyłka", value: "Darmowa – zestaw osiąga próg 110 zł" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Więcej miodu w lepszej cenie – idealny zapas na zimę albo prezent.",

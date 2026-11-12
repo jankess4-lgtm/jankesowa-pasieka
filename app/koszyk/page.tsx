@@ -23,6 +23,13 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/useCart";
 import { packagesForCart, PACKING_NOTE } from "@/lib/products";
+import {
+  SHIPPING_PARCEL,
+  SHIPPING_COURIER,
+  shippingTotal,
+  qualifiesForFreeShipping,
+  freeShippingMessage,
+} from "@/lib/shipping";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
 import { loadPaczkomaty, normalizeText, Paczkomat } from "@/lib/paczkomaty";
 
@@ -257,12 +264,6 @@ function validateParcelFields(customer: FormData, errors: FormErrors): void {
   }
 }
 
-function getShippingCost(method: FormData["deliveryMethod"]): number {
-  if (method === "address") return 16;
-  if (method === "parcel") return 14;
-  return 0;
-}
-
 function inputClass(hasError?: boolean): string {
   return `w-full px-4 py-3 border rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold/30 ${
     hasError ? "border-red-400 bg-red-50/50" : "border-gray-300 bg-white"
@@ -344,8 +345,9 @@ export default function KoszykPage() {
 
   const requiresContact = needsContactValidation(customer.deliveryMethod);
   const packages = packagesForCart(items);
-  const shippingCost = getShippingCost(customer.deliveryMethod) * packages;
+  const shippingCost = shippingTotal(customer.deliveryMethod, totalPrice, packages);
   const grandTotal = totalPrice + shippingCost;
+  const freeShipping = qualifiesForFreeShipping(totalPrice);
 
   const { results: filteredPaczkomaty, totalMatches: totalMatchCount } = useMemo(
     () => searchPaczkomaty(paczkomatyList, debouncedSearch),
@@ -475,8 +477,8 @@ export default function KoszykPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { id: "parcel" as const, label: "Paczkomat", icon: Package, cost: "14 zł" },
-                  { id: "address" as const, label: "Kurier", icon: Truck, cost: "16 zł" },
+                  { id: "parcel" as const, label: "Paczkomat", icon: Package, cost: freeShipping ? "0 zł" : `${SHIPPING_PARCEL} zł` },
+                  { id: "address" as const, label: "Kurier", icon: Truck, cost: freeShipping ? "0 zł" : `${SHIPPING_COURIER} zł` },
                   { id: "pickup" as const, label: "Odbiór osobisty", icon: User, cost: "0 zł" },
                 ].map(({ id, label, icon: Icon, cost }) => (
                   <button
@@ -939,6 +941,9 @@ export default function KoszykPage() {
                     {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
                   </span>
                 </div>
+                <p className={`text-xs leading-snug ${freeShipping ? "text-brand-green font-medium" : "text-brand-brown/70"}`}>
+                  {freeShippingMessage(totalPrice)}
+                </p>
                 {customer.deliveryMethod !== "pickup" && (
                   <p className="text-xs text-brand-brown/60 leading-snug">{PACKING_NOTE}</p>
                 )}

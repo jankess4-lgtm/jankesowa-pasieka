@@ -287,7 +287,7 @@ export function getBundleVarieties(): Product[] {
 export const PACKAGE_UNITS = 8;
 export const PACKAGE_MAX_SMALL = 6;
 export const PACKING_NOTE =
-  "Dla bezpieczeństwa słoików pakujemy maks. 4 duże (1,2 kg) albo 6 małych słoików w jednej paczce (1 duży = 2 małe). Większe zamówienie wyślemy w kilku paczkach – koszt dostawy liczony jest za każdą paczkę.";
+  "Dla bezpieczeństwa słoików pakujemy maks. 4 duże (1,2 kg) albo 6 małych słoików w jednej paczce (1 duży = 2 małe). Większe zamówienie wyślemy w kilku paczkach. Poniżej 110 zł wartości produktów koszt dostawy liczony jest za każdą paczkę; od 110 zł wysyłka jest darmowa.";
 
 /** Ile paczek potrzeba dla podanej liczby dużych i małych słoików oraz innych produktów */
 export function packagesNeeded(large: number, small: number, other = 0): number {

@@ -9,7 +9,7 @@ const steps = [
   {
     icon: Truck,
     title: "Wybierz sposób dostawy",
-    desc: "W koszyku wybierz paczkomat InPost (14 zł), kuriera (16 zł) albo odbiór osobisty w pasiece lub w Bydgoszczy po uzgodnieniu.",
+    desc: "W koszyku wybierz paczkomat InPost (14 zł), kuriera (16 zł) albo odbiór osobisty w pasiece lub w Bydgoszczy po uzgodnieniu. Od 110 zł wartości produktów wysyłka jest darmowa.",
   },
   {
     icon: CreditCard,

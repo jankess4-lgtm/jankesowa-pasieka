@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
+import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -111,10 +112,17 @@ export async function POST(request: NextRequest) {
     }
     const packages = Math.max(packagesNeeded(largeJars, smallJars, otherUnits), 1);
 
-    // Prepare shipping
+    const productsSubtotal = lineItems.reduce((sum, item) => {
+      const unit = item.price_data?.unit_amount ?? 0;
+      const qty = item.quantity ?? 1;
+      return sum + (unit * qty) / 100;
+    }, 0);
+
+    // Prepare shipping – prices from the catalog, free from 110 zł products subtotal
     const deliveryMeta: Record<string, string> = {};
     let shippingCost = 0;
     let shippingName = "";
+    const method = (customer?.deliveryMethod || "") as DeliveryMethod | "";
 
     if (customer) {
       deliveryMeta.customer_name = customer.fullName || "";
@@ -122,24 +130,29 @@ export async function POST(request: NextRequest) {
       deliveryMeta.customer_email = customer.email || "";
       deliveryMeta.delivery_method = customer.deliveryMethod || "";
 
-      if (customer.deliveryMethod === "address") {
+      if (method === "address") {
         deliveryMeta.shipping_street = customer.street || "";
         deliveryMeta.shipping_postal_code = customer.postalCode || "";
         deliveryMeta.shipping_city = customer.city || "";
-        shippingCost = 16;
-        shippingName = "Dostawa kurierem na adres";
-      } else if (customer.deliveryMethod === "parcel") {
+        shippingName = qualifiesForFreeShipping(productsSubtotal)
+          ? "Dostawa kurierem na adres (darmowa wysyłka)"
+          : "Dostawa kurierem na adres";
+      } else if (method === "parcel") {
         const lockerStr = customer.parcelLocker || "";
         deliveryMeta.parcel_locker = lockerStr;
-        shippingCost = 14;
-        shippingName = "Dostawa do Paczkomatu InPost";
-      } else if (customer.deliveryMethod === "pickup") {
-        shippingCost = 0;
+        shippingName = qualifiesForFreeShipping(productsSubtotal)
+          ? "Dostawa do Paczkomatu InPost (darmowa wysyłka)"
+          : "Dostawa do Paczkomatu InPost";
+      } else if (method === "pickup") {
         shippingName = "Odbiór osobisty";
+      }
+
+      if (method === "address" || method === "parcel" || method === "pickup") {
+        shippingCost = shippingUnitCost(method, productsSubtotal);
       }
     }
 
-    // Add shipping as line item
+    // Add shipping as line item only when there is a charge
     if (shippingCost > 0 && shippingName) {
       lineItems.push({
         price_data: {
@@ -156,6 +169,9 @@ export async function POST(request: NextRequest) {
     }
     deliveryMeta.packages = String(packages);
     deliveryMeta.stock = JSON.stringify(stockUsed);
+    deliveryMeta.products_subtotal = String(productsSubtotal);
+    deliveryMeta.shipping_cost = String(shippingCost > 0 ? shippingCost * packages : 0);
+    deliveryMeta.free_shipping = qualifiesForFreeShipping(productsSubtotal) ? "1" : "0";
 
     console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 

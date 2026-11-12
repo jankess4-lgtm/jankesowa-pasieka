@@ -11,13 +11,13 @@ export default function ShippingNote({
     >
       <p className={compact ? "leading-snug" : "leading-relaxed"}>
         <span className="font-medium">Dostawa:</span> paczkomat 14 zł · kurier 16 zł ·
-        odbiór osobisty 0 zł
+        odbiór osobisty 0 zł. <span className="font-medium">Darmowa wysyłka od 110 zł</span> wartości produktów.
       </p>
       {!compact && (
         <p className="mt-1.5 text-xs text-brand-brown/70 leading-relaxed">
-          W zestawie dwóch dużych słoików (110 zł) albo trzech małych (80 zł) wysyłka
-          kosztuje tyle samo co za jeden słoik — to zwykle korzystniejszy zakup niż
-          pojedynczy słoik z dostawą.
+          W zestawie dwóch dużych słoików (110 zł) wysyłka jest już darmowa. W zestawie
+          trzech małych (80 zł) wysyłka kosztuje tyle samo co za jeden słoik — do darmowej
+          brakuje wtedy 30 zł.
         </p>
       )}
     </div>

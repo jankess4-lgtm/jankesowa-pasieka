@@ -8,6 +8,7 @@ import { Button } from "./ui/Button";
 import { toast } from "sonner";
 import Image from "next/image";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
+import { freeShippingMessage, qualifiesForFreeShipping, SHIPPING_PARCEL, SHIPPING_COURIER } from "@/lib/shipping";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -164,8 +165,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
 
                   <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80 leading-relaxed">
-                    Dostawa doliczana przy finalizacji: paczkomat 14 zł, kurier 16 zł,
-                    odbiór osobisty 0 zł. W zestawie wysyłka kosztuje tyle samo co za jeden słoik.
+                    <p>
+                      Dostawa: paczkomat {SHIPPING_PARCEL} zł, kurier {SHIPPING_COURIER} zł,
+                      odbiór osobisty 0 zł. Od 110 zł wartości produktów wysyłka jest darmowa.
+                    </p>
+                    <p className={`mt-1.5 ${qualifiesForFreeShipping(totalPrice) ? "font-medium text-brand-green" : "font-medium text-brand-brown"}`}>
+                      {freeShippingMessage(totalPrice)}
+                    </p>
                   </div>
 
                   <Button

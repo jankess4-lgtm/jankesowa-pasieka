@@ -5,7 +5,7 @@ export default function AnnouncementBar() {
       role="region"
       aria-label="Informacje o wysyłce"
     >
-      Wysyłka w ciągu 1–3 dni roboczych · Paczkomat 14 zł · Kurier 16 zł
+      Wysyłka w ciągu 1–3 dni roboczych · Paczkomat 14 zł · Kurier 16 zł · Darmowa od 110 zł
     </div>
   );
 }

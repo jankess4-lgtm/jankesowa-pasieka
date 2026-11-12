@@ -136,7 +136,8 @@ function SuccessContent() {
       .filter(
         (item) =>
           !item.description?.toLowerCase().includes("dostawa") &&
-          !item.description?.toLowerCase().includes("paczkomat")
+          !item.description?.toLowerCase().includes("paczkomat") &&
+          !item.description?.toLowerCase().includes("niemiec")
       )
       .map((item) => {
         const qty = item.quantity && item.quantity > 0 ? item.quantity : 1;
@@ -170,7 +171,8 @@ function SuccessContent() {
   // Separate products from shipping line items (shipping added as separate line in Stripe)
   const productLineItems = allLineItems.filter(item => 
     !item.description?.toLowerCase().includes('dostawa') && 
-    !item.description?.toLowerCase().includes('paczkomat')
+    !item.description?.toLowerCase().includes('paczkomat') &&
+    !item.description?.toLowerCase().includes('niemiec')
   );
   // Ceny produktów przed rabatem; rabat pokazujemy osobną linią
   const productsTotalCents = productLineItems.reduce((sum, item) => sum + (item.amount_subtotal ?? item.amount_total ?? 0), 0);
@@ -188,6 +190,7 @@ function SuccessContent() {
   const getDeliveryLabel = () => {
     if (deliveryMethod === "parcel") return "Paczkomat InPost";
     if (deliveryMethod === "pickup") return "Odbiór osobisty";
+    if (deliveryMethod === "germany") return "Wysyłka do Niemiec (DHL)";
     return "Dostawa kurierem";
   };
 
@@ -483,6 +486,11 @@ function SuccessContent() {
                           {sessionData.deliverySummary}
                         </div>
                       )}
+                      {deliveryMethod === "germany" && sessionData.deliverySummary && (
+                        <div className="text-sm text-brand-brown/75 mt-0.5">
+                          {sessionData.deliverySummary}
+                        </div>
+                      )}
                       {deliveryMethod === "pickup" && (
                         <div className="text-sm text-brand-brown/75 mt-0.5">
                           Topolno, Bydgoszcz (ul. Jagiellońska, koło hotelu City) lub Świecie – po umówieniu
@@ -518,7 +526,11 @@ function SuccessContent() {
                 <Clock className="w-5 h-5 text-brand-brown" />
               </div>
               <div className="text-[15px] text-brand-brown/85 leading-relaxed">
-                <p className="font-medium text-brand-brown mb-1">Twoje miody zostaną wysłane w ciągu 1–3 dni roboczych.</p>
+                <p className="font-medium text-brand-brown mb-1">
+                  {deliveryMethod === "germany"
+                    ? "Twoje miody zostaną wysłane do Niemiec w ciągu ok. 2–3 dni roboczych (DHL)."
+                    : "Twoje miody zostaną wysłane w ciągu 1–3 dni roboczych."}
+                </p>
                 <p>
                   Starannie zapakujemy każde zamówienie. Otrzymasz e-mail z potwierdzeniem i informacją o nadaniu. 
                   W razie pytań jesteśmy do dyspozycji.

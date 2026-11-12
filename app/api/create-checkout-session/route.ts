@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
-import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
+import { shippingTotal, shippingLineQuantity, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -121,7 +121,6 @@ export async function POST(request: NextRequest) {
 
     // Prepare shipping – prices from the catalog, free from 110 zł products subtotal
     const deliveryMeta: Record<string, string> = {};
-    let shippingCost = 0;
     let shippingName = "";
     const method = (customer?.deliveryMethod || "") as DeliveryMethod | "";
 
@@ -146,11 +145,10 @@ export async function POST(request: NextRequest) {
           : "Dostawa do Paczkomatu InPost";
       } else if (method === "pickup") {
         shippingName = "Odbiór osobisty";
+      } else if (method === "germany") {
+        shippingName = "Dostawa do Niemiec (DHL)";
       }
 
-      if (method === "address" || method === "parcel" || method === "pickup") {
-        shippingCost = shippingUnitCost(method, productsSubtotal);
-      }
     }
 
     // Kod rabatowy (np. FIRMA10) – sprawdzany w Stripe; rabat obejmuje tylko produkty.
@@ -170,34 +168,39 @@ export async function POST(request: NextRequest) {
 
     // Z rabatem dostawa idzie jako opcja wysyłki Stripe (rabat jej nie obejmuje),
     // bez rabatu – jak dotąd, jako osobna pozycja.
+    const shippingQty = method ? shippingLineQuantity(method as DeliveryMethod, packages) : packages;
+    const shippingAmount = method ? shippingTotal(method as DeliveryMethod, productsSubtotal, packages) : 0;
+    const multiPackageLabel = method !== "germany" && packages > 1;
     let shippingOptions: Stripe.Checkout.SessionCreateParams.ShippingOption[] | undefined;
-    if (discount && shippingCost > 0 && shippingName) {
+    if (discount && shippingAmount > 0 && shippingName) {
       shippingOptions = [{
         shipping_rate_data: {
           type: "fixed_amount",
-          display_name: packages > 1 ? `${shippingName} – ${packages} paczki` : shippingName,
-          fixed_amount: { amount: shippingCost * packages * 100, currency: "pln" },
+          display_name: multiPackageLabel ? `${shippingName} – ${packages} paczki` : shippingName,
+          fixed_amount: { amount: Math.round(shippingAmount * 100), currency: "pln" },
         },
       }];
-    } else if (shippingCost > 0 && shippingName) {
+    } else if (shippingAmount > 0 && shippingName) {
       lineItems.push({
         price_data: {
           currency: "pln",
-          unit_amount: shippingCost * 100,
+          unit_amount: Math.round((shippingAmount / shippingQty) * 100),
           product_data: {
             name: shippingName,
-            description: packages > 1 ? `Koszt dostawy – ${packages} paczki (bezpieczne pakowanie słoików)` : "Koszt dostawy",
+            description: method === "germany"
+              ? "Koszt dostawy do Niemiec (stała stawka za zamówienie)"
+              : (multiPackageLabel ? `Koszt dostawy – ${packages} paczki (bezpieczne pakowanie słoików)` : "Koszt dostawy"),
             images: ["https://jankesowapasieka.pl/logo.png"],
           },
         },
-        quantity: packages,
+        quantity: shippingQty,
       });
     }
     deliveryMeta.packages = String(packages);
     deliveryMeta.stock = JSON.stringify(stockUsed);
     deliveryMeta.products_subtotal = String(productsSubtotal);
-    deliveryMeta.shipping_cost = String(shippingCost > 0 ? shippingCost * packages : 0);
-    deliveryMeta.free_shipping = qualifiesForFreeShipping(productsSubtotal) ? "1" : "0";
+    deliveryMeta.shipping_cost = String(shippingAmount);
+    deliveryMeta.free_shipping = (method !== "germany" && qualifiesForFreeShipping(productsSubtotal)) ? "1" : "0";
     if (discount) {
       deliveryMeta.discount_code = discount.code;
       deliveryMeta.discount_percent = String(discount.percentOff);
@@ -242,6 +245,9 @@ export async function POST(request: NextRequest) {
       ...(customer?.deliveryMethod === "address" ? {
         billing_address_collection: "auto",
         shipping_address_collection: { allowed_countries: ["PL"] },
+      } : customer?.deliveryMethod === "germany" ? {
+        billing_address_collection: "auto",
+        shipping_address_collection: { allowed_countries: ["DE"] },
       } : {}),
     });
 

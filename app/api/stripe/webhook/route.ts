@@ -44,7 +44,12 @@ export async function POST(request: NextRequest) {
       deliveryMethod: session.metadata?.delivery_method || "Nie określono",
       parcelLocker: session.metadata?.parcel_locker,
       address: session.shipping_details?.address 
-        ? `${session.shipping_details.address.line1 || ''}, ${session.shipping_details.address.postal_code || ''} ${session.shipping_details.address.city || ''}`
+        ? [
+            session.shipping_details.address.line1,
+            session.shipping_details.address.line2,
+            `${session.shipping_details.address.postal_code || ''} ${session.shipping_details.address.city || ''}`.trim(),
+            session.shipping_details.address.country,
+          ].filter(Boolean).join(", ")
         : null,
       discountCode: session.metadata?.discount_code || null,
       discountAmount: (session.total_details?.amount_discount || 0) / 100,
@@ -127,7 +132,13 @@ async function sendAdminEmail(order: any) {
         <h3>Razem do zapłaty: <strong>${order.totalAmount} zł</strong></h3>
         
         <h3>Dostawa</h3>
-        <p><strong>Metoda:</strong> ${order.deliveryMethod === "parcel" ? "Paczkomat InPost" : order.deliveryMethod}</p>
+        <p><strong>Metoda:</strong> ${
+          order.deliveryMethod === "parcel" ? "Paczkomat InPost"
+          : order.deliveryMethod === "germany" ? "Wysyłka do Niemiec (DHL)"
+          : order.deliveryMethod === "pickup" ? "Odbiór osobisty"
+          : order.deliveryMethod === "address" ? "Kurier na adres"
+          : order.deliveryMethod
+        }</p>
         ${order.parcelLocker ? `<p><strong>Paczkomat:</strong> ${order.parcelLocker}</p>` : ''}
         ${order.address ? `<p><strong>Adres:</strong> ${order.address}</p>` : ''}
         
@@ -145,7 +156,7 @@ async function sendAdminEmail(order: any) {
 // SMS do Ciebie
 async function sendAdminSMS(order: any) {
   try {
-    const message = `Nowe zam. #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. Paczkomat: ${order.parcelLocker || 'kurier'}.`;
+    const message = `Nowe zam. #${order.orderId} - ${order.totalAmount}zł od ${order.customerName}. ${order.parcelLocker ? `Paczkomat: ${order.parcelLocker}` : order.deliveryMethod === 'germany' ? 'Wysyłka do Niemiec (DHL)' : order.deliveryMethod === 'pickup' ? 'Odbiór osobisty' : 'Kurier'}.`;
 
     const response = await fetch('https://api.smsapi.pl/sms.do', {
       method: 'POST',

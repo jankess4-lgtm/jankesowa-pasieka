@@ -9,7 +9,7 @@ const steps = [
   {
     icon: Truck,
     title: "Wybierz sposób dostawy",
-    desc: "W koszyku wybierz paczkomat InPost (14 zł), kuriera (16 zł) albo odbiór osobisty w pasiece w Topolnie, w Bydgoszczy lub w Świeciu po uzgodnieniu. Od 110 zł wartości produktów wysyłka jest darmowa.",
+    desc: "W koszyku wybierz paczkomat InPost (14 zł), kuriera (16 zł) albo odbiór osobisty w pasiece w Topolnie, w Bydgoszczy lub w Świeciu po uzgodnieniu. Od 110 zł wartości produktów wysyłka w Polsce jest darmowa. Jest też wysyłka do Niemiec za 80 zł (DHL).",
   },
   {
     icon: CreditCard,

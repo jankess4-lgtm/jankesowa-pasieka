@@ -17,7 +17,7 @@ export interface CheckoutCustomerData {
 
 export async function startStripeCheckout(
   items: CartItem[] | any[],
-  customerData?: CheckoutCustomerData & { deliveryMethod: 'address' | 'parcel' | 'pickup' },
+  customerData?: CheckoutCustomerData & { deliveryMethod: 'address' | 'parcel' | 'pickup' | 'germany' },
   discountCode?: string
 ) {
   if (!items || items.length === 0) {

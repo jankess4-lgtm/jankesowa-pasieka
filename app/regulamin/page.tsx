@@ -45,9 +45,10 @@ export default function Regulamin() {
                 <li>Paczkomat InPost – 14 zł</li>
                 <li>Kurier na adres – 16 zł</li>
                 <li>Odbiór osobisty w pasiece (Topolno), w Bydgoszczy lub w Świeciu – 0 zł</li>
+                <li>Wysyłka do Niemiec (DHL) – 80 zł</li>
               </ul>
-              <p>2. Przy zamówieniu o wartości produktów od 110 zł dostawa paczkomatem i kurierem jest bezpłatna. Odbiór osobisty zawsze wynosi 0 zł.</p>
-              <p>3. Czas realizacji: 1–3 dni robocze od zaksięgowania płatności.</p>
+              <p>2. Przy zamówieniu o wartości produktów od 110 zł dostawa paczkomatem i kurierem w Polsce jest bezpłatna. Odbiór osobisty zawsze wynosi 0 zł. Wysyłka do Niemiec kosztuje zawsze 80 zł i nie podlega darmowej wysyłce.</p>
+              <p>3. Czas realizacji: 1–3 dni robocze od zaksięgowania płatności. Dostawa do Niemiec trwa zwykle 2–3 dni robocze.</p>
               <p>4. Odbiór osobisty po wcześniejszym uzgodnieniu terminu.</p>
             </section>
 

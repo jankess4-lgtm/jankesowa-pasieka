@@ -20,6 +20,7 @@ import {
   Search,
   Tag,
 } from "lucide-react";
+import GermanFlag from "@/components/GermanFlag";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/lib/useCart";
@@ -27,6 +28,7 @@ import { packagesForCart, PACKING_NOTE } from "@/lib/products";
 import {
   SHIPPING_PARCEL,
   SHIPPING_COURIER,
+  SHIPPING_GERMANY,
   shippingTotal,
   qualifiesForFreeShipping,
   freeShippingMessage,
@@ -39,7 +41,7 @@ interface FormData {
   fullName: string;
   phone: string;
   email: string;
-  deliveryMethod: "address" | "parcel" | "pickup";
+  deliveryMethod: "address" | "parcel" | "pickup" | "germany";
   street?: string;
   postalCode?: string;
   city?: string;
@@ -223,7 +225,7 @@ function searchPaczkomaty(
 }
 
 function needsContactValidation(method: FormData["deliveryMethod"]): boolean {
-  return method === "parcel" || method === "address";
+  return method === "parcel" || method === "address" || method === "germany";
 }
 
 function validateContactFields(customer: FormData, errors: FormErrors): void {
@@ -566,7 +568,7 @@ export default function KoszykPage() {
             <div className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-medium text-brand-brown mb-6">Sposób dostawy</h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                 {[
                   { id: "parcel" as const, label: "Paczkomat", icon: Package, cost: freeShipping ? "0 zł" : `${SHIPPING_PARCEL} zł` },
                   { id: "address" as const, label: "Kurier", icon: Truck, cost: freeShipping ? "0 zł" : `${SHIPPING_COURIER} zł` },
@@ -587,6 +589,26 @@ export default function KoszykPage() {
                     <span className="text-xs text-brand-brown/60">{cost}</span>
                   </button>
                 ))}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <button
+                  type="button"
+                  onClick={() => handleDeliveryChange("germany")}
+                  className={`p-5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 text-center ${
+                    customer.deliveryMethod === "germany"
+                      ? "border-brand-gold bg-brand-gold/5 shadow-sm"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {customer.deliveryMethod === "germany" ? (
+                    <GermanFlag className="w-8 h-[19px] rounded-sm shadow-sm ring-1 ring-black/10" />
+                  ) : (
+                    <Truck className="w-7 h-7 text-brand-brown" />
+                  )}
+                  <span className="font-medium text-brand-brown">Wysyłka do Niemiec</span>
+                  <span className="text-xs text-brand-brown/60">{SHIPPING_GERMANY} zł</span>
+                </button>
               </div>
 
               <AnimatePresence mode="wait">
@@ -800,6 +822,30 @@ export default function KoszykPage() {
                           <p className="text-red-500 text-xs mt-1.5">{errors.city}</p>
                         )}
                       </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {customer.deliveryMethod === "germany" && (
+                  <motion.div
+                    key="germany"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="bg-brand-cream/60 border border-brand-creamDark rounded-2xl p-6 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <GermanFlag className="w-8 h-[19px] rounded-sm shadow-sm ring-1 ring-black/10 flex-shrink-0" />
+                        <h3 className="font-medium text-lg text-brand-brown">Wysyłka do Niemiec</h3>
+                      </div>
+                      <p className="text-sm text-brand-brown/80 leading-relaxed">
+                        Dostawa do Niemiec (DHL, ok. 2–3 dni robocze). Podaj adres w Niemczech przy płatności.
+                      </p>
+                      <p className="text-xs text-brand-brown/60 leading-relaxed">
+                        Wysyłka do Niemiec kosztuje zawsze {SHIPPING_GERMANY} zł za zamówienie.
+                        Próg darmowej wysyłki od 110 zł dotyczy tylko dostawy w Polsce.
+                      </p>
                     </div>
                   </motion.div>
                 )}
@@ -1047,8 +1093,10 @@ export default function KoszykPage() {
                       ? "paczkomat"
                       : customer.deliveryMethod === "address"
                         ? "kurier"
-                        : "odbiór"}
-                    {shippingCost > 0 && packages > 1 ? `, ${packages} paczki` : ""})
+                        : customer.deliveryMethod === "germany"
+                          ? "Niemcy"
+                          : "odbiór"}
+                    {customer.deliveryMethod !== "germany" && shippingCost > 0 && packages > 1 ? `, ${packages} paczki` : ""})
                   </span>
                   <span className="tabular-nums">
                     {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
@@ -1062,10 +1110,16 @@ export default function KoszykPage() {
                     <span className="tabular-nums">−{formatZl(discountValue)} zł</span>
                   </div>
                 )}
-                <p className={`text-xs leading-snug ${freeShipping ? "text-brand-green font-medium" : "text-brand-brown/70"}`}>
-                  {freeShippingMessage(totalPrice)}
-                </p>
-                {customer.deliveryMethod !== "pickup" && (
+                {customer.deliveryMethod === "germany" ? (
+                  <p className="text-xs leading-snug text-brand-brown/70">
+                    Wysyłka do Niemiec zawsze {SHIPPING_GERMANY} zł. Darmowa wysyłka od 110 zł dotyczy tylko dostawy w Polsce.
+                  </p>
+                ) : (
+                  <p className={`text-xs leading-snug ${freeShipping ? "text-brand-green font-medium" : "text-brand-brown/70"}`}>
+                    {freeShippingMessage(totalPrice)}
+                  </p>
+                )}
+                {customer.deliveryMethod !== "pickup" && customer.deliveryMethod !== "germany" && (
                   <p className="text-xs text-brand-brown/60 leading-snug">{PACKING_NOTE}</p>
                 )}
                 <div className="pt-2">

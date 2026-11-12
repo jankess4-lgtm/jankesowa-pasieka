@@ -8,7 +8,7 @@ import { Button } from "./ui/Button";
 import { toast } from "sonner";
 import Image from "next/image";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
-import { freeShippingMessage, qualifiesForFreeShipping, SHIPPING_PARCEL, SHIPPING_COURIER } from "@/lib/shipping";
+import { freeShippingMessage, qualifiesForFreeShipping, SHIPPING_PARCEL, SHIPPING_COURIER, SHIPPING_GERMANY } from "@/lib/shipping";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -167,7 +167,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80 leading-relaxed">
                     <p>
                       Dostawa: paczkomat {SHIPPING_PARCEL} zł, kurier {SHIPPING_COURIER} zł,
-                      odbiór osobisty 0 zł. Od 110 zł wartości produktów wysyłka jest darmowa.
+                      odbiór osobisty 0 zł. Od 110 zł wartości produktów wysyłka w Polsce jest darmowa.
+                      Wysyłka do Niemiec {SHIPPING_GERMANY} zł.
                     </p>
                     <p className={`mt-1.5 ${qualifiesForFreeShipping(totalPrice) ? "font-medium text-brand-green" : "font-medium text-brand-brown"}`}>
                       {freeShippingMessage(totalPrice)}

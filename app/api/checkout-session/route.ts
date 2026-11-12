@@ -23,15 +23,24 @@ export async function GET(request: NextRequest) {
     const shippingCost = meta.shipping_cost ? parseInt(meta.shipping_cost, 10) : 0;
     const deliveryMethod = meta.delivery_method || "address";
 
+    const stripeAddress = session.shipping_details?.address;
+    const stripeAddressLine = stripeAddress
+      ? [stripeAddress.line1, stripeAddress.line2, stripeAddress.postal_code, stripeAddress.city, stripeAddress.country]
+          .filter(Boolean)
+          .join(", ")
+      : "";
+
     let deliverySummary = "";
     if (deliveryMethod === "parcel") {
       deliverySummary = meta.parcel_locker || "Paczkomat InPost";
     } else if (deliveryMethod === "pickup") {
       deliverySummary = meta.pickup_location || "Odbiór osobisty (Topolno, Bydgoszcz lub Świecie)";
+    } else if (deliveryMethod === "germany") {
+      deliverySummary = stripeAddressLine || "Adres w Niemczech podany przy płatności";
     } else {
       deliverySummary = [meta.shipping_street, meta.shipping_postal_code, meta.shipping_city]
         .filter(Boolean)
-        .join(", ");
+        .join(", ") || stripeAddressLine;
     }
 
     return NextResponse.json({

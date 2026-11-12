@@ -18,6 +18,7 @@ import {
   Minus,
   X,
   Search,
+  Tag,
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,6 +32,7 @@ import {
   freeShippingMessage,
 } from "@/lib/shipping";
 import { startStripeCheckout } from "@/lib/stripeCheckout";
+import { discountAmount, formatZl } from "@/lib/discount-math";
 import { loadPaczkomaty, normalizeText, Paczkomat } from "@/lib/paczkomaty";
 
 interface FormData {
@@ -55,6 +57,13 @@ interface FormErrors {
 }
 
 const STORAGE_KEY = "jankesowa_checkout_form";
+const DISCOUNT_STORAGE_KEY = "jankesowa_discount_code";
+
+interface AppliedDiscount {
+  code: string;
+  percentOff: number;
+  label: string;
+}
 const SEARCH_DEBOUNCE_MS = 200;
 const SEARCH_RESULTS_LIMIT = 80;
 
@@ -291,6 +300,57 @@ export default function KoszykPage() {
   const [paczkomatyList, setPaczkomatyList] = useState<Paczkomat[]>([]);
   const [paczkomatyLoading, setPaczkomatyLoading] = useState(true);
   const [paczkomatyError, setPaczkomatyError] = useState<string | null>(null);
+  const [discountOpen, setDiscountOpen] = useState(false);
+  const [discountInput, setDiscountInput] = useState("");
+  const [discountError, setDiscountError] = useState<string | null>(null);
+  const [discountChecking, setDiscountChecking] = useState(false);
+  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(DISCOUNT_STORAGE_KEY);
+      if (saved) setAppliedDiscount(JSON.parse(saved));
+    } catch {
+      sessionStorage.removeItem(DISCOUNT_STORAGE_KEY);
+    }
+  }, []);
+
+  const applyDiscount = async () => {
+    const code = discountInput.trim();
+    if (!code) {
+      setDiscountError("Wpisz kod rabatowy.");
+      return;
+    }
+    setDiscountChecking(true);
+    setDiscountError(null);
+    try {
+      const res = await fetch("/api/discount", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.valid) {
+        setDiscountError(data.error || "Ten kod rabatowy jest nieprawidłowy.");
+        return;
+      }
+      const applied = { code: data.code, percentOff: data.percentOff, label: data.label };
+      setAppliedDiscount(applied);
+      sessionStorage.setItem(DISCOUNT_STORAGE_KEY, JSON.stringify(applied));
+      setDiscountInput("");
+      setDiscountOpen(false);
+      toast.success(`Kod ${data.code} dodany – rabat ${data.percentOff}% na produkty`);
+    } catch {
+      setDiscountError("Nie udało się sprawdzić kodu. Spróbuj ponownie za chwilę.");
+    } finally {
+      setDiscountChecking(false);
+    }
+  };
+
+  const removeDiscount = () => {
+    setAppliedDiscount(null);
+    sessionStorage.removeItem(DISCOUNT_STORAGE_KEY);
+  };
 
   const fetchPaczkomaty = useCallback(() => {
     setPaczkomatyLoading(true);
@@ -346,7 +406,9 @@ export default function KoszykPage() {
   const requiresContact = needsContactValidation(customer.deliveryMethod);
   const packages = packagesForCart(items);
   const shippingCost = shippingTotal(customer.deliveryMethod, totalPrice, packages);
-  const grandTotal = totalPrice + shippingCost;
+  const discountValue = appliedDiscount ? discountAmount(totalPrice, appliedDiscount.percentOff) : 0;
+  const grandTotalNumber = Math.round((totalPrice - discountValue + shippingCost) * 100) / 100;
+  const grandTotal = formatZl(grandTotalNumber);
   const freeShipping = qualifiesForFreeShipping(totalPrice);
 
   const { results: filteredPaczkomaty, totalMatches: totalMatchCount } = useMemo(
@@ -431,10 +493,18 @@ export default function KoszykPage() {
         street: customer.street?.trim(),
         postalCode: customer.postalCode?.trim(),
         city: customer.city?.trim(),
-      });
+      }, appliedDiscount?.code);
       toast.success("Przekierowanie do płatności...");
-    } catch {
-      toast.error("Błąd podczas inicjowania płatności");
+    } catch (err: any) {
+      const message = String(err?.message || "");
+      if (message.includes("kod rabatowy")) {
+        removeDiscount();
+        setDiscountOpen(true);
+        setDiscountError(message);
+        toast.error(message);
+      } else {
+        toast.error("Błąd podczas inicjowania płatności");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -941,12 +1011,84 @@ export default function KoszykPage() {
                     {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
                   </span>
                 </div>
+                {appliedDiscount && (
+                  <div className="flex justify-between text-brand-green font-medium">
+                    <span>
+                      Rabat {appliedDiscount.code} (−{appliedDiscount.percentOff}% na produkty)
+                    </span>
+                    <span className="tabular-nums">−{formatZl(discountValue)} zł</span>
+                  </div>
+                )}
                 <p className={`text-xs leading-snug ${freeShipping ? "text-brand-green font-medium" : "text-brand-brown/70"}`}>
                   {freeShippingMessage(totalPrice)}
                 </p>
                 {customer.deliveryMethod !== "pickup" && (
                   <p className="text-xs text-brand-brown/60 leading-snug">{PACKING_NOTE}</p>
                 )}
+                <div className="pt-2">
+                  {appliedDiscount ? (
+                    <div className="flex items-center justify-between gap-2 rounded-xl border border-brand-green/30 bg-brand-green/5 px-3 py-2 text-xs text-brand-brown">
+                      <span className="flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5 text-brand-green" />
+                        Kod <strong>{appliedDiscount.code}</strong> działa
+                      </span>
+                      <button
+                        type="button"
+                        onClick={removeDiscount}
+                        className="text-brand-brown/60 hover:text-red-600 underline"
+                      >
+                        Usuń kod
+                      </button>
+                    </div>
+                  ) : !discountOpen ? (
+                    <button
+                      type="button"
+                      onClick={() => setDiscountOpen(true)}
+                      className="flex items-center gap-1.5 text-sm text-brand-gold hover:underline"
+                    >
+                      <Tag className="w-4 h-4" />
+                      Masz kod rabatowy?
+                    </button>
+                  ) : (
+                    <div>
+                      <label htmlFor="discountCode" className="block text-sm font-medium text-brand-brown mb-2">
+                        Kod rabatowy
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          id="discountCode"
+                          type="text"
+                          value={discountInput}
+                          onChange={(e) => {
+                            setDiscountInput(e.target.value.toUpperCase());
+                            if (discountError) setDiscountError(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              applyDiscount();
+                            }
+                          }}
+                          placeholder="np. FIRMA10"
+                          autoComplete="off"
+                          autoCapitalize="characters"
+                          className={`${inputClass(!!discountError)} py-2.5 uppercase`}
+                        />
+                        <Button
+                          type="button"
+                          onClick={applyDiscount}
+                          disabled={discountChecking}
+                          className="px-4 py-2.5 text-sm whitespace-nowrap"
+                        >
+                          {discountChecking ? "Sprawdzam..." : "Zastosuj"}
+                        </Button>
+                      </div>
+                      {discountError && (
+                        <p className="text-red-500 text-xs mt-1.5">{discountError}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
                 <div className="h-px bg-brand-creamDark my-2" />
                 <div className="flex justify-between text-lg font-semibold text-brand-brown">
                   <span>Do zapłaty</span>

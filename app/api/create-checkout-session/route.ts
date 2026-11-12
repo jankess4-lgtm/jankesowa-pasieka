@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
+import { resolveDiscountCode, INVALID_CODE_MESSAGE, type ResolvedDiscount } from "@/lib/discounts";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -10,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   try {
-    const { items, customer } = await request.json();
+    const { items, customer, discountCode } = await request.json();
 
     console.log("Full cart items received:", JSON.stringify(items, null, 2));
 
@@ -152,8 +153,28 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Add shipping as line item only when there is a charge
-    if (shippingCost > 0 && shippingName) {
+    // Kod rabatowy (np. FIRMA10) – sprawdzany w Stripe; rabat obejmuje tylko produkty.
+    // Próg darmowej wysyłki liczymy od wartości produktów PRZED rabatem.
+    let discount: ResolvedDiscount | null = null;
+    if (discountCode && String(discountCode).trim()) {
+      discount = await resolveDiscountCode(stripe, discountCode);
+      if (!discount) {
+        return NextResponse.json({ error: INVALID_CODE_MESSAGE, invalidCode: true }, { status: 400 });
+      }
+    }
+
+    // Z rabatem dostawa idzie jako opcja wysyłki Stripe (rabat jej nie obejmuje),
+    // bez rabatu – jak dotąd, jako osobna pozycja.
+    let shippingOptions: Stripe.Checkout.SessionCreateParams.ShippingOption[] | undefined;
+    if (discount && shippingCost > 0 && shippingName) {
+      shippingOptions = [{
+        shipping_rate_data: {
+          type: "fixed_amount",
+          display_name: packages > 1 ? `${shippingName} – ${packages} paczki` : shippingName,
+          fixed_amount: { amount: shippingCost * packages * 100, currency: "pln" },
+        },
+      }];
+    } else if (shippingCost > 0 && shippingName) {
       lineItems.push({
         price_data: {
           currency: "pln",
@@ -172,6 +193,10 @@ export async function POST(request: NextRequest) {
     deliveryMeta.products_subtotal = String(productsSubtotal);
     deliveryMeta.shipping_cost = String(shippingCost > 0 ? shippingCost * packages : 0);
     deliveryMeta.free_shipping = qualifiesForFreeShipping(productsSubtotal) ? "1" : "0";
+    if (discount) {
+      deliveryMeta.discount_code = discount.code;
+      deliveryMeta.discount_percent = String(discount.percentOff);
+    }
 
     console.log("Prepared lineItems for Stripe:", JSON.stringify(lineItems, null, 2));
 
@@ -181,6 +206,8 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       ui_mode: "hosted",
       line_items: lineItems,
+      ...(discount ? { discounts: [{ promotion_code: discount.promotionCodeId }] } : {}),
+      ...(shippingOptions ? { shipping_options: shippingOptions } : {}),
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
       cancel_url: `${origin}/cancel`,
       ...(customer?.email ? { customer_email: customer.email } : {}),

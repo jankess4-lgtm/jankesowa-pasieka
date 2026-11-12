@@ -32,7 +32,10 @@ interface SessionData {
     description: string | null;
     quantity: number | null;
     amount_total: number | null;
+    amount_subtotal?: number | null;
   }>;
+  amount_discount?: number;
+  discountCode?: string | null;
   // Enriched from API
   orderRef?: string | null;
   shippingCost?: number;
@@ -169,7 +172,9 @@ function SuccessContent() {
     !item.description?.toLowerCase().includes('dostawa') && 
     !item.description?.toLowerCase().includes('paczkomat')
   );
-  const productsTotalCents = productLineItems.reduce((sum, item) => sum + (item.amount_total || 0), 0);
+  // Ceny produktów przed rabatem; rabat pokazujemy osobną linią
+  const productsTotalCents = productLineItems.reduce((sum, item) => sum + (item.amount_subtotal ?? item.amount_total ?? 0), 0);
+  const discountCents = sessionData?.amount_discount || 0;
 
   const shippingCost = sessionData?.shippingCost ?? 0;
   const fullTotalFromStripe = sessionData?.amount_total || 0;
@@ -405,7 +410,7 @@ function SuccessContent() {
                           <span>{item.description}</span>
                         </div>
                         <div className="tabular-nums font-medium text-brand-brown whitespace-nowrap">
-                          {formatAmount(item.amount_total)} zł
+                          {formatAmount(item.amount_subtotal ?? item.amount_total)} zł
                         </div>
                       </div>
                     ))
@@ -420,6 +425,13 @@ function SuccessContent() {
                     <span>Wartość produktów</span>
                     <span className="tabular-nums">{formatAmount(productsTotalCents)} zł</span>
                   </div>
+
+                  {discountCents > 0 && (
+                    <div className="flex justify-between text-brand-green font-medium">
+                      <span>Rabat{sessionData?.discountCode ? ` (kod ${sessionData.discountCode})` : ""}</span>
+                      <span className="tabular-nums">−{formatAmount(discountCents)} zł</span>
+                    </div>
+                  )}
 
                   <div className="flex justify-between text-brand-brown/80">
                     <span>

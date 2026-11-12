@@ -46,10 +46,14 @@ export async function POST(request: NextRequest) {
       address: session.shipping_details?.address 
         ? `${session.shipping_details.address.line1 || ''}, ${session.shipping_details.address.postal_code || ''} ${session.shipping_details.address.city || ''}`
         : null,
+      discountCode: session.metadata?.discount_code || null,
+      discountAmount: (session.total_details?.amount_discount || 0) / 100,
+      // z kodem rabatowym dostawa jest opcją wysyłki Stripe, a nie pozycją
+      shippingOptionAmount: (session.shipping_cost?.amount_total || 0) / 100,
       products: lineItems.data.map(item => ({
         name: item.description || "Produkt",
         quantity: item.quantity || 1,
-        amount: (item.amount_total || 0) / 100
+        amount: (item.amount_subtotal ?? item.amount_total ?? 0) / 100
       }))
     };
 
@@ -117,6 +121,8 @@ async function sendAdminEmail(order: any) {
         
         <h3>Zamówione produkty</h3>
         <ul>${productsHtml}</ul>
+        ${order.shippingOptionAmount > 0 ? `<p><strong>Dostawa:</strong> ${order.shippingOptionAmount} zł</p>` : ''}
+        ${order.discountAmount > 0 ? `<p><strong>Rabat${order.discountCode ? ` (kod ${order.discountCode})` : ''}:</strong> −${order.discountAmount.toFixed(2).replace('.', ',')} zł</p>` : ''}
         
         <h3>Razem do zapłaty: <strong>${order.totalAmount} zł</strong></h3>
         

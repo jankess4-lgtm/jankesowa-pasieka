@@ -45,7 +45,10 @@ export async function GET(request: NextRequest) {
         description: item.description,
         quantity: item.quantity,
         amount_total: item.amount_total,
+        amount_subtotal: item.amount_subtotal,
       })),
+      amount_discount: session.total_details?.amount_discount || 0,
+      discountCode: meta.discount_code || null,
       // Enriched for success page
       orderRef: meta.orderRef || null,
       shippingCost,

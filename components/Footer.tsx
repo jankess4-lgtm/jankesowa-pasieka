@@ -20,7 +20,7 @@ export default function Footer() {
               className="h-12 w-auto object-contain"
             />
             <span
-              className="text-[#78350F] text-base md:text-lg tracking-[0.5px] font-normal"
+              className="text-[#FDF6E3] text-base md:text-lg tracking-[0.5px] font-bold"
               style={{ fontFamily: "'Kristen ITC', cursive" }}
             >
               JANKESOWA PASIEKA

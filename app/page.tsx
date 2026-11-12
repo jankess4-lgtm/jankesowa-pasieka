@@ -121,8 +121,8 @@ export default async function HomePage() {
               <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-1">DOSTĘPNE TERAZ</div>
               <h2 className="font-serif text-3xl sm:text-4xl text-brand-brown tracking-tight">Miody i zestawy</h2>
               <p className="mt-2 text-sm text-[#374151] max-w-xl">
-                Zestaw dwóch dużych słoików za 110 zł albo trzech małych za 80 zł — oszczędzasz 10 zł,
-                a wysyłka kosztuje tyle samo co za jeden słoik.
+                Zestaw dwóch dużych słoików za 110 zł albo trzech małych za 80 zł.
+                Wysyłka kosztuje tyle samo co za jeden słoik.
               </p>
             </div>
             <Link href="/produkty" className="hidden md:block text-sm font-medium text-brand-gold hover:underline">

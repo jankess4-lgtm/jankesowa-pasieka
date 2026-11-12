@@ -164,7 +164,7 @@ function getProductDetails(product: Product): ProductDetails {
       richDescription: product.longDescription,
       specs: [
         { label: "W zestawie", value: "2 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
-        { label: "Cena", value: "110 zł zamiast 120 zł – oszczędzasz 10 zł" },
+        { label: "Cena", value: "110 zł za dwa duże słoiki do wyboru" },
         { label: "Wysyłka", value: "Tyle samo co za jeden słoik" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],

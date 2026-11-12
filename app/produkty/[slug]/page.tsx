@@ -6,6 +6,7 @@ import Link from "next/link";
 import ProductActions from "./ProductActions";
 import ShippingNote from "@/components/ShippingNote";
 import BundleActions from "./BundleActions";
+import SalePrice from "@/components/SalePrice";
 import type { Metadata } from "next";
 import { productJsonLd } from "@/lib/structured-data";
 import JsonLd from "@/components/JsonLd";
@@ -146,6 +147,20 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
+  if (product.category === "zestawy" && product.id === 23) {
+    return {
+      richDescription: product.longDescription,
+      specs: [
+        { label: "W zestawie", value: "3 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
+        { label: "Cena", value: "135 zł zamiast 150 zł – oszczędzasz 15 zł" },
+        { label: "Waga", value: "3,6 kg miodu" },
+        { label: "Wysyłka", value: "Darmowa – zestaw jest powyżej 110 zł" },
+        { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
+      ],
+      whyBuy: "Więcej miodu taniej: trzy duże słoiki i darmowa wysyłka w jednym zestawie.",
+    };
+  }
+
   if (product.category === "zestawy" && product.id === 22) {
     return {
       richDescription: product.longDescription,
@@ -278,12 +293,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <h1 className="font-serif text-[32px] sm:text-[42px] md:text-[48px] leading-none text-brand-brown tracking-[-1.2px] mb-3">
                 {product.name}
               </h1>
-              <div className="flex items-baseline gap-2">
-                <div className="text-4xl font-semibold text-brand-brown tabular-nums">
-                  {product.price} <span className="text-2xl align-super font-normal">zł</span>
-                </div>
-                <div className="text-brand-brown/70 text-lg ml-1">{product.unit}</div>
-              </div>
+              <SalePrice productId={product.id} price={product.price} unit={product.unit} size="page" />
             </div>
 
             {/* Trust badges */}

@@ -5,6 +5,7 @@ import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
+import SalePrice from "./SalePrice";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -88,8 +89,11 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
             className="object-cover transition-transform duration-500 rounded-xl group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
             <Badge variant="gold">{product.category === "miody" ? "Miód" : product.category === "zestawy" ? "Zestaw" : "Produkt"}</Badge>
+            {product.badgeText && product.available !== false && (
+              <Badge variant="default">{product.badgeText}</Badge>
+            )}
           </div>
         </div>
       </Link>
@@ -106,7 +110,7 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
         <div className="pt-3 border-t border-brand-creamDark mt-auto space-y-2">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-2xl font-semibold tabular-nums text-brand-brown">{product.price} <span className="text-base align-super font-normal">zł</span></div>
+              <SalePrice productId={product.id} price={product.price} size="card" />
             </div>
 
             {product.category === "zestawy" ? (

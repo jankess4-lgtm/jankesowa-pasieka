@@ -162,6 +162,20 @@ export const products: Product[] = [
     available: true,
     badgeText: "Na święta",
   },
+  {
+    id: 23,
+    name: "Zestaw 3 dużych słoików miodu – 3 × 900 ml (3 × 1,2 kg)",
+    slug: "zestaw-3-duzych-sloikow-miodu-900ml",
+    description: "Trzy duże słoiki miodu 1,2 kg do wyboru za 135 zł zamiast 150 zł – oszczędzasz 15 zł. 3,6 kg miodu, a wysyłka jest już darmowa.",
+    longDescription: "Zestaw trzech dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz trzy rodzaje spośród dostępnych miodów – możesz też wziąć kilka takich samych. Płacisz 135 zł zamiast 150 zł za trzy słoiki po 50 zł (wielokwiatowy albo rzepakowo-mniszkowy), czyli oszczędzasz 15 zł. Jeśli w zestawie będzie miód akacjowy (60 zł za słoik), oszczędzasz jeszcze więcej, a cena zestawu zostaje 135 zł. To 3,6 kg miodu, więc wysyłka jest darmowa (od 110 zł wartości produktów). Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    price: 135,
+    unit: "3 × 900 ml (3 × 1,2 kg)",
+    category: "zestawy",
+    image: "/images/zestaw-3-duze-sloiki.webp",
+    inStock: 15,
+    available: true,
+    badgeText: "Oszczędzasz 15 zł",
+  },
 ];
 
 export function isProductListedAsAvailable(p: Product): boolean {
@@ -171,7 +185,7 @@ export function isProductListedAsAvailable(p: Product): boolean {
 /** Dwa zestawy i dwa duże słoiki — równy rząd 4 produktów na komputerze. */
 export function getHomepageFeaturedProducts(): Product[] {
   const sets = products.filter((p) => p.category === "zestawy" && isProductListedAsAvailable(p));
-  const preferredIds = [22, 20, 21];
+  const preferredIds = [23, 22, 20, 21];
   const featuredSets = preferredIds
     .map((id) => sets.find((p) => p.id === id))
     .filter((p): p is Product => Boolean(p))
@@ -225,6 +239,12 @@ export const BUNDLES: BundleConfig[] = [
     cartBase: 3000000, labelPrefix: "Zestaw świąteczny 3 × 350 ml", jarLabel: "350 ml", jarShort: "0,49 kg",
     feedNetWeightKg: 1.47, feedPackagingKg: 0.8,
   },
+  {
+    // cartBase poza zakresami zestawów 21 i 22 (cartBase + 1000^3), żeby id koszyka się nie pokrywały
+    id: 23, count: 3, varietyUnit: "900 ml (1,2 kg)", price: 135, regularPrice: 150,
+    cartBase: 2_000_000_000, labelPrefix: "Zestaw 3 × 1,2 kg", jarLabel: "900 ml", jarShort: "1,2 kg",
+    feedNetWeightKg: 3.6, feedPackagingKg: 1.05,
+  },
 ];
 
 const BUNDLE_SLOT = 1000; // id miodów < 1000
@@ -240,7 +260,19 @@ function bundleRangeEnd(b: BundleConfig): number {
 /** Konfiguracja zestawu dla id produktu albo id pozycji koszyka */
 export function findBundleForCartId(id: number): BundleConfig | undefined {
   if (!Number.isInteger(id)) return undefined;
-  return BUNDLES.find((b) => id === b.id || (id > b.cartBase && id < bundleRangeEnd(b)));
+  const exact = BUNDLES.find((b) => id === b.id);
+  if (exact) return exact;
+  // Zakresy 3-słoikowych zestawów mogą się nakładać — wybieramy ten, którego kodowanie daje poprawne miody.
+  const candidates = BUNDLES.filter((b) => id > b.cartBase && id < bundleRangeEnd(b));
+  const matched = candidates.find((b) => parseBundleCartIdFor(b, id));
+  return matched ?? candidates[0];
+}
+
+/** Przekreślona cena „osobno”, jeśli oszczędność jest wyraźna (co najmniej 5 zł). */
+export function getVisibleBundleSale(productId: number): { regularPrice: number; price: number; savings: number } | null {
+  const b = getBundleConfig(productId);
+  if (!b || b.regularPrice - b.price < 5) return null;
+  return { regularPrice: b.regularPrice, price: b.price, savings: b.regularPrice - b.price };
 }
 
 /** Miody dostępne teraz (na stanie, nie "wkrótce") w rozmiarze danego zestawu */

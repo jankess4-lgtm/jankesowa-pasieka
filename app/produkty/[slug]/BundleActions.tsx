@@ -5,6 +5,7 @@ import { useCart } from "@/lib/useCart";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart } from "lucide-react";
 import { getBundleConfig, getBundleVarietiesFor, makeBundleCartProductFor, varietyShortName } from "@/lib/products";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/shipping";
 
 const ORDINALS = ["Pierwszy", "Drugi", "Trzeci", "Czwarty", "Piąty"];
 const COUNT_WORDS: Record<number, string> = { 2: "dwa", 3: "trzy" };
@@ -61,7 +62,10 @@ export default function BundleActions({ bundleId }: { bundleId: number }) {
         Dodaj zestaw do koszyka – {cfg.price} zł
       </Button>
       <p className="text-[11px] text-center text-brand-brown/60">
-        Możesz wybrać {cfg.count === 2 ? "dwa takie same miody" : "kilka takich samych miodów"}. Wysyłka kosztuje tyle samo co za jeden słoik.
+        Możesz wybrać {cfg.count === 2 ? "dwa takie same miody" : "kilka takich samych miodów"}.
+        {cfg.price >= FREE_SHIPPING_THRESHOLD
+          ? " W tym zestawie wysyłka jest już darmowa."
+          : " Wysyłka kosztuje tyle samo co za jeden słoik."}
       </p>
 
       <div className="lg:hidden fixed inset-x-0 bottom-0 z-30 border-t border-brand-brown/15 bg-[#F5EDE4]/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-6px_20px_rgba(60,40,20,0.10)]">

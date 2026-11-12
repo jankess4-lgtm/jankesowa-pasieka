@@ -6,7 +6,7 @@ const SITE = "https://jankesowapasieka.pl";
 
 /** Stable lastmod for static shop pages (avoid a fresh timestamp on every crawl). */
 const SITE_PAGES_UPDATED = new Date("2026-11-11T12:00:00+01:00");
-const CATALOG_UPDATED = new Date("2026-11-12T12:00:00+01:00");
+const CATALOG_UPDATED = new Date("2026-11-12T16:00:00+01:00");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [

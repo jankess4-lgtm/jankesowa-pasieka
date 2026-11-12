@@ -39,7 +39,7 @@ function itemXml(p: Product) {
     `<link>${BASE_URL}/produkty/${esc(p.slug!)}</link>`,
     `<g:image_link>${BASE_URL}${encodeURI(p.image)}</g:image_link>`,
     `<g:availability>in_stock</g:availability>`,
-    `<g:price>${p.price.toFixed(2)} PLN</g:price>`,
+    `<g:price>${(bundle && bundle.regularPrice > bundle.price ? bundle.regularPrice : p.price).toFixed(2)} PLN</g:price>`,
     `<g:condition>new</g:condition>`,
     `<g:brand>Jankesowa Pasieka</g:brand>`,
     `<g:identifier_exists>no</g:identifier_exists>`,
@@ -51,6 +51,9 @@ function itemXml(p: Product) {
   if (isHoney && weight !== null && fixedWeight) {
     lines.push(`<g:unit_pricing_measure>${weight} kg</g:unit_pricing_measure>`);
     lines.push(`<g:unit_pricing_base_measure>1 kg</g:unit_pricing_base_measure>`);
+  }
+  if (bundle && bundle.regularPrice > bundle.price) {
+    lines.push(`<g:sale_price>${bundle.price.toFixed(2)} PLN</g:sale_price>`);
   }
   if (shippingWeight) lines.push(`<g:shipping_weight>${shippingWeight} kg</g:shipping_weight>`);
   lines.push(

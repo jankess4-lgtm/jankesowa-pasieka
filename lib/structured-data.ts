@@ -24,7 +24,7 @@ export const organizationJsonLd = {
   image: [`${SITE_URL}/logo.png`, `${SITE_URL}/og-image.jpg`, ...pasiekaImageUrls],
   telephone: "48514070298",
   email: "kontakt@jankesowapasieka.pl",
-  priceRange: "40-110 PLN",
+  priceRange: "30-135 PLN",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Topolno 45",

@@ -124,15 +124,15 @@ export const products: Product[] = [
     id: 20,
     name: "Zestaw 2 słoików miodu – 2 × 900 ml (2 × 1,2 kg)",
     slug: "zestaw-2-sloikow-miodu-900ml",
-    description: "Dwa duże słoiki miodu 1,2 kg do wyboru za 110 zł. Wysyłka kosztuje tyle samo co za jeden słoik.",
-    longDescription: "Zestaw dwóch dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz dwa rodzaje spośród dostępnych miodów – możesz też wziąć dwa takie same. Płacisz 110 zł. Przy dwóch słoikach akacjowych jest to 10 zł mniej niż przy zakupie osobno; wielokwiatowy i rzepakowo-mniszkowy w dużym słoiku kosztują teraz po 50 zł. Miód naturalny, niepasteryzowany, w szklanych słoikach.",
-    price: 110,
+    description: "Dwa duże słoiki miodu 1,2 kg do wyboru za 95 zł – od 5 zł taniej niż przy zakupie osobno. Wysyłka jak za jeden słoik; do darmowej (od 110 zł) brakuje 15 zł.",
+    longDescription: "Zestaw dwóch dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz dwa rodzaje spośród dostępnych miodów – możesz też wziąć dwa takie same. Płacisz 95 zł, zawsze taniej niż dwa duże słoiki osobno: przy wielokwiatowym i rzepakowo-mniszkowym (po 50 zł) oszczędzasz 5 zł, przy dwóch akacjach (po 60 zł) – 25 zł, a przy mieszance 50 zł i 60 zł – 15 zł. Do darmowej wysyłki (od 110 zł wartości produktów) w tym zestawie brakuje 15 zł. Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    price: 95,
     unit: "2 × 900 ml (2 × 1,2 kg)",
     category: "zestawy",
     image: "/images/miod-rzepakowo-mniszkowy-1-2-kg.webp",
     inStock: 15,
     available: true,
-    badgeText: "Oszczędzasz 10 zł",
+    badgeText: "Oszczędzasz od 5 zł",
   },
   {
     id: 21,
@@ -210,7 +210,7 @@ export interface BundleConfig {
 
 export const BUNDLES: BundleConfig[] = [
   {
-    id: 20, count: 2, varietyUnit: "900 ml (1,2 kg)", price: 110, regularPrice: 120,
+    id: 20, count: 2, varietyUnit: "900 ml (1,2 kg)", price: 95, regularPrice: 100,
     // 100000 + a*1000 + b (a <= b) – kodowanie bez zmian względem pierwszej wersji
     cartBase: 100000, labelPrefix: "Zestaw 2 × 1,2 kg", jarLabel: "900 ml", jarShort: "1,2 kg",
     feedNetWeightKg: 2.4, feedPackagingKg: 0.7,
@@ -299,7 +299,7 @@ export function makeBundleCartProductFor(b: BundleConfig, ids: number[]): Produc
 
 // Zgodność wstecz: zestaw 2 słoików 1,2 kg
 export const BUNDLE_ID = 20;
-export const BUNDLE_PRICE = 110;
+export const BUNDLE_PRICE = 95;
 export function getBundleProduct(): Product {
   return products.find((p) => p.id === BUNDLE_ID)!;
 }

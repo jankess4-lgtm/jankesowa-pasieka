@@ -177,8 +177,8 @@ function getProductDetails(product: Product): ProductDetails {
       richDescription: product.longDescription,
       specs: [
         { label: "W zestawie", value: "2 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
-        { label: "Cena", value: "110 zł za dwa duże słoiki do wyboru" },
-        { label: "Wysyłka", value: "Darmowa – zestaw osiąga próg 110 zł" },
+        { label: "Cena", value: "95 zł – od 5 zł taniej niż dwa słoiki osobno" },
+        { label: "Wysyłka", value: "Jak za jeden słoik; do darmowej (od 110 zł) brakuje 15 zł" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Więcej miodu w lepszej cenie – idealny zapas na zimę albo prezent.",

@@ -58,7 +58,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Zestawy – gdy nie chcesz stawiać na jedną odmianę",
         paragraphs: [
           "Najwygodniejszym prezentem na święta jest często zestaw. Zamiast zgadywać, czy ktoś woli akację, czy wielokwiatowy, można dać kilka mniejszych albo dwa duże słoiki i pozwolić, żeby domownicy porównali smaki przy wspólnym stole.",
-          "[Zestaw dwóch słoików 900 ml](/produkty/zestaw-2-sloikow-miodu-900ml) (110 zł) to wyraźny, rodzinny prezent: dużo miodu, dwie odmiany, łatwo postawić pod choinką. [Zestaw trzech małych słoików 350 ml](/produkty/zestaw-3-malych-sloikow-miodu-350ml) (80 zł) jest z kolei zręczny, gdy chcesz pokazać różnorodność bez dużego słoika. Taki komplet dobrze wygląda w koszyku i nie wymaga dodatkowego tłumaczenia – etykiety mówią, co jest w środku.",
+          "[Zestaw dwóch słoików 900 ml](/produkty/zestaw-2-sloikow-miodu-900ml) (95 zł) to wyraźny, rodzinny prezent: dużo miodu, dwie odmiany, łatwo postawić pod choinką. [Zestaw trzech małych słoików 350 ml](/produkty/zestaw-3-malych-sloikow-miodu-350ml) (80 zł) jest z kolei zręczny, gdy chcesz pokazać różnorodność bez dużego słoika. Taki komplet dobrze wygląda w koszyku i nie wymaga dodatkowego tłumaczenia – etykiety mówią, co jest w środku.",
           "W sklepie zestaw kompletujesz z dostępnych odmian. Jeśli któregoś miodu chwilowo nie ma, wybierzesz spośród tych, które właśnie są w magazynie. To proste i uczciwe: prezent jedzie taki, jaki naprawdę mamy w pasiece, a nie na zamówienie z hurtowni.",
         ],
       },
@@ -220,7 +220,7 @@ export const blogPosts: BlogPost[] = [
         { href: "/produkty/miod-akacjowy-900ml", label: "Miód akacjowy 1,2 kg" },
         { href: "/produkty/miod-rzepakowo-mniszkowy-900ml", label: "Miód mniszkowo-rzepakowy 1,2 kg" },
         { href: "/produkty/plastry-miodu", label: "Miód w plastrach" },
-        { href: "/produkty/zestaw-2-sloikow-miodu-900ml", label: "Zestaw 2 słoików 2 × 1,2 kg – 110 zł" },
+        { href: "/produkty/zestaw-2-sloikow-miodu-900ml", label: "Zestaw 2 słoików 2 × 1,2 kg – 95 zł" },
         { href: "/produkty/zestaw-3-malych-sloikow-miodu-350ml", label: "Zestaw 3 małych słoików 3 × 0,49 kg – 80 zł" },
       ],
     },

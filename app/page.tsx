@@ -1,4 +1,5 @@
 import PromoSwiecie from "@/components/PromoSwiecie";
+import ChristmasGiftLink from "@/components/ChristmasGiftLink";
 import ShippingNote from "@/components/ShippingNote";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
@@ -142,6 +143,8 @@ export default async function HomePage() {
               <Button variant="outline">Zobacz pełną ofertę</Button>
             </Link>
           </div>
+
+          <ChristmasGiftLink />
         </div>
       </section>
 

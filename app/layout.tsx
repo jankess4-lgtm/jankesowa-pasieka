@@ -110,7 +110,13 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
-        <Toaster position="top-center" richColors closeButton offset={120} mobileOffset={120} />
+        <Toaster
+          position="top-center"
+          richColors
+          closeButton
+          offset={{ top: 112 }}
+          mobileOffset={{ top: 112, left: 16, right: 16, bottom: 16 }}
+        />
         <Analytics />
         <CookieBanner />
       </body>

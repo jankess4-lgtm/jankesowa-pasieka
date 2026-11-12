@@ -82,3 +82,42 @@ h1, h2, .font-serif {
   color: white !important;
   border: 1px solid #92400E !important;
 }
+
+/*
+  Sonner applies a single numeric mobileOffset to top, right, bottom AND left,
+  then on narrow screens sets the toast width to:
+    calc(100% - var(--mobile-offset-left) * 2)
+  Passing 120 to clear the sticky nav therefore also inset the toaster 120px
+  from both sides. The computed width collapsed, and overflow-wrap: anywhere
+  stacked the message one letter per line down the middle of the screen.
+*/
+@media (max-width: 600px) {
+  [data-sonner-toaster] {
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+    max-width: calc(100vw - 32px);
+  }
+
+  [data-sonner-toaster][data-y-position="top"] {
+    top: 7rem;
+  }
+
+  [data-sonner-toaster] [data-sonner-toast],
+  [data-sonner-toaster] [data-sonner-toast][data-styled="true"] {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  [data-sonner-toaster] [data-content],
+  [data-sonner-toaster] [data-title] {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+    white-space: normal;
+  }
+}

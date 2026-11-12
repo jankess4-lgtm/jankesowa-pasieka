@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
-import { resolveDiscountCode, INVALID_CODE_MESSAGE, type ResolvedDiscount } from "@/lib/discounts";
+import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -157,10 +157,15 @@ export async function POST(request: NextRequest) {
     // Próg darmowej wysyłki liczymy od wartości produktów PRZED rabatem.
     let discount: ResolvedDiscount | null = null;
     if (discountCode && String(discountCode).trim()) {
-      discount = await resolveDiscountCode(stripe, discountCode);
-      if (!discount) {
-        return NextResponse.json({ error: INVALID_CODE_MESSAGE, invalidCode: true }, { status: 400 });
+      // productsSubtotal liczony z cen katalogu po stronie serwera
+      const check = await checkDiscountCode(stripe, discountCode, productsSubtotal);
+      if (!check.ok) {
+        return NextResponse.json(
+          { error: check.message, invalidCode: true, reason: check.reason },
+          { status: 400 }
+        );
       }
+      discount = check.discount;
     }
 
     // Z rabatem dostawa idzie jako opcja wysyłki Stripe (rabat jej nie obejmuje),

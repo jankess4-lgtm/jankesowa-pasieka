@@ -43,7 +43,12 @@ export async function startStripeCheckout(
   const data = await res.json();
 
   if (!res.ok || !data.sessionId) {
-    throw new Error(data.error || "Nie udało się utworzyć sesji płatności");
+    const err: Error & { invalidCode?: boolean; reason?: string } = new Error(
+      data.error || "Nie udało się utworzyć sesji płatności"
+    );
+    err.invalidCode = !!data.invalidCode;
+    err.reason = data.reason;
+    throw err;
   }
 
   const stripe = await stripePromise;

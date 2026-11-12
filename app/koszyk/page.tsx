@@ -63,6 +63,8 @@ interface AppliedDiscount {
   code: string;
   percentOff: number;
   label: string;
+  minProducts?: number;
+  expiresAt?: number | null;
 }
 const SEARCH_DEBOUNCE_MS = 200;
 const SEARCH_RESULTS_LIMIT = 80;
@@ -327,14 +329,20 @@ export default function KoszykPage() {
       const res = await fetch("/api/discount", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, productsSubtotal: totalPrice }),
       });
       const data = await res.json();
       if (!res.ok || !data.valid) {
         setDiscountError(data.error || "Ten kod rabatowy jest nieprawidłowy.");
         return;
       }
-      const applied = { code: data.code, percentOff: data.percentOff, label: data.label };
+      const applied: AppliedDiscount = {
+        code: data.code,
+        percentOff: data.percentOff,
+        label: data.label,
+        minProducts: data.minProducts || 0,
+        expiresAt: data.expiresAt ?? null,
+      };
       setAppliedDiscount(applied);
       sessionStorage.setItem(DISCOUNT_STORAGE_KEY, JSON.stringify(applied));
       setDiscountInput("");
@@ -351,6 +359,16 @@ export default function KoszykPage() {
     setAppliedDiscount(null);
     sessionStorage.removeItem(DISCOUNT_STORAGE_KEY);
   };
+
+  // Kod po terminie ważności – usuwamy i informujemy klienta
+  useEffect(() => {
+    if (appliedDiscount?.expiresAt && appliedDiscount.expiresAt * 1000 <= Date.now()) {
+      setAppliedDiscount(null);
+      sessionStorage.removeItem(DISCOUNT_STORAGE_KEY);
+      setDiscountOpen(true);
+      setDiscountError("Ten kod rabatowy wygasł.");
+    }
+  }, [appliedDiscount]);
 
   const fetchPaczkomaty = useCallback(() => {
     setPaczkomatyLoading(true);
@@ -406,7 +424,10 @@ export default function KoszykPage() {
   const requiresContact = needsContactValidation(customer.deliveryMethod);
   const packages = packagesForCart(items);
   const shippingCost = shippingTotal(customer.deliveryMethod, totalPrice, packages);
-  const discountValue = appliedDiscount ? discountAmount(totalPrice, appliedDiscount.percentOff) : 0;
+  const discountMin = appliedDiscount?.minProducts || 0;
+  const discountBelowMin = !!appliedDiscount && totalPrice < discountMin;
+  const discountActive = !!appliedDiscount && !discountBelowMin;
+  const discountValue = discountActive && appliedDiscount ? discountAmount(totalPrice, appliedDiscount.percentOff) : 0;
   const grandTotalNumber = Math.round((totalPrice - discountValue + shippingCost) * 100) / 100;
   const grandTotal = formatZl(grandTotalNumber);
   const freeShipping = qualifiesForFreeShipping(totalPrice);
@@ -493,11 +514,11 @@ export default function KoszykPage() {
         street: customer.street?.trim(),
         postalCode: customer.postalCode?.trim(),
         city: customer.city?.trim(),
-      }, appliedDiscount?.code);
+      }, discountActive ? appliedDiscount?.code : undefined);
       toast.success("Przekierowanie do płatności...");
     } catch (err: any) {
       const message = String(err?.message || "");
-      if (message.includes("kod rabatowy")) {
+      if (err?.invalidCode) {
         removeDiscount();
         setDiscountOpen(true);
         setDiscountError(message);
@@ -1011,7 +1032,7 @@ export default function KoszykPage() {
                     {shippingCost === 0 ? "0 zł" : `${shippingCost} zł`}
                   </span>
                 </div>
-                {appliedDiscount && (
+                {discountActive && appliedDiscount && (
                   <div className="flex justify-between text-brand-green font-medium">
                     <span>
                       Rabat {appliedDiscount.code} (−{appliedDiscount.percentOff}% na produkty)
@@ -1026,7 +1047,26 @@ export default function KoszykPage() {
                   <p className="text-xs text-brand-brown/60 leading-snug">{PACKING_NOTE}</p>
                 )}
                 <div className="pt-2">
-                  {appliedDiscount ? (
+                  {appliedDiscount && discountBelowMin ? (
+                    <div className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-brand-brown">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="flex items-start gap-1.5">
+                          <Tag className="w-3.5 h-3.5 text-amber-600 mt-0.5 flex-shrink-0" />
+                          <span>
+                            Kod <strong>{appliedDiscount.code}</strong> działa od {formatZl(discountMin)} zł wartości
+                            produktów. Brakuje jeszcze {formatZl(discountMin - totalPrice)} zł.
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={removeDiscount}
+                          className="text-brand-brown/60 hover:text-red-600 underline whitespace-nowrap"
+                        >
+                          Usuń kod
+                        </button>
+                      </div>
+                    </div>
+                  ) : appliedDiscount ? (
                     <div className="flex items-center justify-between gap-2 rounded-xl border border-brand-green/30 bg-brand-green/5 px-3 py-2 text-xs text-brand-brown">
                       <span className="flex items-center gap-1.5">
                         <Tag className="w-3.5 h-3.5 text-brand-green" />

@@ -146,6 +146,19 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
+  if (product.category === "zestawy" && product.id === 22) {
+    return {
+      richDescription: product.longDescription,
+      specs: [
+        { label: "W zestawie", value: "3 słoiki 350 ml (0,49 kg) w pudełku z kokardą – rodzaje wybierasz sam" },
+        { label: "Cena", value: "89 zł" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 110 zł darmowa" },
+        { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
+      ],
+      whyBuy: "Gotowy prezent na święta – trzy małe słoiki, pudełko i kokarda, bez dodatkowego pakowania.",
+    };
+  }
+
   if (product.category === "zestawy" && product.id === 21) {
     return {
       richDescription: product.longDescription,

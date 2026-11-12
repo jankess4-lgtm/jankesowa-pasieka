@@ -148,6 +148,20 @@ export const products: Product[] = [
     available: true,
     badgeText: "Oszczędzasz 10 zł",
   },
+  {
+    id: 22,
+    name: "Zestaw świąteczny – 3 małe słoiki miodu w pudełku z kokardą",
+    slug: "zestaw-swiateczny-3-male-sloiki",
+    description: "Trzy małe słoiki miodu (po 0,49 kg) w pudełku przewiązanym kokardą. Gotowy prezent z pasieki na święta – odmiany wybierasz sam.",
+    longDescription: "Zestaw świąteczny z naszej pasieki w Topolnie: trzy słoiki miodu 350 ml (0,49 kg) w pudełku przewiązanym kokardą. Sam wybierasz odmiany spośród tych, które właśnie mamy – możesz też wziąć kilka takich samych. To spokojny, praktyczny prezent na stół, bez kombinowania z pakowaniem. Miód naturalny, niepasteryzowany, w szklanych słoikach. Pudełko i kokarda są w cenie.",
+    price: 89,
+    unit: "3 × 350 ml (3 × 0,49 kg)",
+    category: "zestawy",
+    image: "/images/miod-akacjowy-0-49-kg.webp",
+    inStock: 15,
+    available: true,
+    badgeText: "Na święta",
+  },
 ];
 
 export function isProductListedAsAvailable(p: Product): boolean {
@@ -157,10 +171,15 @@ export function isProductListedAsAvailable(p: Product): boolean {
 /** Dwa zestawy i dwa duże słoiki — równy rząd 4 produktów na komputerze. */
 export function getHomepageFeaturedProducts(): Product[] {
   const sets = products.filter((p) => p.category === "zestawy" && isProductListedAsAvailable(p));
+  const preferredIds = [22, 20, 21];
+  const featuredSets = preferredIds
+    .map((id) => sets.find((p) => p.id === id))
+    .filter((p): p is Product => Boolean(p))
+    .slice(0, 2);
   const honeys = products.filter(
     (p) => p.category === "miody" && isProductListedAsAvailable(p) && !p.unit.includes("350")
   );
-  return [...sets, ...honeys.slice(0, 2)];
+  return [...featuredSets, ...honeys.slice(0, 2)];
 }
 
 export function sortProductsForCatalog(list: Product[]): Product[] {
@@ -200,6 +219,11 @@ export const BUNDLES: BundleConfig[] = [
     id: 21, count: 3, varietyUnit: "350 ml (0,49 kg)", price: 80, regularPrice: 90,
     cartBase: 2000000, labelPrefix: "Zestaw 3 × 350 ml", jarLabel: "350 ml", jarShort: "0,49 kg",
     feedNetWeightKg: 1.47, feedPackagingKg: 0.6,
+  },
+  {
+    id: 22, count: 3, varietyUnit: "350 ml (0,49 kg)", price: 89, regularPrice: 90,
+    cartBase: 3000000, labelPrefix: "Zestaw świąteczny 3 × 350 ml", jarLabel: "350 ml", jarShort: "0,49 kg",
+    feedNetWeightKg: 1.47, feedPackagingKg: 0.8,
   },
 ];
 

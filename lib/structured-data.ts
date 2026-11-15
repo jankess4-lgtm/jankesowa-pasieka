@@ -2,6 +2,7 @@ import type { Product } from "./types";
 import type { BlogPost } from "./blog";
 import { pasiekaPhotos } from "./pasieka-photos";
 import { GOOGLE_PROFILE_URL } from "./google-profile";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_PARCEL } from "./shipping";
 
 export const SITE_URL = "https://jankesowapasieka.pl";
 
@@ -10,6 +11,49 @@ export function jsonLdString(data: unknown): string {
 }
 
 const pasiekaImageUrls = pasiekaPhotos.map((photo) => `${SITE_URL}${photo.src}`);
+
+/** § 5 regulaminu: 14 dni na odstąpienie od umowy. Koszt odesłania ponosi klient (domyślna zasada, regulamin tego nie precyzuje). */
+export const merchantReturnPolicyJsonLd = {
+  "@type": "MerchantReturnPolicy",
+  applicableCountry: "PL",
+  returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+  merchantReturnDays: 14,
+  returnMethod: "https://schema.org/ReturnByMail",
+  returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+  merchantReturnLink: `${SITE_URL}/regulamin`,
+};
+
+/** Czas realizacji 1–3 dni robocze (regulamin / „Jak zrobić zakupy?”); dostawa kurierem/paczkomatem w PL zwykle 1–2 dni. */
+function productShippingDetails(product: Product) {
+  const rate = product.price >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_PARCEL;
+  return {
+    "@type": "OfferShippingDetails",
+    shippingDestination: {
+      "@type": "DefinedRegion",
+      addressCountry: "PL",
+    },
+    shippingRate: {
+      "@type": "MonetaryAmount",
+      value: rate.toFixed(2),
+      currency: "PLN",
+    },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      handlingTime: {
+        "@type": "QuantitativeValue",
+        minValue: 1,
+        maxValue: 3,
+        unitCode: "DAY",
+      },
+      transitTime: {
+        "@type": "QuantitativeValue",
+        minValue: 1,
+        maxValue: 2,
+        unitCode: "DAY",
+      },
+    },
+  };
+}
 
 /** LocalBusiness + Store — injected in the root layout (homepage and every page). */
 export const organizationJsonLd = {
@@ -53,6 +97,7 @@ export const organizationJsonLd = {
     },
   ],
   sameAs: [GOOGLE_PROFILE_URL],
+  hasMerchantReturnPolicy: merchantReturnPolicyJsonLd,
 };
 
 export type BreadcrumbItem = {
@@ -99,6 +144,8 @@ export function productJsonLd(product: Product) {
         "@type": "Organization",
         name: "Jankesowa Pasieka",
       },
+      shippingDetails: productShippingDetails(product),
+      hasMerchantReturnPolicy: merchantReturnPolicyJsonLd,
     },
   };
 }

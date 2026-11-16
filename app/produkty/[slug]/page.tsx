@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "./ProductActions";
 import ShippingNote from "@/components/ShippingNote";
+import TrustSignals from "@/components/TrustSignals";
 import BundleActions from "./BundleActions";
 import SalePrice from "@/components/SalePrice";
 import type { Metadata } from "next";
@@ -311,6 +312,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <ProductActions product={product} isAvailable={isAvailable} />
               )}
               <ShippingNote />
+              <TrustSignals />
             </div>
 
             {/* Rich description */}

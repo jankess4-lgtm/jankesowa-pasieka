@@ -58,7 +58,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Zestawy – gdy nie chcesz stawiać na jedną odmianę",
         paragraphs: [
           "Najwygodniejszym prezentem na święta jest często zestaw. Zamiast zgadywać, czy ktoś woli akację, czy wielokwiatowy, można dać kilka mniejszych albo dwa lub trzy duże słoiki i pozwolić, żeby domownicy porównali smaki przy wspólnym stole.",
-          "[Zestaw 3 dużych słoików miodu](/produkty/zestaw-3-duzych-sloikow-miodu-900ml) (3 × 1,2 kg) kosztuje 135 zł zamiast 150 zł – oszczędzasz 15 zł, a wysyłka jest już darmowa, bo wartość przekracza 110 zł. To 3,6 kg miodu: wyraźny prezent dla rodziny albo solidny zapas na zimę. [Zestaw dwóch słoików 900 ml](/produkty/zestaw-2-sloikow-miodu-900ml) (95 zł) jest trochę mniejszy, ale też rodzinny. [Zestaw trzech małych słoików 350 ml](/produkty/zestaw-3-malych-sloikow-miodu-350ml) (80 zł) jest zręczny, gdy chcesz pokazać różnorodność bez dużego słoika. Na święta jest też [zestaw świąteczny](/produkty/zestaw-swiateczny-3-male-sloiki): trzy małe słoiki w pudełku z kokardą za 89 zł – gotowy prezent, bez dodatkowego pakowania.",
+          "[Zestaw 3 dużych słoików miodu](/produkty/zestaw-3-duzych-sloikow-miodu-900ml) (3 × 1,2 kg) kosztuje 135 zł zamiast 150 zł – oszczędzasz 15 zł, a wysyłka jest już darmowa, bo wartość przekracza 95 zł. To 3,6 kg miodu: wyraźny prezent dla rodziny albo solidny zapas na zimę. [Zestaw dwóch słoików 900 ml](/produkty/zestaw-2-sloikow-miodu-900ml) (95 zł) jest trochę mniejszy, ale też rodzinny i również z darmową wysyłką. [Zestaw trzech małych słoików 350 ml](/produkty/zestaw-3-malych-sloikow-miodu-350ml) (80 zł) jest zręczny, gdy chcesz pokazać różnorodność bez dużego słoika. Na święta jest też [zestaw świąteczny](/produkty/zestaw-swiateczny-3-male-sloiki): trzy małe słoiki w pudełku z kokardą za 89 zł – gotowy prezent, bez dodatkowego pakowania.",
           "W sklepie zestaw kompletujesz z dostępnych odmian. Jeśli któregoś miodu chwilowo nie ma, wybierzesz spośród tych, które właśnie są w magazynie. To proste i uczciwe: prezent jedzie taki, jaki naprawdę mamy w pasiece, a nie na zamówienie z hurtowni.",
         ],
       },
@@ -66,7 +66,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Na co zwrócić uwagę przed zamówieniem",
         paragraphs: [
           "Kilka praktycznych rzeczy, o których warto pamiętać, zanim miód trafi pod choinkę.",
-          "Po pierwsze, czas dostawy. Wysyłamy w ciągu 1–3 dni roboczych, do Paczkomatu InPost (14 zł) albo kurierem (16 zł), a przy zamówieniu za co najmniej 110 zł wysyłka jest darmowa. Przy zamówieniach świątecznych lepiej nie zostawiać tego na ostatnią chwilę – grudzień bywa intensywny zarówno w poczcie, jak i u przewoźników. Aktualne koszty i terminy zawsze widać w koszyku przed płatnością.",
+          "Po pierwsze, czas dostawy. Wysyłamy w ciągu 1–3 dni roboczych, do Paczkomatu InPost (14 zł) albo kurierem (16 zł), a przy zamówieniu za co najmniej 95 zł wysyłka jest darmowa. Przy zamówieniach świątecznych lepiej nie zostawiać tego na ostatnią chwilę – grudzień bywa intensywny zarówno w poczcie, jak i u przewoźników. Aktualne koszty i terminy zawsze widać w koszyku przed płatnością.",
           "Po drugie, odbiór osobisty. Miód można odebrać w pasiece w Topolnie (po umówieniu), w Bydgoszczy przy ul. Jagiellońskiej koło hotelu City (w dni robocze po 15:00, po wcześniejszym telefonie) oraz w Świeciu (zawsze po wcześniejszym kontakcie). To wygodne, jeśli prezent ma trafić do kogoś z Bydgoszczy, Torunia albo ze Świecia i chcesz uniknąć przesyłki.",
           "Po trzecie, krystalizacja. Miód naturalny z czasem gęstnieje – jedne odmiany szybciej, inne wolniej. To naturalny proces, nie oznaka zepsucia. Jeśli chcesz, żeby słoik w dniu wręczenia był bardziej płynny, akacja zwykle dłużej taka pozostaje. Rzepakowo-mniszkowy raczej będzie już kremowy, i właśnie tak go lubi wiele osób.",
           "Po czwarte, przechowywanie. Wystarczy suche, zacienione miejsce, bez silnych zapachów w pobliżu. Nie trzeba trzymać miodu w lodówce. Przy okazji wręczenia można dopisać na kartce tę jedną wskazówkę – bywa przydatna, zwłaszcza gdy obdarowujesz kogoś, kto bierze miód rzadziej.",
@@ -131,7 +131,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Na zimę i pod choinkę",
         paragraphs: [
-          "Jeśli chcesz mieć naturalny miód na całą zimę, do herbaty z cytryną albo na prezent pod choinkę, to dobry moment, żeby go zamówić. W sklepie duży słoik wielokwiatowego albo rzepakowo-mniszkowego kosztuje 50 zł, akacjowego 60 zł. Wysyłamy paczkomatem (14 zł) lub kurierem (16 zł), a od 110 zł wartości produktów wysyłka jest darmowa.",
+          "Jeśli chcesz mieć naturalny miód na całą zimę, do herbaty z cytryną albo na prezent pod choinkę, to dobry moment, żeby go zamówić. W sklepie duży słoik wielokwiatowego albo rzepakowo-mniszkowego kosztuje 50 zł, akacjowego 60 zł. Wysyłamy paczkomatem (14 zł) lub kurierem (16 zł), a od 95 zł wartości produktów wysyłka jest darmowa.",
           "Można też odebrać osobiście: w pasiece w Topolnie (po umówieniu), w Bydgoszczy przy ul. Jagiellońskiej koło hotelu City (w dni robocze po 15:00, po telefonie) oraz w Świeciu (zawsze po wcześniejszym kontakcie). Dla mieszkańców Świecia, powiatu świeckiego oraz Chełmna i okolic duży słoik 1,2 kg kosztuje 45 zł przy odbiorze osobistym po umówieniu telefonicznym – do 31 grudnia 2026 r. Ta cena nie dotyczy zamówień przez sklep.",
           "Jeśli chcesz zrobić większy zapas, [zestaw 3 dużych słoików miodu](/produkty/zestaw-3-duzych-sloikow-miodu-900ml) (3 × 1,2 kg) jest za 135 zł zamiast 150 zł. Oszczędzasz 15 zł, a wysyłka jest już darmowa.",
         ],
@@ -297,7 +297,7 @@ export const blogPosts: BlogPost[] = [
       },
     ],
     cta: {
-      text: "Nasz miód mniszkowo-rzepakowy pochodzi z wiosennych pożytków wokół Topolna nad Wisłą. Duży słoik 1,2 kg kosztuje 50 zł. Możesz zamówić z wysyłką (darmowa od 110 zł) albo odebrać w pasiece w Topolnie, w Bydgoszczy lub w Świeciu – zawsze po umówieniu.",
+      text: "Nasz miód mniszkowo-rzepakowy pochodzi z wiosennych pożytków wokół Topolna nad Wisłą. Duży słoik 1,2 kg kosztuje 50 zł. Możesz zamówić z wysyłką (darmowa od 95 zł) albo odebrać w pasiece w Topolnie, w Bydgoszczy lub w Świeciu – zawsze po umówieniu.",
       links: [
         { href: "/produkty/miod-rzepakowo-mniszkowy-900ml", label: "Miód mniszkowo-rzepakowy 1,2 kg – 50 zł" },
         { href: "/produkty/miod-rzepakowo-mniszkowy-350ml", label: "Miód mniszkowo-rzepakowy 0,49 kg" },
@@ -444,7 +444,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Wysyłka miodu w całej Polsce",
         paragraphs: [
-          "Miód możesz zamówić przez nasz sklep internetowy i opłacić kartą, BLIK-iem lub Przelewy24. Wysyłamy do Paczkomatów InPost (14 zł) oraz kurierem na wskazany adres (16 zł). Od 110 zł wartości produktów wysyłka jest darmowa. Słoiki pakujemy starannie, żeby dotarły w całości.",
+          "Miód możesz zamówić przez nasz sklep internetowy i opłacić kartą, BLIK-iem lub Przelewy24. Wysyłamy do Paczkomatów InPost (14 zł) oraz kurierem na wskazany adres (16 zł). Od 95 zł wartości produktów wysyłka jest darmowa. Słoiki pakujemy starannie, żeby dotarły w całości.",
           "Jeśli chcesz większy zapas, w sklepie jest [zestaw 3 dużych słoików miodu](/produkty/zestaw-3-duzych-sloikow-miodu-900ml): 3 × 1,2 kg za 135 zł zamiast 150 zł. Oszczędzasz 15 zł, a wysyłka jest już darmowa. Rodzaje wybierasz sam spośród tych, które właśnie mamy.",
         ],
       },

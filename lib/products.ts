@@ -124,8 +124,8 @@ export const products: Product[] = [
     id: 20,
     name: "Zestaw 2 słoików miodu – 2 × 900 ml (2 × 1,2 kg)",
     slug: "zestaw-2-sloikow-miodu-900ml",
-    description: "Dwa duże słoiki miodu 1,2 kg do wyboru za 95 zł – od 5 zł taniej niż przy zakupie osobno. Wysyłka jak za jeden słoik; do darmowej (od 110 zł) brakuje 15 zł.",
-    longDescription: "Zestaw dwóch dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz dwa rodzaje spośród dostępnych miodów – możesz też wziąć dwa takie same. Płacisz 95 zł, zawsze taniej niż dwa duże słoiki osobno: przy wielokwiatowym i rzepakowo-mniszkowym (po 50 zł) oszczędzasz 5 zł, przy dwóch akacjach (po 60 zł) – 25 zł, a przy mieszance 50 zł i 60 zł – 15 zł. Do darmowej wysyłki (od 110 zł wartości produktów) w tym zestawie brakuje 15 zł. Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    description: "Dwa duże słoiki miodu 1,2 kg do wyboru za 95 zł – od 5 zł taniej niż przy zakupie osobno, z darmową wysyłką.",
+    longDescription: "Zestaw dwóch dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz dwa rodzaje spośród dostępnych miodów – możesz też wziąć dwa takie same. Płacisz 95 zł, zawsze taniej niż dwa duże słoiki osobno: przy wielokwiatowym i rzepakowo-mniszkowym (po 50 zł) oszczędzasz 5 zł, przy dwóch akacjach (po 60 zł) – 25 zł, a przy mieszance 50 zł i 60 zł – 15 zł. Wysyłka jest darmowa (od 95 zł wartości produktów). Miód naturalny, niepasteryzowany, w szklanych słoikach.",
     price: 95,
     unit: "2 × 900 ml (2 × 1,2 kg)",
     category: "zestawy",
@@ -167,7 +167,7 @@ export const products: Product[] = [
     name: "Zestaw 3 dużych słoików miodu – 3 × 900 ml (3 × 1,2 kg)",
     slug: "zestaw-3-duzych-sloikow-miodu-900ml",
     description: "Trzy duże słoiki miodu 1,2 kg do wyboru za 135 zł zamiast 150 zł – oszczędzasz 15 zł. 3,6 kg miodu, a wysyłka jest już darmowa.",
-    longDescription: "Zestaw trzech dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz trzy rodzaje spośród dostępnych miodów – możesz też wziąć kilka takich samych. Płacisz 135 zł zamiast 150 zł za trzy słoiki po 50 zł (wielokwiatowy albo rzepakowo-mniszkowy), czyli oszczędzasz 15 zł. Jeśli w zestawie będzie miód akacjowy (60 zł za słoik), oszczędzasz jeszcze więcej, a cena zestawu zostaje 135 zł. To 3,6 kg miodu, więc wysyłka jest darmowa (od 110 zł wartości produktów). Miód naturalny, niepasteryzowany, w szklanych słoikach.",
+    longDescription: "Zestaw trzech dużych słoików miodu 900 ml (1,2 kg) z naszej pasieki w Topolnie. Sam wybierasz trzy rodzaje spośród dostępnych miodów – możesz też wziąć kilka takich samych. Płacisz 135 zł zamiast 150 zł za trzy słoiki po 50 zł (wielokwiatowy albo rzepakowo-mniszkowy), czyli oszczędzasz 15 zł. Jeśli w zestawie będzie miód akacjowy (60 zł za słoik), oszczędzasz jeszcze więcej, a cena zestawu zostaje 135 zł. To 3,6 kg miodu, więc wysyłka jest darmowa (od 95 zł wartości produktów). Miód naturalny, niepasteryzowany, w szklanych słoikach.",
     price: 135,
     unit: "3 × 900 ml (3 × 1,2 kg)",
     category: "zestawy",
@@ -343,7 +343,7 @@ export function getBundleVarieties(): Product[] {
 export const PACKAGE_UNITS = 8;
 export const PACKAGE_MAX_SMALL = 6;
 export const PACKING_NOTE =
-  "Dla bezpieczeństwa słoików pakujemy maks. 4 duże (1,2 kg) albo 6 małych słoików w jednej paczce (1 duży = 2 małe). Większe zamówienie wyślemy w kilku paczkach. Poniżej 110 zł wartości produktów koszt dostawy liczony jest za każdą paczkę; od 110 zł wysyłka jest darmowa.";
+  "Dla bezpieczeństwa słoików pakujemy maks. 4 duże (1,2 kg) albo 6 małych słoików w jednej paczce (1 duży = 2 małe). Większe zamówienie wyślemy w kilku paczkach. Poniżej 95 zł wartości produktów koszt dostawy liczony jest za każdą paczkę; od 95 zł wysyłka jest darmowa.";
 
 /** Ile paczek potrzeba dla podanej liczby dużych i małych słoików oraz innych produktów */
 export function packagesNeeded(large: number, small: number, other = 0): number {

@@ -1,6 +1,6 @@
 export const SHIPPING_PARCEL = 14;
 export const SHIPPING_COURIER = 16;
-export const FREE_SHIPPING_THRESHOLD = 110;
+export const FREE_SHIPPING_THRESHOLD = 95;
 
 export type DeliveryMethod = "address" | "parcel" | "pickup";
 
@@ -31,7 +31,7 @@ export function amountToFreeShipping(subtotal: number): number {
 
 export function freeShippingMessage(subtotal: number): string {
   if (qualifiesForFreeShipping(subtotal)) {
-    return "Darmowa wysyłka – wartość produktów wynosi co najmniej 110 zł.";
+    return `Darmowa wysyłka – wartość produktów wynosi co najmniej ${FREE_SHIPPING_THRESHOLD} zł.`;
   }
   const left = amountToFreeShipping(subtotal);
   return `Brakuje ${left} zł do darmowej wysyłki.`;

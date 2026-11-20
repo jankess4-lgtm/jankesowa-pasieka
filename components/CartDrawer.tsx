@@ -167,7 +167,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <div className="text-xs bg-brand-cream p-3 rounded-lg text-brand-brown/80 leading-relaxed">
                     <p>
                       Dostawa: paczkomat {SHIPPING_PARCEL} zł, kurier {SHIPPING_COURIER} zł,
-                      odbiór osobisty 0 zł. Od 110 zł wartości produktów wysyłka jest darmowa.
+                      odbiór osobisty 0 zł. Od 95 zł wartości produktów wysyłka jest darmowa.
                     </p>
                     <p className={`mt-1.5 ${qualifiesForFreeShipping(totalPrice) ? "font-medium text-brand-green" : "font-medium text-brand-brown"}`}>
                       {freeShippingMessage(totalPrice)}

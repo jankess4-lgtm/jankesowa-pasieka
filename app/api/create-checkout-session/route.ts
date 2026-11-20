@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
       return sum + (unit * qty) / 100;
     }, 0);
 
-    // Prepare shipping – prices from the catalog, free from 110 zł products subtotal
+    // Prepare shipping – prices from the catalog, free from FREE_SHIPPING_THRESHOLD (95 zł) products subtotal
     const deliveryMeta: Record<string, string> = {};
     let shippingCost = 0;
     let shippingName = "";

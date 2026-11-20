@@ -154,7 +154,7 @@ function getProductDetails(product: Product): ProductDetails {
         { label: "W zestawie", value: "3 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
         { label: "Cena", value: "135 zł zamiast 150 zł – oszczędzasz 15 zł" },
         { label: "Waga", value: "3,6 kg miodu" },
-        { label: "Wysyłka", value: "Darmowa – zestaw jest powyżej 110 zł" },
+        { label: "Wysyłka", value: "Darmowa – zestaw jest powyżej 95 zł" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Więcej miodu taniej: trzy duże słoiki i darmowa wysyłka w jednym zestawie.",
@@ -167,7 +167,7 @@ function getProductDetails(product: Product): ProductDetails {
       specs: [
         { label: "W zestawie", value: "3 słoiki 350 ml (0,49 kg) w pudełku z kokardą – rodzaje wybierasz sam" },
         { label: "Cena", value: "89 zł" },
-        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 110 zł darmowa" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 95 zł darmowa" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Gotowy prezent na święta – trzy małe słoiki, pudełko i kokarda, bez dodatkowego pakowania.",
@@ -180,7 +180,7 @@ function getProductDetails(product: Product): ProductDetails {
       specs: [
         { label: "W zestawie", value: "3 słoiki 350 ml (0,49 kg) – rodzaje wybierasz sam" },
         { label: "Cena", value: "80 zł zamiast 90 zł – oszczędzasz 10 zł" },
-        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 110 zł darmowa" },
+        { label: "Wysyłka", value: "Tyle samo co za jeden słoik; od 95 zł darmowa" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Ładny pomysł na prezent i okazja, żeby spróbować kilku miodów.",
@@ -193,7 +193,7 @@ function getProductDetails(product: Product): ProductDetails {
       specs: [
         { label: "W zestawie", value: "2 słoiki 900 ml (1,2 kg) – rodzaje wybierasz sam" },
         { label: "Cena", value: "95 zł – od 5 zł taniej niż dwa słoiki osobno" },
-        { label: "Wysyłka", value: "Jak za jeden słoik; do darmowej (od 110 zł) brakuje 15 zł" },
+        { label: "Wysyłka", value: "Darmowa – zestaw kosztuje 95 zł" },
         { label: "Pochodzenie", value: "Pasieka w Topolnie nad Wisłą" },
       ],
       whyBuy: "Więcej miodu w lepszej cenie – idealny zapas na zimę albo prezent.",

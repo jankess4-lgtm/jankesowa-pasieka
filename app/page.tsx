@@ -1,4 +1,3 @@
-import PromoSwiecie from "@/components/PromoSwiecie";
 import ChristmasGiftLink from "@/components/ChristmasGiftLink";
 import ShippingNote from "@/components/ShippingNote";
 import Link from "next/link";
@@ -122,7 +121,7 @@ export default async function HomePage() {
               <h2 className="font-serif text-3xl sm:text-4xl text-brand-brown tracking-tight">Miody i zestawy</h2>
               <p className="mt-2 text-sm text-[#374151] max-w-xl">
                 Zestaw trzech dużych słoików 1,2 kg za 135 zł zamiast 150 zł — oszczędzasz 15 zł, a wysyłka jest darmowa.
-                Są też zestawy dwóch dużych słoików za 95 zł i trzech małych za 80 zł.
+                Są też zestawy dwóch dużych słoików za 95 zł (także z darmową wysyłką) i trzech małych za 80 zł.
               </p>
             </div>
             <Link href="/produkty" className="hidden md:block text-sm font-medium text-brand-gold hover:underline">
@@ -166,10 +165,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      <div className="max-w-6xl mx-auto px-6 pb-8">
-        <PromoSwiecie className="text-center" />
-      </div>
 
       <HowToShop />
 

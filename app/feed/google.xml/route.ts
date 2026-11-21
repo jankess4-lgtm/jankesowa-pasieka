@@ -1,5 +1,6 @@
 import { products, getBundleConfig } from "@/lib/products";
 import { Product } from "@/lib/types";
+import { qualifiesForFreeShipping, SHIPPING_PARCEL } from "@/lib/shipping";
 
 export const revalidate = 3600;
 
@@ -56,8 +57,10 @@ function itemXml(p: Product) {
     lines.push(`<g:sale_price>${bundle.price.toFixed(2)} PLN</g:sale_price>`);
   }
   if (shippingWeight) lines.push(`<g:shipping_weight>${shippingWeight} kg</g:shipping_weight>`);
+  const sellingPrice = bundle ? bundle.price : p.price;
+  const shippingPrice = qualifiesForFreeShipping(sellingPrice) ? 0 : SHIPPING_PARCEL;
   lines.push(
-    `<g:shipping><g:country>PL</g:country><g:service>Paczkomat InPost</g:service><g:price>14.00 PLN</g:price></g:shipping>`
+    `<g:shipping><g:country>PL</g:country><g:service>Paczkomat InPost</g:service><g:price>${shippingPrice.toFixed(2)} PLN</g:price></g:shipping>`
   );
   return `    <item>\n      ${lines.join("\n      ")}\n    </item>`;
 }

@@ -22,7 +22,7 @@ export const blogPosts: BlogPost[] = [
     title: "Miód na grudniowe wieczory i pod choinkę",
     description:
       "Miód z pasieki na Kujawach na grudzień: zimowy stół, zestawy na prezent, darmowa wysyłka od 95 zł i wskazówka, kiedy zamówić, żeby zdążyć na święta.",
-    date: "2026-11-24",
+    date: "2026-11-23",
     image: "/images/pasieka/ramka-miod.webp",
     imageAlt: "Ramka z miodem z Jankesowej Pasieki w Topolnie – na grudniowy stół i pod choinkę",
     intro:

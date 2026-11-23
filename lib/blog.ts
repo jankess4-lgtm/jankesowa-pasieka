@@ -18,6 +18,60 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "miod-na-grudniowe-wieczory-i-pod-choinke",
+    title: "Miód na grudniowe wieczory i pod choinkę",
+    description:
+      "Miód z pasieki na Kujawach na grudzień: zimowy stół, zestawy na prezent, darmowa wysyłka od 95 zł i wskazówka, kiedy zamówić, żeby zdążyć na święta.",
+    date: "2026-11-24",
+    image: "/images/pasieka/ramka-miod.webp",
+    imageAlt: "Ramka z miodem z Jankesowej Pasieki w Topolnie – na grudniowy stół i pod choinkę",
+    intro:
+      "W grudniu w pasiece robi się cicho. Pszczoły siedzą już w kłębie zimowym, a tegoroczny miód dawno jest w słoikach. To spokojny czas, żeby pomyśleć o zimowym stole i o prezencie, z którego ktoś będzie korzystał jeszcze długo po świętach. W tym tekście podpowiadam, co z naszej pasieki w Topolnie, na Kujawach, dobrze sprawdza się zimą, jak złożyć zamówienie z darmową wysyłką od 95 zł i kiedy je wysłać, żeby zdążyło pod choinkę. O tym, jak dobrać odmianę do konkretnej osoby, pisałem już osobno – tu skupiam się na grudniu, zestawach i praktycznym zamówieniu.",
+    sections: [
+      {
+        heading: "Zima w pasiece",
+        paragraphs: [
+          "Od późnej jesieni pszczoły nie wylatują po nektar. Trzymają się razem w ulu, żyją z zapasów, które zostawiłem im na zimę, i czekają na wiosnę. Nowego miodu nie będzie aż do kolejnego sezonu, zwykle do czerwca. To, co dzisiaj jest w słoikach, pochodzi z tegorocznych pożytków wokół Topolna: z rzepaku i mniszka, z akacji i z wielokwiatowych łąk nad Wisłą.",
+          "Dlatego grudzień w pasiece to nie czas zbiorów, tylko czas korzystania z tego, co pszczoły już przyniosły. Słoik otwarty przy herbacie, plaster na desce albo zestaw odstawiony pod choinkę – to właśnie ten miód, z tego sezonu, z tego miejsca.",
+        ],
+      },
+      {
+        heading: "Na grudniowy stół i wieczór",
+        paragraphs: [
+          "Zimą miód najczęściej wraca na stół wieczorem. Do herbaty z cytryną albo lipy dodaję go dopiero wtedy, gdy napój trochę przestygnie – wrzątek psuje smak i to, co w miodzie najdelikatniejsze. Ta sama łyżeczka sprawdza się w owsiance, na pieczywie i przy pierniku. Nie trzeba wielkich przepisowych ceremonii: wystarczy słoik w zasięgu ręki.",
+          "Jeśli ktoś lubi jasny, łagodny miód do napojów, naturalnym wyborem jest [akacjowy](/produkty/miod-akacjowy-900ml). Do codziennego smarowania lepiej pasuje [wielokwiatowy](/produkty/miod-wielokwiatowy-900ml) albo [rzepakowo-mniszkowy](/produkty/miod-rzepakowo-mniszkowy-900ml), który szybko nabiera kremowej konsystencji. Szerszy przewodnik po odmianach jest w artykule [Miód na prezent świąteczny – jak wybrać](/blog/miod-na-prezent-swiateczny-jak-wybrac).",
+          "Na szczególny wieczór zostawiam jeszcze dwa produkty z pasieki. [Plaster miodu](/produkty/plastry-miodu) (ok. 450–500 g, 75 zł) je się prosto z woskiem, tak jak kiedyś przy stole. [Świeca z wosku pszczelego](/produkty/swiece-z-wosku-pszczelego) (150 g, 32 zł) pali się spokojnym, ciepłym światłem i ładnie pachnie – bez dodatkowych olejków. Jedna i druga rzecz dobrze wygląda obok słoika, gdy za oknem jest już ciemno.",
+        ],
+      },
+      {
+        heading: "Zestawy na prezent i darmowa wysyłka od 95 zł",
+        paragraphs: [
+          "Najwygodniejszym prezentem z pasieki jest zwykle zestaw. Odmiany kompletujesz sam spośród tych, które właśnie mamy – można wziąć kilka takich samych albo wymieszać.",
+          "[Zestaw dwóch dużych słoików](/produkty/zestaw-2-sloikow-miodu-900ml) (2 × 1,2 kg) kosztuje 95 zł i od razu łapie się na darmową wysyłkę. [Zestaw trzech dużych](/produkty/zestaw-3-duzych-sloikow-miodu-900ml) to już 3,6 kg miodu za 135 zł zamiast 150 zł – też z darmową przesyłką. [Zestaw trzech małych słoików](/produkty/zestaw-3-malych-sloikow-miodu-350ml) za 80 zł jest zręczny, gdy chcesz pokazać kilka smaków bez dużego zapasu. Na święta jest też [zestaw świąteczny](/produkty/zestaw-swiateczny-3-male-sloiki): trzy małe słoiki w pudełku z kokardą za 89 zł, gotowe do wręczenia.",
+          "Od 95 zł wartości produktów wysyłka jest darmowa, niezależnie od tego, czy w koszyku jest zestaw, czy słoiki złożone osobno. Poniżej tego progu paczkomat InPost kosztuje 14 zł, a kurier 16 zł. Zestaw świąteczny za 89 zł i zestaw trzech małych za 80 zł samego progu jeszcze nie osiągają – jeśli chcesz darmową przesyłkę, wystarczy dodać na przykład [świecę z wosku](/produkty/swiece-z-wosku-pszczelego) albo jeden mały słoik.",
+        ],
+      },
+      {
+        heading: "Kiedy zamówić, żeby zdążyć na święta",
+        paragraphs: [
+          "Wysyłamy w ciągu 1–3 dni roboczych. W grudniu u przewoźników bywa tłoczno, dlatego spokojniej złożyć zamówienie w pierwszej połowie miesiąca, a najpóźniej na około tydzień przed Wigilią. Aktualny koszt dostawy i próg darmowej wysyłki zawsze widać w koszyku przed płatnością.",
+          "Jeśli jesteś w okolicy, miód można odebrać osobiście: w pasiece w Topolnie (po umówieniu), w Bydgoszczy przy ul. Jagiellońskiej koło hotelu City (w dni robocze po 15:00, po wcześniejszym telefonie) oraz w Świeciu (zawsze po wcześniejszym kontakcie). Przy odbiorze nie płaci się za przesyłkę.",
+          "Gdy wahasz się między odmianami albo terminem, napisz albo zadzwoń – powiem, co jeszcze jest w pracowni i czy zdążymy na wskazany dzień.",
+        ],
+      },
+    ],
+    cta: {
+      text: "Zamów miód na grudniowy stół i pod choinkę w sklepie Jankesowej Pasieki. Wysyłka w całej Polsce, od 95 zł darmowa. Odbiór w Topolnie, w Bydgoszczy i w Świeciu.",
+      links: [
+        { href: "/produkty/zestaw-2-sloikow-miodu-900ml", label: "Zestaw 2 dużych słoików – 95 zł, z darmową wysyłką" },
+        { href: "/produkty/zestaw-swiateczny-3-male-sloiki", label: "Zestaw świąteczny – 89 zł" },
+        { href: "/produkty/zestaw-3-duzych-sloikow-miodu-900ml", label: "Zestaw 3 dużych słoików – 135 zł zamiast 150 zł" },
+        { href: "/produkty", label: "Zobacz wszystkie miody i zestawy" },
+        { href: "/kontakt", label: "Kontakt i odbiór osobisty" },
+      ],
+    },
+  },
+  {
     slug: "miod-na-prezent-swiateczny-jak-wybrac",
     title: "Miód na prezent świąteczny – jak wybrać",
     description:

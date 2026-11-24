@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { products, sortProductsForCatalog, getProposedCandleProducts } from "@/lib/products";
+import { products, sortProductsForCatalog, getCandleProducts } from "@/lib/products";
 import ShippingNote from "@/components/ShippingNote";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/Button";
@@ -13,7 +13,7 @@ type CategoryFilter = "all" | "miody" | "zestawy" | "produkty";
 
 export default function ProduktyPage() {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
-  const candleProducts = getProposedCandleProducts();
+  const candleProducts = getCandleProducts();
 
   const filteredProducts = sortProductsForCatalog(
     activeFilter === "all"
@@ -82,7 +82,7 @@ export default function ProduktyPage() {
                   aniołki, kószki i serca. Bez parafiny i sztucznych zapachów.
                 </p>
                 <p className="text-sm text-brand-brown/70 mb-5">
-                  Ceny w tej ofercie są propozycją i czekają na potwierdzenie. Świec nie da się jeszcze zamówić online.
+                  Świece wliczają się do darmowej wysyłki od 95 zł, tak jak miód. Na razie nie da się ich jeszcze zamówić online — najpierw podamy wymiary i stany.
                 </p>
                 <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="text-sm font-medium text-brand-gold hover:underline">
                   Zobacz zestaw i poszczególne świece →

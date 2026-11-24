@@ -162,7 +162,7 @@ export default async function HomePage() {
               <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-2">Z NASZEJ PASIEKI</div>
               <h2 className="font-serif text-3xl text-brand-brown tracking-tight mb-3">Świece z wosku pszczelego</h2>
               <p className="text-sm leading-relaxed text-[#374151] mb-4">
-                Ręcznie odlewane z naszego wosku, z pasieki w Topolnie na Kujawach. Ceny są na razie propozycją — świec nie da się jeszcze zamówić online.
+                Ręcznie odlewane z naszego wosku, z pasieki w Topolnie na Kujawach. Wliczają się do darmowej wysyłki od 95 zł. Na razie nie da się ich jeszcze zamówić online.
               </p>
               <span className="text-sm font-medium text-brand-gold">Zobacz świece →</span>
             </div>

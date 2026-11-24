@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
-import { products, isPriceProposed } from "@/lib/products";
+import { notFound, permanentRedirect } from "next/navigation";
+import { products, isComingSoon, isCandleProduct, CANDLE_SLUG_REDIRECTS } from "@/lib/products";
 import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,11 +29,11 @@ interface ProductDetails {
 
 // Generate static paths
 export async function generateStaticParams() {
-  return products
-    .filter((product) => product.slug)
-    .map((product) => ({
-      slug: product.slug!,
-    }));
+  const slugs = [
+    ...products.filter((product) => product.slug).map((product) => product.slug!),
+    ...Object.keys(CANDLE_SLUG_REDIRECTS),
+  ];
+  return slugs.map((slug) => ({ slug }));
 }
 
 export const dynamicParams = false;
@@ -200,12 +200,17 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
-  if (isPriceProposed(product) || product.slug === "swiece-z-wosku-pszczelego" || (product.slug || "").includes("swiec")) {
+  if (isCandleProduct(product)) {
     const setNote = product.id === 35
-      ? "W zestawie: walec z motywem roślinnym, aniołek, aniołek z dzieciątkiem, dwie kószki i dwa serca."
+      ? "W zestawie: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem."
       : product.id === 36
-        ? "W zestawie: aniołek, kószka i serce."
+        ? "W zestawie: aniołek, stary ul i walec z sercem."
         : "Ręcznie odlewana z czystego wosku pszczelego.";
+    const priceNote = product.id === 35
+      ? "119 zł zamiast 134 zł — oszczędzasz 15 zł. Na razie nie do zamówienia online."
+      : product.id === 36
+        ? "49 zł zamiast 51 zł. Na razie nie do zamówienia online."
+        : `${product.price} zł. Na razie nie do zamówienia online.`;
     return {
       richDescription: product.longDescription,
       specs: [
@@ -213,13 +218,10 @@ function getProductDetails(product: Product): ProductDetails {
         { label: "Wykonanie", value: setNote },
         { label: "Pochodzenie", value: "Pasieka w Topolnie na Kujawach" },
         { label: "Wymiary i waga", value: "Podamy po pomiarze" },
-        ...(isPriceProposed(product)
-          ? [{ label: "Cena", value: `${product.price} zł — propozycja, do potwierdzenia. Na razie nie do zamówienia online.` }]
-          : []),
+        { label: "Cena", value: priceNote },
+        { label: "Wysyłka", value: "Wlicza się do darmowej wysyłki od 95 zł, tak jak miód" },
       ],
-      whyBuy: isPriceProposed(product)
-        ? "To podgląd oferty. Gdy potwierdzisz nazwy, ceny, wymiary i stany, świece będzie można zamawiać jak miód."
-        : "Naturalna świeca z wosku z naszej pasieki — spokojny prezent albo ozdoba stołu.",
+      whyBuy: "Naturalna świeca z wosku z naszej pasieki — spokojny prezent albo ozdoba stołu. Zamówienia uruchomimy po podaniu wymiarów i stanów.",
     };
   }
 
@@ -236,12 +238,15 @@ function getProductDetails(product: Product): ProductDetails {
 }
 
 export function generateMetadata({ params }: ProductPageProps): Metadata {
+  const redirectTo = CANDLE_SLUG_REDIRECTS[params.slug];
+  if (redirectTo) {
+    return { robots: { index: false, follow: true } };
+  }
   const product = products.find((p) => p.slug === params.slug);
   if (!product) return {};
-  const proposed = isPriceProposed(product);
-  const title = proposed ? `${product.name} – propozycja ceny` : `${product.name} – ${product.price} zł`;
-  const description = proposed
-    ? `${product.description} Ręcznie odlewane z wosku z pasieki w Topolnie na Kujawach. Cena ${product.price} zł jest propozycją i czeka na potwierdzenie.`
+  const title = `${product.name} – ${product.price} zł`;
+  const description = isCandleProduct(product)
+    ? `${product.description} Ręcznie odlewane z wosku z pasieki w Topolnie na Kujawach. Cena ${product.price} zł. Na razie nie do zamówienia online.`
     : `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
   return {
     title: { absolute: `${title} | Jankesowa Pasieka` },
@@ -253,6 +258,10 @@ export function generateMetadata({ params }: ProductPageProps): Metadata {
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = params;
+  const redirectTo = CANDLE_SLUG_REDIRECTS[slug];
+  if (redirectTo) {
+    permanentRedirect(redirectTo);
+  }
   const product = products.find((p) => p.slug === slug);
 
   if (!product) {
@@ -325,12 +334,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-2 text-xs">
               <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Produkt z naszej pasieki</span>
-              {isPriceProposed(product) || (product.slug || "").includes("swiec") ? (
+              {isCandleProduct(product) ? (
                 <>
                   <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">100% wosk pszczeli</span>
                   <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Ręcznie odlewane</span>
-                  {isPriceProposed(product) && (
-                    <span className="px-3.5 py-1 bg-brand-gold/15 border border-brand-gold/40 rounded-full text-brand-brown">Propozycja ceny</span>
+                  {isComingSoon(product) && (
+                    <span className="px-3.5 py-1 bg-brand-gold/15 border border-brand-gold/40 rounded-full text-brand-brown">Wkrótce</span>
                   )}
                 </>
               ) : (

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { products, isPriceProposed } from "@/lib/products";
+import { products } from "@/lib/products";
 import { blogPosts } from "@/lib/blog";
 
 const SITE = "https://jankesowapasieka.pl";
@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/polityka-prywatnosci`, lastModified: SITE_PAGES_UPDATED, changeFrequency: "yearly", priority: 0.3 },
   ];
 
-  const productPages: MetadataRoute.Sitemap = products.filter((p) => p.slug && !isPriceProposed(p)).map((p) => ({
+  const productPages: MetadataRoute.Sitemap = products.filter((p) => p.slug).map((p) => ({
     url: `${SITE}/produkty/${p.slug}`,
     lastModified: CATALOG_UPDATED,
     changeFrequency: "weekly" as const,

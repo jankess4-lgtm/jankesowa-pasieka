@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
-import { products, isPriceProposed, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
+import { products, isComingSoon, packingUnits, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       const size = jarSize(p);
       if (size === "large") largeJars += q;
       else if (size === "small") smallJars += q;
-      else if (p.id === 12) otherUnits += q; // plaster miodu zajmuje 1 miejsce
+      else otherUnits += packingUnits(p) * q; // plastry i świece
     };
     for (const item of items as any[]) {
       const quantity = Math.floor(Number(item?.quantity) || 1);
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
       const product = products.find((p) => p.id === Number(item?.id));
-      if (!product || product.available === false || isPriceProposed(product)) {
+      if (!product || product.available === false || isComingSoon(product)) {
         return NextResponse.json(
           { error: `Produkt jest niedostępny: ${item?.name || item?.id}` },
           { status: 400 }

@@ -1,4 +1,4 @@
-import { products, getBundleConfig, isPriceProposed } from "@/lib/products";
+import { products, getBundleConfig, isComingSoon } from "@/lib/products";
 import { Product } from "@/lib/types";
 import { qualifiesForFreeShipping, SHIPPING_PARCEL } from "@/lib/shipping";
 
@@ -66,7 +66,7 @@ function itemXml(p: Product) {
 }
 
 export function GET() {
-  const items = products.filter((p) => p.available !== false && p.slug && !isPriceProposed(p)).map(itemXml).join("\n");
+  const items = products.filter((p) => p.available !== false && p.slug && !isComingSoon(p)).map(itemXml).join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>

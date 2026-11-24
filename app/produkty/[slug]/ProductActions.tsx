@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/types";
-import { isPriceProposed } from "@/lib/products";
+import { isComingSoon } from "@/lib/products";
 import Link from "next/link";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
@@ -20,11 +20,11 @@ export default function ProductActions({ product: baseProduct, isAvailable: base
   const isAvailable = baseAvailable && !soldOut;
   const { addToCart, addToCartAndCheckout, isInCart } = useCart();
 
-  if (isPriceProposed(product)) {
+  if (isComingSoon(product)) {
     return (
       <div className="space-y-3">
         <div className="rounded-xl border border-brand-gold/40 bg-brand-cream/60 px-4 py-3 text-sm text-brand-brown">
-          To propozycja ceny — jeszcze nie potwierdzona. Świecy nie da się na razie zamówić online.
+          Świeca pojawi się w sprzedaży, gdy potwierdzimy wymiary i stany. Na razie nie da się jej zamówić online.
         </div>
         <Button disabled size="lg" className="w-full cursor-not-allowed opacity-60">
           Wkrótce do zamówienia

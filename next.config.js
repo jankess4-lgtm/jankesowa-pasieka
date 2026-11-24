@@ -31,6 +31,28 @@ const nextConfig = {
         destination: 'https://jankesowapasieka.pl/:path*',
         permanent: true,
       },
+
+      // 4. Stary produkt świec oraz poprzednie nazwy slugów
+      {
+        source: '/produkty/swiece-z-wosku-pszczelego',
+        destination: '/produkty#swiece',
+        permanent: true,
+      },
+      {
+        source: '/produkty/swieca-aniolek-z-dzieciatkiem',
+        destination: '/produkty/swieca-aniolek',
+        permanent: true,
+      },
+      {
+        source: '/produkty/swieca-koszka',
+        destination: '/produkty/swieca-stary-ul',
+        permanent: true,
+      },
+      {
+        source: '/produkty/swieca-serce',
+        destination: '/produkty/swieca-walec-z-sercem',
+        permanent: true,
+      },
     ];
   },
 

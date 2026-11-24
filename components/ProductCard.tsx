@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/types";
-import { isPriceProposed } from "@/lib/products";
+import { isComingSoon } from "@/lib/products";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
@@ -109,23 +109,22 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
         </div>
 
         <div className="pt-3 border-t border-brand-creamDark mt-auto space-y-2">
-          {isPriceProposed(product) ? (
+          {isComingSoon(product) ? (
             <>
               <div className="flex items-end justify-between gap-3">
                 <div>
                   <div className="text-2xl font-semibold tabular-nums text-brand-brown">
                     {product.price} <span className="text-base align-super font-normal">zł</span>
                   </div>
-                  <div className="text-[11px] text-brand-brown/60 mt-0.5">Propozycja ceny — do potwierdzenia</div>
                 </div>
                 <Button size="sm" variant="ghost" disabled className="opacity-60 cursor-not-allowed">
                   Wkrótce
                 </Button>
               </div>
               <p className="text-[11px] leading-snug text-brand-brown/60">
-                Świecy nie da się jeszcze zamówić online.{" "}
+                Na razie nie da się zamówić online.{" "}
                 <Link href="/kontakt" className="underline hover:text-brand-gold">Napisz do nas</Link>
-                , jeśli chcesz zapytać o cenę.
+                , jeśli chcesz zapytać o świece.
               </p>
             </>
           ) : (

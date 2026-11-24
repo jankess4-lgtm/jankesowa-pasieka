@@ -40,7 +40,7 @@ export const blogPosts: BlogPost[] = [
         paragraphs: [
           "Zimą miód najczęściej wraca na stół wieczorem. Do herbaty z cytryną albo lipy dodaję go dopiero wtedy, gdy napój trochę przestygnie – wrzątek psuje smak i to, co w miodzie najdelikatniejsze. Ta sama łyżeczka sprawdza się w owsiance, na pieczywie i przy pierniku. Nie trzeba wielkich przepisowych ceremonii: wystarczy słoik w zasięgu ręki.",
           "Jeśli ktoś lubi jasny, łagodny miód do napojów, naturalnym wyborem jest [akacjowy](/produkty/miod-akacjowy-900ml). Do codziennego smarowania lepiej pasuje [wielokwiatowy](/produkty/miod-wielokwiatowy-900ml) albo [rzepakowo-mniszkowy](/produkty/miod-rzepakowo-mniszkowy-900ml), który szybko nabiera kremowej konsystencji. Szerszy przewodnik po odmianach jest w artykule [Miód na prezent świąteczny – jak wybrać](/blog/miod-na-prezent-swiateczny-jak-wybrac).",
-          "Na szczególny wieczór zostawiam jeszcze dwa produkty z pasieki. [Plaster miodu](/produkty/plastry-miodu) (ok. 450–500 g, 75 zł) je się prosto z woskiem, tak jak kiedyś przy stole. [Świeca z wosku pszczelego](/produkty/swiece-z-wosku-pszczelego) (150 g, 32 zł) pali się spokojnym, ciepłym światłem i ładnie pachnie – bez dodatkowych olejków. Jedna i druga rzecz dobrze wygląda obok słoika, gdy za oknem jest już ciemno.",
+          "Na szczególny wieczór zostawiam jeszcze dwa produkty z pasieki. [Plaster miodu](/produkty/plastry-miodu) (ok. 450–500 g, 75 zł) je się prosto z woskiem, tak jak kiedyś przy stole. [Świece z wosku pszczelego](/produkty#swiece) palą się spokojnym, ciepłym światłem i ładnie pachną – bez dodatkowych olejków. Jedna i druga rzecz dobrze wygląda obok słoika, gdy za oknem jest już ciemno.",
         ],
       },
       {
@@ -48,7 +48,7 @@ export const blogPosts: BlogPost[] = [
         paragraphs: [
           "Najwygodniejszym prezentem z pasieki jest zwykle zestaw. Odmiany kompletujesz sam spośród tych, które właśnie mamy – można wziąć kilka takich samych albo wymieszać.",
           "[Zestaw dwóch dużych słoików](/produkty/zestaw-2-sloikow-miodu-900ml) (2 × 1,2 kg) kosztuje 95 zł i od razu łapie się na darmową wysyłkę. [Zestaw trzech dużych](/produkty/zestaw-3-duzych-sloikow-miodu-900ml) to już 3,6 kg miodu za 135 zł zamiast 150 zł – też z darmową przesyłką. [Zestaw trzech małych słoików](/produkty/zestaw-3-malych-sloikow-miodu-350ml) za 80 zł jest zręczny, gdy chcesz pokazać kilka smaków bez dużego zapasu. Na święta jest też [zestaw świąteczny](/produkty/zestaw-swiateczny-3-male-sloiki): trzy małe słoiki w pudełku z kokardą za 89 zł, gotowe do wręczenia.",
-          "Od 95 zł wartości produktów wysyłka jest darmowa, niezależnie od tego, czy w koszyku jest zestaw, czy słoiki złożone osobno. Poniżej tego progu paczkomat InPost kosztuje 14 zł, a kurier 16 zł. Zestaw świąteczny za 89 zł i zestaw trzech małych za 80 zł samego progu jeszcze nie osiągają – jeśli chcesz darmową przesyłkę, wystarczy dodać na przykład [świecę z wosku](/produkty/swiece-z-wosku-pszczelego) albo jeden mały słoik.",
+          "Od 95 zł wartości produktów wysyłka jest darmowa, niezależnie od tego, czy w koszyku jest zestaw, czy słoiki złożone osobno. Poniżej tego progu paczkomat InPost kosztuje 14 zł, a kurier 16 zł. Zestaw świąteczny za 89 zł i zestaw trzech małych za 80 zł samego progu jeszcze nie osiągają – jeśli chcesz darmową przesyłkę, wystarczy dodać na przykład [świecę z wosku](/produkty#swiece) albo jeden mały słoik. Świece też wliczają się do tego progu.",
         ],
       },
       {

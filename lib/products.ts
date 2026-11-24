@@ -108,19 +108,6 @@ export const products: Product[] = [
     available: true,
   },
   {
-    id: 13,
-    name: "Świece z wosku pszczelego",
-    slug: "swiece-z-wosku-pszczelego",
-    description: "Naturalne świece 100% z wosku pszczelego.",
-    longDescription: "Ręcznie wytwarzane świece ze 100% czystego wosku pszczelego.",
-    price: 32,
-    unit: "150 g",
-    category: "produkty",
-    image: "/images/swiece-z-wosku-pszczelego.PNG",
-    inStock: 10,        // aktualna ilość
-    available: true,
-  },
-  {
     id: 20,
     name: "Zestaw 2 słoików miodu – 2 × 900 ml (2 × 1,2 kg)",
     slug: "zestaw-2-sloikow-miodu-900ml",
@@ -181,105 +168,86 @@ export const products: Product[] = [
     name: "Walec z motywem roślinnym",
     slug: "swieca-walec-z-motywem-roslinnym",
     description: "Ręcznie odlewany walec z motywem roślinnym, ze 100% wosku pszczelego z naszej pasieki w Topolnie na Kujawach.",
-    longDescription: "Świeca w kształcie walca z motywem roślinnym, ręcznie odlewana z czystego wosku pszczelego z naszych uli w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów — pachnie delikatnie woskiem i miodem. Wymiary i wagę podamy po pomiarze. Cena jest propozycją i czeka na potwierdzenie; świecy nie da się jeszcze zamówić online.",
+    longDescription: "Świeca w kształcie walca z motywem roślinnym, ręcznie odlewana z czystego wosku pszczelego z naszych uli w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów — pachnie delikatnie woskiem i miodem. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
     price: 32,
     unit: "sztuka (wymiary podamy po pomiarze)",
     category: "produkty",
     image: "/images/swiece/walec-z-motywem-roslinnym.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    comingSoon: true,
   },
   {
     id: 31,
     name: "Aniołek z wosku pszczelego",
     slug: "swieca-aniolek",
     description: "Ręcznie odlewany aniołek z naszego wosku pszczelego. Spokojna ozdoba na stół albo prezent.",
-    longDescription: "Aniołek ze złożonymi dłońmi, ręcznie odlewany z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Ładnie wygląda na stole i spokojnie nadaje się na prezent. Wymiary i wagę podamy po pomiarze. Cena jest propozycją i czeka na potwierdzenie; świecy nie da się jeszcze zamówić online.",
+    longDescription: "Aniołek ze złożonymi dłońmi, ręcznie odlewany z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Ładnie wygląda na stole i spokojnie nadaje się na prezent. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
     price: 18,
     unit: "sztuka (wymiary podamy po pomiarze)",
     category: "produkty",
     image: "/images/swiece/aniolek.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
-  },
-  {
-    id: 32,
-    name: "Aniołek z dzieciątkiem",
-    slug: "swieca-aniolek-z-dzieciatkiem",
-    description: "Ręcznie odlewany aniołek z dzieciątkiem, ze 100% wosku pszczelego z naszej pasieki w Topolnie na Kujawach.",
-    longDescription: "Aniołek trzymający dzieciątko, ręcznie odlewany z czystego wosku pszczelego z naszych uli w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Nazwę kształtu potwierdzimy jeszcze przed publikacją. Wymiary i wagę podamy po pomiarze. Cena jest propozycją i czeka na potwierdzenie; świecy nie da się jeszcze zamówić online.",
-    price: 18,
-    unit: "sztuka (wymiary podamy po pomiarze)",
-    category: "produkty",
-    image: "/images/swiece/aniolek-z-dzieciatkiem.webp",
-    inStock: 0,
-    available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    comingSoon: true,
   },
   {
     id: 33,
-    name: "Kószka z wosku pszczelego",
-    slug: "swieca-koszka",
-    description: "Ręcznie odlewana kószka — tradycyjny ul ze słomy — z naszego wosku pszczelego z Topolna na Kujawach.",
-    longDescription: "Świeca w kształcie kószki, czyli dawnego ula ze słomy, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Cena jest propozycją i czeka na potwierdzenie; świecy nie da się jeszcze zamówić online.",
+    name: "Stary ul z wosku pszczelego",
+    slug: "swieca-stary-ul",
+    description: "Ręcznie odlewany stary ul z naszego wosku pszczelego z Topolna na Kujawach.",
+    longDescription: "Świeca w kształcie starego ula, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
     price: 15,
     unit: "sztuka (wymiary podamy po pomiarze)",
     category: "produkty",
     image: "/images/swiece/koszka.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    comingSoon: true,
   },
   {
     id: 34,
-    name: "Serce z wosku pszczelego",
-    slug: "swieca-serce",
+    name: "Walec z sercem",
+    slug: "swieca-walec-z-sercem",
     description: "Niski walec z wypukłym sercem, ręcznie odlewany z naszego wosku pszczelego z Topolna na Kujawach.",
-    longDescription: "Krótka świeca-walec z wypukłym sercem, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Cena jest propozycją i czeka na potwierdzenie; świecy nie da się jeszcze zamówić online.",
+    longDescription: "Krótka świeca-walec z wypukłym sercem, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
     price: 18,
     unit: "sztuka (wymiary podamy po pomiarze)",
     category: "produkty",
     image: "/images/swiece/serce.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    comingSoon: true,
   },
   {
     id: 35,
     name: "Zestaw świec z wosku pszczelego",
     slug: "zestaw-swiec-z-wosku-pszczelego",
-    description: "Siedem ręcznie odlewanych świec z naszego wosku: walec, dwa aniołki, dwie kószki i dwa serca.",
-    longDescription: "Zestaw siedmiu świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: walec z motywem roślinnym, aniołek, aniołek z dzieciątkiem, dwie kószki i dwa serca. Każda świeca jest ręcznie odlewana, bez parafiny i sztucznych zapachów. Cena zestawu jest propozycją (ok. 11% taniej niż świece osobno) i czeka na potwierdzenie; zestawu nie da się jeszcze zamówić online.",
+    description: "Siedem ręcznie odlewanych świec z naszego wosku: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem — 119 zł zamiast 134 zł.",
+    longDescription: "Zestaw siedmiu świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem. Każda świeca jest ręcznie odlewana, bez parafiny i sztucznych zapachów. Płacisz 119 zł zamiast 134 zł za świece osobno, czyli oszczędzasz 15 zł. Na razie nie da się jeszcze zamówić online.",
     price: 119,
     unit: "7 sztuk",
     category: "produkty",
     image: "/images/swiece/swiece-wszystkie.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    badgeText: "Oszczędzasz 15 zł",
+    comingSoon: true,
   },
   {
     id: 36,
     name: "Zestaw świąteczny świec",
     slug: "zestaw-swiateczny-swiec",
-    description: "Trzy świece z naszego wosku: aniołek, kószka i serce. Spokojny pomysł na prezent.",
-    longDescription: "Zestaw trzech ręcznie odlewanych świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: aniołek, kószka i serce. Bez parafiny i sztucznych zapachów. Cena jest propozycją i czeka na potwierdzenie; zestawu nie da się jeszcze zamówić online.",
+    description: "Trzy świece z naszego wosku: aniołek, stary ul i walec z sercem za 49 zł zamiast 51 zł. Spokojny pomysł na prezent.",
+    longDescription: "Zestaw trzech ręcznie odlewanych świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: aniołek, stary ul i walec z sercem. Bez parafiny i sztucznych zapachów. Płacisz 49 zł zamiast 51 zł. Na razie nie da się jeszcze zamówić online.",
     price: 49,
     unit: "3 sztuki",
     category: "produkty",
     image: "/images/swiece/swiece-wszystkie.webp",
     inStock: 0,
     available: true,
-    badgeText: "Propozycja ceny",
-    priceProposed: true,
+    badgeText: "Na święta",
+    comingSoon: true,
   },
 ];
 
@@ -287,21 +255,40 @@ export function isProductListedAsAvailable(p: Product): boolean {
   return p.available !== false && p.inStock > 0;
 }
 
-export function isPriceProposed(p: Product): boolean {
-  return p.priceProposed === true;
+export function isComingSoon(p: Product): boolean {
+  return p.comingSoon === true;
 }
 
 export function isProductOrderable(p: Product): boolean {
-  return isProductListedAsAvailable(p) && !isPriceProposed(p);
+  return isProductListedAsAvailable(p) && !isComingSoon(p);
 }
 
-const CANDLE_PROPOSAL_IDS = [30, 31, 32, 33, 34, 35, 36];
+export const CANDLE_IDS = [30, 31, 33, 34, 35, 36];
 
-export function getProposedCandleProducts(): Product[] {
-  return CANDLE_PROPOSAL_IDS
+export function isCandleProduct(p: Product): boolean {
+  return CANDLE_IDS.includes(p.id);
+}
+
+export function getCandleProducts(): Product[] {
+  return CANDLE_IDS
     .map((id) => products.find((p) => p.id === id))
     .filter((p): p is Product => Boolean(p));
 }
+
+/** Ile miejsc w paczce zajmuje produkt (słoiki liczymy osobno przez jarSize). */
+export function packingUnits(p: Product): number {
+  if (p.id === 35) return 7;
+  if (p.id === 36) return 3;
+  if (isCandleProduct(p) || p.id === 12) return 1;
+  return 0;
+}
+
+export const CANDLE_SLUG_REDIRECTS: Record<string, string> = {
+  "swiece-z-wosku-pszczelego": "/produkty#swiece",
+  "swieca-aniolek-z-dzieciatkiem": "/produkty/swieca-aniolek",
+  "swieca-koszka": "/produkty/swieca-stary-ul",
+  "swieca-serce": "/produkty/swieca-walec-z-sercem",
+};
 
 /** Dwa zestawy i dwa duże słoiki — równy rząd 4 produktów na komputerze. */
 export function getHomepageFeaturedProducts(): Product[] {
@@ -491,7 +478,7 @@ export function packagesForCart(items: { id: number; quantity: number }[]): numb
       const s = jarSize(p);
       if (s === "large") large += q;
       else if (s === "small") small += q;
-      else if (p.id === 12) other += q;
+      else other += packingUnits(p) * q;
     }
   }
   return Math.max(packagesNeeded(large, small, other), 1);

@@ -3,7 +3,7 @@ import type { BlogPost } from "./blog";
 import { pasiekaPhotos } from "./pasieka-photos";
 import { GOOGLE_PROFILE_URL } from "./google-profile";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_PARCEL } from "./shipping";
-import { isPriceProposed } from "./products";
+import { isComingSoon } from "./products";
 
 export const SITE_URL = "https://jankesowapasieka.pl";
 
@@ -120,7 +120,7 @@ export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
 }
 
 export function productJsonLd(product: Product) {
-  const inStock = product.available !== false && product.inStock > 0 && !isPriceProposed(product);
+  const inStock = product.available !== false && product.inStock > 0 && !isComingSoon(product);
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -133,9 +133,6 @@ export function productJsonLd(product: Product) {
       name: "Jankesowa Pasieka",
     },
   };
-  if (isPriceProposed(product)) {
-    return data;
-  }
   return {
     ...data,
     offers: {
@@ -143,7 +140,9 @@ export function productJsonLd(product: Product) {
       url: `${SITE_URL}/produkty/${product.slug}`,
       priceCurrency: "PLN",
       price: product.price,
-      availability: inStock
+      availability: isComingSoon(product)
+        ? "https://schema.org/PreOrder"
+        : inStock
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",

@@ -144,6 +144,29 @@ export default async function HomePage() {
           </div>
 
           <ChristmasGiftLink />
+
+          <Link
+            href="/produkty#swiece"
+            className="mt-12 grid md:grid-cols-2 gap-0 bg-[#F5EDE4] border border-brand-brown/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="relative aspect-[4/3] md:aspect-auto min-h-[220px]">
+              <Image
+                src="/images/swiece/swiece-wszystkie-4x3.webp"
+                alt="Ręcznie odlewane świece z wosku pszczelego z Jankesowej Pasieki"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+            <div className="p-7 sm:p-9 flex flex-col justify-center">
+              <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-2">Z NASZEJ PASIEKI</div>
+              <h2 className="font-serif text-3xl text-brand-brown tracking-tight mb-3">Świece z wosku pszczelego</h2>
+              <p className="text-sm leading-relaxed text-[#374151] mb-4">
+                Ręcznie odlewane z naszego wosku, z pasieki w Topolnie na Kujawach. Ceny są na razie propozycją — świec nie da się jeszcze zamówić online.
+              </p>
+              <span className="text-sm font-medium text-brand-gold">Zobacz świece →</span>
+            </div>
+          </Link>
         </div>
       </section>
 

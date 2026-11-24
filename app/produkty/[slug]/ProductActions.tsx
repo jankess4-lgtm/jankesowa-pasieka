@@ -1,6 +1,8 @@
 "use client";
 
 import { Product } from "@/lib/types";
+import { isPriceProposed } from "@/lib/products";
+import Link from "next/link";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "@/components/ui/Button";
@@ -17,6 +19,22 @@ export default function ProductActions({ product: baseProduct, isAvailable: base
   const soldOut = baseAvailable && live === 0;
   const isAvailable = baseAvailable && !soldOut;
   const { addToCart, addToCartAndCheckout, isInCart } = useCart();
+
+  if (isPriceProposed(product)) {
+    return (
+      <div className="space-y-3">
+        <div className="rounded-xl border border-brand-gold/40 bg-brand-cream/60 px-4 py-3 text-sm text-brand-brown">
+          To propozycja ceny — jeszcze nie potwierdzona. Świecy nie da się na razie zamówić online.
+        </div>
+        <Button disabled size="lg" className="w-full cursor-not-allowed opacity-60">
+          Wkrótce do zamówienia
+        </Button>
+        <p className="text-xs text-center text-brand-brown/60">
+          Możesz <Link href="/kontakt" className="underline hover:text-brand-gold">napisać do nas</Link> albo zadzwonić: +48 514 070 298.
+        </p>
+      </div>
+    );
+  }
 
   if (!isAvailable) {
     return (

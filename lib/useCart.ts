@@ -76,6 +76,10 @@ export function useCart() {
   };
 
   const addToCart = useCallback((product: Product, quantity: number = 1) => {
+    if (product.priceProposed) {
+      toast.error("Ta cena jest tylko propozycją. Świecy nie da się jeszcze zamówić online.");
+      return;
+    }
     setItems((current) => nextCartItems(current, product, quantity));
 
     toast.success(`Dodano ${product.name} do koszyka`, {
@@ -91,6 +95,10 @@ export function useCart() {
 
   /** Dodaje produkt, zapisuje koszyk i otwiera stronę dostawy — żeby wysyłka nie została pominięta. */
   const addToCartAndCheckout = useCallback((product: Product, quantity: number = 1) => {
+    if (product.priceProposed) {
+      toast.error("Ta cena jest tylko propozycją. Świecy nie da się jeszcze zamówić online.");
+      return;
+    }
     setItems((current) => {
       const next = nextCartItems(current, product, quantity);
       try {

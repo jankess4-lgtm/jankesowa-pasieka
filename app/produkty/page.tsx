@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { products, sortProductsForCatalog } from "@/lib/products";
+import { products, sortProductsForCatalog, getProposedCandleProducts } from "@/lib/products";
 import ShippingNote from "@/components/ShippingNote";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import Image from "next/image";
+import Link from "next/link";
 
 type CategoryFilter = "all" | "miody" | "zestawy" | "produkty";
 
 export default function ProduktyPage() {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
+  const candleProducts = getProposedCandleProducts();
 
   const filteredProducts = sortProductsForCatalog(
     activeFilter === "all"
@@ -57,9 +60,46 @@ export default function ProduktyPage() {
           ))}
         </div>
 
+        {(activeFilter === "all" || activeFilter === "produkty") && (
+          <section id="swiece" className="mb-12 scroll-mt-24">
+            <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-8 items-center bg-white border border-brand-brown/10 rounded-3xl overflow-hidden shadow-sm">
+              <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[320px] bg-[#F5EDE4]">
+                <Image
+                  src="/images/swiece/swiece-wszystkie-4x3.webp"
+                  alt="Siedem ręcznie odlewanych świec z wosku pszczelego z Jankesowej Pasieki na białej tacy"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                />
+              </Link>
+              <div className="px-6 pb-8 lg:py-8 lg:pr-10">
+                <div className="uppercase text-xs tracking-[2px] text-brand-gold mb-2">Z NASZEJ PASIEKI</div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-brand-brown tracking-tight mb-3">
+                  Świece z wosku pszczelego
+                </h2>
+                <p className="text-[#374151] leading-relaxed mb-3">
+                  Ręcznie odlewane z naszego wosku, z pasieki w Topolnie na Kujawach: walec z motywem roślinnym,
+                  aniołki, kószki i serca. Bez parafiny i sztucznych zapachów.
+                </p>
+                <p className="text-sm text-brand-brown/70 mb-5">
+                  Ceny w tej ofercie są propozycją i czekają na potwierdzenie. Świec nie da się jeszcze zamówić online.
+                </p>
+                <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="text-sm font-medium text-brand-gold hover:underline">
+                  Zobacz zestaw i poszczególne świece →
+                </Link>
+              </div>
+            </div>
+            <div className="products-grid mt-8">
+              {candleProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Products Grid */}
         <div className="products-grid">
-          {filteredProducts.map((product) => (
+          {filteredProducts.filter((product) => !candleProducts.some((c) => c.id === product.id)).map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
-import { products, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
+import { products, isPriceProposed, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
       const product = products.find((p) => p.id === Number(item?.id));
-      if (!product || product.available === false) {
+      if (!product || product.available === false || isPriceProposed(product)) {
         return NextResponse.json(
           { error: `Produkt jest niedostępny: ${item?.name || item?.id}` },
           { status: 400 }

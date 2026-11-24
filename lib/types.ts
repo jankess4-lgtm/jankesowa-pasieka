@@ -11,6 +11,8 @@ export interface Product {
   inStock: number;
   available?: boolean;
   badgeText?: string;
+  /** Cena jest tylko propozycją — nie wolno jej sprzedawać ani wysyłać do feedu. */
+  priceProposed?: boolean;
 }
 
 export interface CartItem extends Product {

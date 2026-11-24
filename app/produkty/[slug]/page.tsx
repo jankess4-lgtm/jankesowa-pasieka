@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { products } from "@/lib/products";
+import { products, isPriceProposed } from "@/lib/products";
 import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -200,6 +200,29 @@ function getProductDetails(product: Product): ProductDetails {
     };
   }
 
+  if (isPriceProposed(product) || product.slug === "swiece-z-wosku-pszczelego" || (product.slug || "").includes("swiec")) {
+    const setNote = product.id === 35
+      ? "W zestawie: walec z motywem roślinnym, aniołek, aniołek z dzieciątkiem, dwie kószki i dwa serca."
+      : product.id === 36
+        ? "W zestawie: aniołek, kószka i serce."
+        : "Ręcznie odlewana z czystego wosku pszczelego.";
+    return {
+      richDescription: product.longDescription,
+      specs: [
+        { label: "Skład", value: "100% wosk pszczeli z naszej pasieki, knot bawełniany" },
+        { label: "Wykonanie", value: setNote },
+        { label: "Pochodzenie", value: "Pasieka w Topolnie na Kujawach" },
+        { label: "Wymiary i waga", value: "Podamy po pomiarze" },
+        ...(isPriceProposed(product)
+          ? [{ label: "Cena", value: `${product.price} zł — propozycja, do potwierdzenia. Na razie nie do zamówienia online.` }]
+          : []),
+      ],
+      whyBuy: isPriceProposed(product)
+        ? "To podgląd oferty. Gdy potwierdzisz nazwy, ceny, wymiary i stany, świece będzie można zamawiać jak miód."
+        : "Naturalna świeca z wosku z naszej pasieki — spokojny prezent albo ozdoba stołu.",
+    };
+  }
+
   // Fallback dla plastrów i świec
   return {
     richDescription: product.longDescription || "Szczegółowy opis produktu wkrótce.",
@@ -215,8 +238,11 @@ function getProductDetails(product: Product): ProductDetails {
 export function generateMetadata({ params }: ProductPageProps): Metadata {
   const product = products.find((p) => p.slug === params.slug);
   if (!product) return {};
-  const title = `${product.name} – ${product.price} zł`;
-  const description = `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
+  const proposed = isPriceProposed(product);
+  const title = proposed ? `${product.name} – propozycja ceny` : `${product.name} – ${product.price} zł`;
+  const description = proposed
+    ? `${product.description} Ręcznie odlewane z wosku z pasieki w Topolnie na Kujawach. Cena ${product.price} zł jest propozycją i czeka na potwierdzenie.`
+    : `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
   return {
     title: { absolute: `${title} | Jankesowa Pasieka` },
     description,
@@ -299,8 +325,20 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-2 text-xs">
               <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Produkt z naszej pasieki</span>
-              <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Niepasteryzowany</span>
-              <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Szklane opakowanie</span>
+              {isPriceProposed(product) || (product.slug || "").includes("swiec") ? (
+                <>
+                  <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">100% wosk pszczeli</span>
+                  <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Ręcznie odlewane</span>
+                  {isPriceProposed(product) && (
+                    <span className="px-3.5 py-1 bg-brand-gold/15 border border-brand-gold/40 rounded-full text-brand-brown">Propozycja ceny</span>
+                  )}
+                </>
+              ) : (
+                <>
+                  <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Niepasteryzowany</span>
+                  <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Szklane opakowanie</span>
+                </>
+              )}
             </div>
 
             {/* Actions first so add-to-cart is close to the price on a phone */}

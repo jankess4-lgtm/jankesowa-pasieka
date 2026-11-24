@@ -1,11 +1,12 @@
 import { notFound, permanentRedirect } from "next/navigation";
-import { products, isComingSoon, isCandleProduct, CANDLE_SLUG_REDIRECTS } from "@/lib/products";
+import { products, isCandleProduct, CANDLE_SLUG_REDIRECTS, getCandleBundleConfig } from "@/lib/products";
 import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import ProductActions from "./ProductActions";
 import ShippingNote from "@/components/ShippingNote";
 import BundleActions from "./BundleActions";
+import CandleBundleActions from "./CandleBundleActions";
 import SalePrice from "@/components/SalePrice";
 import type { Metadata } from "next";
 import { productJsonLd } from "@/lib/structured-data";
@@ -202,26 +203,25 @@ function getProductDetails(product: Product): ProductDetails {
 
   if (isCandleProduct(product)) {
     const setNote = product.id === 35
-      ? "W zestawie: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem."
+      ? "W zestawie 7 świec, które kompletujesz sam spośród: walca z motywem roślinnym, aniołka, starego ula i walca z sercem."
       : product.id === 36
-        ? "W zestawie: aniołek, stary ul i walec z sercem."
+        ? "W zestawie 3 świece, które kompletujesz sam spośród: walca z motywem roślinnym, aniołka, starego ula i walca z sercem."
         : "Ręcznie odlewana z czystego wosku pszczelego.";
     const priceNote = product.id === 35
-      ? "119 zł zamiast 134 zł — oszczędzasz 15 zł. Na razie nie do zamówienia online."
+      ? "119 zł za zestaw. Jeśli wybrane świece osobno kosztowałyby mniej, płacisz tę niższą kwotę."
       : product.id === 36
-        ? "49 zł zamiast 51 zł. Na razie nie do zamówienia online."
-        : `${product.price} zł. Na razie nie do zamówienia online.`;
+        ? "49 zł za zestaw. Jeśli wybrane świece osobno kosztowałyby mniej, płacisz tę niższą kwotę."
+        : `${product.price} zł.`;
     return {
       richDescription: product.longDescription,
       specs: [
         { label: "Skład", value: "100% wosk pszczeli z naszej pasieki, knot bawełniany" },
         { label: "Wykonanie", value: setNote },
         { label: "Pochodzenie", value: "Pasieka w Topolnie na Kujawach" },
-        { label: "Wymiary i waga", value: "Podamy po pomiarze" },
         { label: "Cena", value: priceNote },
         { label: "Wysyłka", value: "Wlicza się do darmowej wysyłki od 95 zł, tak jak miód" },
       ],
-      whyBuy: "Naturalna świeca z wosku z naszej pasieki — spokojny prezent albo ozdoba stołu. Zamówienia uruchomimy po podaniu wymiarów i stanów.",
+      whyBuy: "Naturalna świeca z wosku z naszej pasieki — spokojny prezent albo ozdoba stołu.",
     };
   }
 
@@ -246,7 +246,7 @@ export function generateMetadata({ params }: ProductPageProps): Metadata {
   if (!product) return {};
   const title = `${product.name} – ${product.price} zł`;
   const description = isCandleProduct(product)
-    ? `${product.description} Ręcznie odlewane z wosku z pasieki w Topolnie na Kujawach. Cena ${product.price} zł. Na razie nie do zamówienia online.`
+    ? `${product.description} Ręcznie odlewane z wosku z pasieki w Topolnie na Kujawach. Cena ${product.price} zł.`
     : `${product.description} Miód prosto z pasieki w Topolnie (okolice Świecia i Torunia). Cena ${product.price} zł, ${product.unit}.`;
   return {
     title: { absolute: `${title} | Jankesowa Pasieka` },
@@ -338,9 +338,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <>
                   <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">100% wosk pszczeli</span>
                   <span className="px-3.5 py-1 bg-brand-cream border border-brand-creamDark rounded-full text-brand-brown">Ręcznie odlewane</span>
-                  {isComingSoon(product) && (
-                    <span className="px-3.5 py-1 bg-brand-gold/15 border border-brand-gold/40 rounded-full text-brand-brown">Wkrótce</span>
-                  )}
                 </>
               ) : (
                 <>
@@ -352,7 +349,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* Actions first so add-to-cart is close to the price on a phone */}
             <div className="pt-1 space-y-4">
-              {product.category === "zestawy" ? (
+              {getCandleBundleConfig(product.id) ? (
+                <CandleBundleActions bundleId={product.id} />
+              ) : product.category === "zestawy" ? (
                 <BundleActions bundleId={product.id} />
               ) : (
                 <ProductActions product={product} isAvailable={isAvailable} />

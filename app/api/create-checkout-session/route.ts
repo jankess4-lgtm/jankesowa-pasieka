@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getStock, TRACKED_IDS } from "@/lib/inventory";
-import { products, isComingSoon, packingUnits, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded } from "@/lib/products";
+import { products, packingUnits, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded, findCandleBundleForCartId, parseCandleBundleCartId, candleBundlePrice, candleBundleLabel } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
 
@@ -38,6 +38,36 @@ export async function POST(request: NextRequest) {
     for (const item of items as any[]) {
       const quantity = Math.floor(Number(item?.quantity) || 1);
       // Zestawy: id koduje wybrane miody, cena zawsze z serwera
+      const candleBundleCfg = findCandleBundleForCartId(Number(item?.id));
+      if (candleBundleCfg) {
+        const bundleProduct = products.find((p) => p.id === candleBundleCfg.id);
+        const chosen = parseCandleBundleCartId(candleBundleCfg, Number(item?.id));
+        if (!chosen || !bundleProduct || bundleProduct.available === false) {
+          return NextResponse.json(
+            { error: `Wybierz ${candleBundleCfg.count} świece do zestawu` },
+            { status: 400 }
+          );
+        }
+        if (quantity < 1 || quantity > 50) {
+          return NextResponse.json({ error: "Nieprawidłowa ilość produktu" }, { status: 400 });
+        }
+        for (const c of chosen) countJar(c, quantity);
+        const label = candleBundleLabel(chosen);
+        const unitPrice = candleBundlePrice(candleBundleCfg, chosen);
+        lineItems.push({
+          price_data: {
+            currency: "pln",
+            unit_amount: Math.round(unitPrice * 100),
+            product_data: {
+              name: `${candleBundleCfg.labelPrefix}: ${label}`,
+              description: `Wybrane świece: ${label} (${candleBundleCfg.count} szt.)`,
+              images: ["https://jankesowapasieka.pl/logo.png"],
+            },
+          },
+          quantity,
+        });
+        continue;
+      }
       const bundleCfg = findBundleForCartId(Number(item?.id));
       if (bundleCfg) {
         const bundleProduct = products.find((p) => p.id === bundleCfg.id);
@@ -71,7 +101,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
       const product = products.find((p) => p.id === Number(item?.id));
-      if (!product || product.available === false || isComingSoon(product)) {
+      if (!product || product.available === false) {
         return NextResponse.json(
           { error: `Produkt jest niedostępny: ${item?.name || item?.id}` },
           { status: 400 }

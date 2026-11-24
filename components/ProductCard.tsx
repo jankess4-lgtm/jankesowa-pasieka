@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/types";
-import { isComingSoon } from "@/lib/products";
+import { isCandleSetProduct } from "@/lib/products";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
@@ -109,32 +109,19 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
         </div>
 
         <div className="pt-3 border-t border-brand-creamDark mt-auto space-y-2">
-          {isComingSoon(product) ? (
-            <>
-              <div className="flex items-end justify-between gap-3">
-                <div>
-                  <div className="text-2xl font-semibold tabular-nums text-brand-brown">
-                    {product.price} <span className="text-base align-super font-normal">zł</span>
-                  </div>
-                </div>
-                <Button size="sm" variant="ghost" disabled className="opacity-60 cursor-not-allowed">
-                  Wkrótce
-                </Button>
-              </div>
-              <p className="text-[11px] leading-snug text-brand-brown/60">
-                Na razie nie da się zamówić online.{" "}
-                <Link href="/kontakt" className="underline hover:text-brand-gold">Napisz do nas</Link>
-                , jeśli chcesz zapytać o świece.
-              </p>
-            </>
-          ) : (
-            <>
           <div className="flex items-center justify-between">
             <div>
               <SalePrice productId={product.id} price={product.price} size="card" />
             </div>
 
-            {product.category === "zestawy" ? (
+            {isCandleSetProduct(product.id) ? (
+              <Link href={`/produkty/${product.slug}`}>
+                <Button size="sm" variant="primary" className="gap-2">
+                  <ShoppingCart className="w-3.5 h-3.5" />
+                  Wybierz świece
+                </Button>
+              </Link>
+            ) : product.category === "zestawy" ? (
               <Link href={`/produkty/${product.slug}`}>
                 <Button size="sm" variant="primary" className="gap-2">
                   <ShoppingCart className="w-3.5 h-3.5" />
@@ -154,7 +141,7 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
             )}
           </div>
 
-          {product.category !== "zestawy" && (
+          {product.category !== "zestawy" && !isCandleSetProduct(product.id) && (
           <Button
             onClick={() => addToCartAndCheckout(product)}
             size="sm"
@@ -164,8 +151,6 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
             <ShoppingCart className="w-3.5 h-3.5" />
             Zapłać
           </Button>
-          )}
-            </>
           )}
         </div>
       </div>

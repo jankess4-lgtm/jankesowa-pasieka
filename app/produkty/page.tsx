@@ -82,7 +82,7 @@ export default function ProduktyPage() {
                   aniołki, stare ule i walce z sercem. Bez parafiny i sztucznych zapachów.
                 </p>
                 <p className="text-sm text-brand-brown/70 mb-5">
-                  Świece wliczają się do darmowej wysyłki od 95 zł, tak jak miód. Na razie nie da się ich jeszcze zamówić online — najpierw podamy wymiary i stany.
+                  Świece wliczają się do darmowej wysyłki od 95 zł, tak jak miód. W zestawach sam wybierasz, które świece mają w nich być.
                 </p>
                 <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="text-sm font-medium text-brand-gold hover:underline">
                   Zobacz zestaw i poszczególne świece →

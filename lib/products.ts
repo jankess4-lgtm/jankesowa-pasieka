@@ -168,86 +168,80 @@ export const products: Product[] = [
     name: "Walec z motywem roślinnym",
     slug: "swieca-walec-z-motywem-roslinnym",
     description: "Ręcznie odlewany walec z motywem roślinnym, ze 100% wosku pszczelego z naszej pasieki w Topolnie na Kujawach.",
-    longDescription: "Świeca w kształcie walca z motywem roślinnym, ręcznie odlewana z czystego wosku pszczelego z naszych uli w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów — pachnie delikatnie woskiem i miodem. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
+    longDescription: "Świeca w kształcie walca z motywem roślinnym, ręcznie odlewana z czystego wosku pszczelego z naszych uli w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów — pachnie delikatnie woskiem i miodem.",
     price: 32,
-    unit: "sztuka (wymiary podamy po pomiarze)",
+    unit: "sztuka",
     category: "produkty",
     image: "/images/swiece/walec-z-motywem-roslinnym.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
-    comingSoon: true,
   },
   {
     id: 31,
     name: "Aniołek z wosku pszczelego",
     slug: "swieca-aniolek",
     description: "Ręcznie odlewany aniołek z naszego wosku pszczelego. Spokojna ozdoba na stół albo prezent.",
-    longDescription: "Aniołek ze złożonymi dłońmi, ręcznie odlewany z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Ładnie wygląda na stole i spokojnie nadaje się na prezent. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
+    longDescription: "Aniołek ze złożonymi dłońmi, ręcznie odlewany z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Ładnie wygląda na stole i spokojnie nadaje się na prezent.",
     price: 18,
-    unit: "sztuka (wymiary podamy po pomiarze)",
+    unit: "sztuka",
     category: "produkty",
     image: "/images/swiece/aniolek.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
-    comingSoon: true,
   },
   {
     id: 33,
     name: "Stary ul z wosku pszczelego",
     slug: "swieca-stary-ul",
-    description: "Ręcznie odlewany stary ul z naszego wosku pszczelego z Topolna na Kujawach.",
-    longDescription: "Świeca w kształcie starego ula, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
+    description: "Ręcznie odlewana kószka – stary ul z naszego wosku pszczelego z Topolna na Kujawach.",
+    longDescription: "Ręcznie odlewana kószka – stary ul z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów.",
     price: 15,
-    unit: "sztuka (wymiary podamy po pomiarze)",
+    unit: "sztuka",
     category: "produkty",
     image: "/images/swiece/koszka.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
-    comingSoon: true,
   },
   {
     id: 34,
     name: "Walec z sercem",
     slug: "swieca-walec-z-sercem",
     description: "Niski walec z wypukłym sercem, ręcznie odlewany z naszego wosku pszczelego z Topolna na Kujawach.",
-    longDescription: "Krótka świeca-walec z wypukłym sercem, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów. Wymiary i wagę podamy po pomiarze. Na razie nie da się jeszcze zamówić online.",
+    longDescription: "Krótka świeca-walec z wypukłym sercem, ręcznie odlewana z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Bez parafiny i sztucznych zapachów.",
     price: 18,
-    unit: "sztuka (wymiary podamy po pomiarze)",
+    unit: "sztuka",
     category: "produkty",
     image: "/images/swiece/serce.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
-    comingSoon: true,
   },
   {
     id: 35,
     name: "Zestaw świec z wosku pszczelego",
     slug: "zestaw-swiec-z-wosku-pszczelego",
-    description: "Siedem ręcznie odlewanych świec z naszego wosku: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem — 119 zł zamiast 134 zł.",
-    longDescription: "Zestaw siedmiu świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: walec z motywem roślinnym, dwa aniołki, dwa stare ule i dwa walce z sercem. Każda świeca jest ręcznie odlewana, bez parafiny i sztucznych zapachów. Płacisz 119 zł zamiast 134 zł za świece osobno, czyli oszczędzasz 15 zł. Na razie nie da się jeszcze zamówić online.",
+    description: "Siedem świec z naszego wosku, które kompletujesz sam — 119 zł. Jeśli wybrane świece osobno kosztowałyby mniej, płacisz tę niższą kwotę.",
+    longDescription: "Zestaw siedmiu ręcznie odlewanych świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Wybierasz dowolną mieszankę spośród: walca z motywem roślinnym, aniołka, starego ula (kószki) i walca z sercem. Cena zestawu to 119 zł. Jeśli suma tych samych świec sprzedawanych osobno wyszłaby niższa, płacisz tyle, ile wynoszą osobno. Bez parafiny i sztucznych zapachów.",
     price: 119,
     unit: "7 sztuk",
     category: "produkty",
     image: "/images/swiece/swiece-wszystkie.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
     badgeText: "Oszczędzasz 15 zł",
-    comingSoon: true,
   },
   {
     id: 36,
     name: "Zestaw świąteczny świec",
     slug: "zestaw-swiateczny-swiec",
-    description: "Trzy świece z naszego wosku: aniołek, stary ul i walec z sercem za 49 zł zamiast 51 zł. Spokojny pomysł na prezent.",
-    longDescription: "Zestaw trzech ręcznie odlewanych świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach: aniołek, stary ul i walec z sercem. Bez parafiny i sztucznych zapachów. Płacisz 49 zł zamiast 51 zł. Na razie nie da się jeszcze zamówić online.",
+    description: "Trzy świece z naszego wosku, które kompletujesz sam — 49 zł. Jeśli wybrane świece osobno kosztowałyby mniej, płacisz tę niższą kwotę. Spokojny pomysł na prezent.",
+    longDescription: "Zestaw trzech ręcznie odlewanych świec z czystego wosku pszczelego z naszej pasieki w Topolnie na Kujawach. Wybierasz dowolną mieszankę spośród: walca z motywem roślinnym, aniołka, starego ula (kószki) i walca z sercem. Cena zestawu to 49 zł. Jeśli suma tych samych świec sprzedawanych osobno wyszłaby niższa, płacisz tyle, ile wynoszą osobno. Bez parafiny i sztucznych zapachów.",
     price: 49,
     unit: "3 sztuki",
     category: "produkty",
     image: "/images/swiece/swiece-wszystkie.webp",
-    inStock: 0,
+    inStock: 999,
     available: true,
     badgeText: "Na święta",
-    comingSoon: true,
   },
 ];
 
@@ -255,12 +249,8 @@ export function isProductListedAsAvailable(p: Product): boolean {
   return p.available !== false && p.inStock > 0;
 }
 
-export function isComingSoon(p: Product): boolean {
-  return p.comingSoon === true;
-}
-
 export function isProductOrderable(p: Product): boolean {
-  return isProductListedAsAvailable(p) && !isComingSoon(p);
+  return isProductListedAsAvailable(p);
 }
 
 export const CANDLE_IDS = [30, 31, 33, 34, 35, 36];
@@ -447,6 +437,152 @@ export function getBundleVarieties(): Product[] {
   return getBundleVarietiesFor(getBundleConfig(BUNDLE_ID)!);
 }
 
+
+// ===== Zestawy świec z wyborem zawartości =====
+// Kodowanie nie używa BUNDLE_SLOT=1000, bo 7 świec nie zmieściłoby się w bezpiecznym Number.
+// Cztery formy mapujemy na cyfry 0–3 (slot 4). Zakresy cartBase są między zestawem 20 a 21,
+// żeby id koszyka nie nakładały się na zestawy miodów.
+export interface CandleBundleConfig {
+  id: number;
+  count: number;
+  price: number;
+  regularPrice: number;
+  cartBase: number;
+  labelPrefix: string;
+  defaultIds: number[];
+}
+
+export const CANDLE_VARIETY_IDS = [30, 31, 33, 34] as const;
+const CANDLE_BUNDLE_SLOT = 4;
+
+export const CANDLE_BUNDLES: CandleBundleConfig[] = [
+  {
+    id: 36,
+    count: 3,
+    price: 49,
+    regularPrice: 51,
+    cartBase: 1_200_000,
+    labelPrefix: "Zestaw świąteczny świec",
+    defaultIds: [31, 33, 34],
+  },
+  {
+    id: 35,
+    count: 7,
+    price: 119,
+    regularPrice: 134,
+    cartBase: 1_300_000,
+    labelPrefix: "Zestaw świec z wosku pszczelego",
+    defaultIds: [30, 31, 31, 33, 33, 34, 34],
+  },
+];
+
+function candleBundleRangeEnd(b: CandleBundleConfig): number {
+  return b.cartBase + Math.pow(CANDLE_BUNDLE_SLOT, b.count);
+}
+
+export function getCandleBundleConfig(id: number): CandleBundleConfig | undefined {
+  return CANDLE_BUNDLES.find((b) => b.id === id);
+}
+
+export function isCandleSetProduct(id: number): boolean {
+  return CANDLE_BUNDLES.some((b) => b.id === id);
+}
+
+export function findCandleBundleForCartId(id: number): CandleBundleConfig | undefined {
+  if (!Number.isInteger(id)) return undefined;
+  const exact = CANDLE_BUNDLES.find((b) => id === b.id);
+  if (exact) return exact;
+  return CANDLE_BUNDLES.find((b) => id > b.cartBase && id < candleBundleRangeEnd(b));
+}
+
+export function getCandleVarieties(): Product[] {
+  return CANDLE_VARIETY_IDS
+    .map((id) => products.find((p) => p.id === id))
+    .filter((p): p is Product => p !== undefined && p.available !== false && p.inStock > 0);
+}
+
+export function candleShortName(p: Product): string {
+  switch (p.id) {
+    case 30: return "walec z motywem roślinnym";
+    case 31: return "aniołek";
+    case 33: return "stary ul";
+    case 34: return "walec z sercem";
+    default: return p.name;
+  }
+}
+
+export function candleBundleLabel(chosen: Product[]): string {
+  const counts = new Map<string, number>();
+  const order: string[] = [];
+  for (const p of chosen) {
+    const name = candleShortName(p);
+    if (!counts.has(name)) order.push(name);
+    counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  return order.map((name) => {
+    const n = counts.get(name) || 1;
+    return n > 1 ? `${n} × ${name}` : name;
+  }).join(", ");
+}
+
+function candleVarietyIndex(id: number): number {
+  return CANDLE_VARIETY_IDS.indexOf(id as typeof CANDLE_VARIETY_IDS[number]);
+}
+
+export function candleBundleCartId(b: CandleBundleConfig, ids: number[]): number {
+  const indices = ids.map(candleVarietyIndex);
+  if (indices.some((i) => i < 0) || indices.length !== b.count) {
+    throw new Error("Nieprawidłowy wybór świec w zestawie");
+  }
+  const sorted = [...indices].sort((a, b) => a - b);
+  return b.cartBase + sorted.reduce((acc, v) => acc * CANDLE_BUNDLE_SLOT + v, 0);
+}
+
+export function parseCandleBundleCartId(b: CandleBundleConfig, id: number): Product[] | null {
+  if (!Number.isInteger(id) || id <= b.cartBase || id >= candleBundleRangeEnd(b)) return null;
+  let rest = id - b.cartBase;
+  const indices: number[] = [];
+  for (let i = 0; i < b.count; i++) {
+    indices.unshift(rest % CANDLE_BUNDLE_SLOT);
+    rest = Math.floor(rest / CANDLE_BUNDLE_SLOT);
+  }
+  if (rest !== 0) return null;
+  const varieties = getCandleVarieties();
+  const chosen = indices.map((idx) => varieties.find((p) => candleVarietyIndex(p.id) === idx));
+  if (chosen.some((p) => !p)) return null;
+  return chosen as Product[];
+}
+
+/** Cena zestawu, albo suma świec osobno — jeśli ta suma jest niższa. */
+export function candleBundlePrice(b: CandleBundleConfig, chosen: Product[]): number {
+  const singles = chosen.reduce((sum, p) => sum + p.price, 0);
+  return Math.min(b.price, singles);
+}
+
+export function candleBundleSinglesTotal(chosen: Product[]): number {
+  return chosen.reduce((sum, p) => sum + p.price, 0);
+}
+
+export function makeCandleBundleCartProduct(b: CandleBundleConfig, ids: number[]): Product | null {
+  if (ids.length !== b.count) return null;
+  let id: number;
+  try {
+    id = candleBundleCartId(b, ids);
+  } catch {
+    return null;
+  }
+  const chosen = parseCandleBundleCartId(b, id);
+  const bundle = products.find((p) => p.id === b.id);
+  if (!chosen || !bundle) return null;
+  const price = candleBundlePrice(b, chosen);
+  return {
+    ...bundle,
+    id,
+    name: `${b.labelPrefix}: ${candleBundleLabel(chosen)}`,
+    price,
+  };
+}
+
 // ===== Pakowanie: duży słoik = 2 miejsca, mały = 1; paczka max 8 miejsc i max 6 małych =====
 export const PACKAGE_UNITS = 8;
 export const PACKAGE_MAX_SMALL = 6;
@@ -471,6 +607,12 @@ export function packagesForCart(items: { id: number; quantity: number }[]): numb
   let large = 0, small = 0, other = 0;
   for (const it of items) {
     const q = it.quantity || 0;
+    const candleBundle = findCandleBundleForCartId(it.id);
+    const candleChosen = candleBundle ? parseCandleBundleCartId(candleBundle, it.id) : null;
+    if (candleChosen) {
+      other += candleChosen.length * q;
+      continue;
+    }
     const b = findBundleForCartId(it.id);
     const chosen = b ? parseBundleCartIdFor(b, it.id) : null;
     const list = chosen ?? [products.find((p) => p.id === it.id)].filter(Boolean) as Product[];

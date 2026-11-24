@@ -76,10 +76,6 @@ export function useCart() {
   };
 
   const addToCart = useCallback((product: Product, quantity: number = 1) => {
-    if (product.comingSoon) {
-      toast.error("Ta świeca pojawi się w sprzedaży wkrótce. Na razie nie da się jej zamówić online.");
-      return;
-    }
     setItems((current) => nextCartItems(current, product, quantity));
 
     toast.success(`Dodano ${product.name} do koszyka`, {
@@ -95,10 +91,6 @@ export function useCart() {
 
   /** Dodaje produkt, zapisuje koszyk i otwiera stronę dostawy — żeby wysyłka nie została pominięta. */
   const addToCartAndCheckout = useCallback((product: Product, quantity: number = 1) => {
-    if (product.comingSoon) {
-      toast.error("Ta świeca pojawi się w sprzedaży wkrótce. Na razie nie da się jej zamówić online.");
-      return;
-    }
     setItems((current) => {
       const next = nextCartItems(current, product, quantity);
       try {

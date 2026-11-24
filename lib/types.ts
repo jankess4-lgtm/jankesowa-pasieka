@@ -11,8 +11,6 @@ export interface Product {
   inStock: number;
   available?: boolean;
   badgeText?: string;
-  /** Produkt jest w ofercie, ale jeszcze nie do zamówienia (brak wymiarów lub stanu). */
-  comingSoon?: boolean;
 }
 
 export interface CartItem extends Product {

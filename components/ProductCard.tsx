@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/types";
-import { isCandleSetProduct } from "@/lib/products";
+import { isCandleSetProduct, isCandleProduct } from "@/lib/products";
 import { useCart } from "@/lib/useCart";
 import { useLiveStock } from "@/lib/useLiveStock";
 import { Button } from "./ui/Button";
@@ -82,7 +82,9 @@ export default function ProductCard({ product: baseProduct, compact = false }: P
   return (
     <div className="product-card group flex flex-col h-full shadow-md hover:shadow-lg hover:-translate-y-0.5">
       <Link href={`/produkty/${productSlug}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden bg-brand-cream rounded-xl shadow-md group-hover:shadow-xl">
+        <div className={`relative overflow-hidden bg-brand-cream rounded-xl shadow-md group-hover:shadow-xl ${
+            isCandleSetProduct(product.id) ? "aspect-[5/4]" : isCandleProduct(product) ? "aspect-[3/5]" : "aspect-[4/3]"
+          }`}>
           <Image
             src={product.image}
             alt={product.name}

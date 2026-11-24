@@ -1,5 +1,5 @@
 import { notFound, permanentRedirect } from "next/navigation";
-import { products, isCandleProduct, CANDLE_SLUG_REDIRECTS, getCandleBundleConfig } from "@/lib/products";
+import { products, isCandleProduct, isCandleSetProduct, CANDLE_SLUG_REDIRECTS, getCandleBundleConfig } from "@/lib/products";
 import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -290,7 +290,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
           {/* IMAGE SECTION */}
           <div className="space-y-4">
-            <div className="relative h-[220px] w-full sm:h-auto sm:aspect-[4/3.6] lg:aspect-square rounded-3xl overflow-hidden bg-white border border-brand-creamDark shadow-sm">
+            <div className={`relative w-full rounded-3xl overflow-hidden bg-white border border-brand-creamDark shadow-sm ${
+                isCandleSetProduct(product.id)
+                  ? "aspect-[5/4]"
+                  : isCandleProduct(product)
+                    ? "aspect-[3/5] max-w-[480px]"
+                    : "h-[220px] sm:h-auto sm:aspect-[4/3.6] lg:aspect-square"
+              }`}>
               {isAvailable ? (
                 <Image
                   src={product.image}

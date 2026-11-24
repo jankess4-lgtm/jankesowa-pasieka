@@ -149,9 +149,9 @@ export default async function HomePage() {
             href="/produkty#swiece"
             className="mt-12 grid md:grid-cols-2 gap-0 bg-[#F5EDE4] border border-brand-brown/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
           >
-            <div className="relative aspect-[4/3] md:aspect-auto min-h-[220px]">
+            <div className="relative aspect-[5/4] min-h-[220px]">
               <Image
-                src="/images/swiece/swiece-wszystkie-4x3.webp"
+                src="/images/swiece/swiece-wszystkie-5x4-foto.webp"
                 alt="Ręcznie odlewane świece z wosku pszczelego z Jankesowej Pasieki"
                 fill
                 className="object-cover"

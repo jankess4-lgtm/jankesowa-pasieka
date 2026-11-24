@@ -63,10 +63,10 @@ export default function ProduktyPage() {
         {(activeFilter === "all" || activeFilter === "produkty") && (
           <section id="swiece" className="mb-12 scroll-mt-24">
             <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-8 items-center bg-white border border-brand-brown/10 rounded-3xl overflow-hidden shadow-sm">
-              <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[320px] bg-[#F5EDE4]">
+              <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="relative aspect-[5/4] bg-[#F5EDE4]">
                 <Image
-                  src="/images/swiece/swiece-wszystkie-4x3.webp"
-                  alt="Siedem ręcznie odlewanych świec z wosku pszczelego z Jankesowej Pasieki na białej tacy"
+                  src="/images/swiece/swiece-wszystkie-5x4-foto.webp"
+                  alt="Ręcznie odlewane świece z wosku pszczelego z Jankesowej Pasieki na białej tacy"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 55vw"

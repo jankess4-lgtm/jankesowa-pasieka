@@ -297,9 +297,11 @@ export function getHomepageFeaturedProducts(): Product[] {
 export function sortProductsForCatalog(list: Product[]): Product[] {
   return [...list].sort((a, b) => {
     const rank = (p: Product) => {
-      if (!isProductListedAsAvailable(p)) return 2;
+      if (!isProductListedAsAvailable(p)) return 4;
       if (p.category === "zestawy") return 0;
-      return 1;
+      if (p.category === "miody") return 1;
+      if (isCandleProduct(p)) return 3;
+      return 2;
     };
     return rank(a) - rank(b);
   });

@@ -60,8 +60,15 @@ export default function ProduktyPage() {
           ))}
         </div>
 
+        {/* Products Grid — miody i zestawy najpierw; świece niżej, jako dodatek */}
+        <div className="products-grid">
+          {filteredProducts.filter((product) => !candleProducts.some((c) => c.id === product.id)).map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+
         {(activeFilter === "all" || activeFilter === "produkty") && (
-          <section id="swiece" className="mb-12 scroll-mt-24">
+          <section id="swiece" className="mt-12 mb-4 scroll-mt-24">
             <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-8 items-center bg-white border border-brand-brown/10 rounded-3xl overflow-hidden shadow-sm">
               <Link href="/produkty/zestaw-swiec-z-wosku-pszczelego" className="relative aspect-[5/4] bg-[#F5EDE4]">
                 <Image
@@ -96,13 +103,6 @@ export default function ProduktyPage() {
             </div>
           </section>
         )}
-
-        {/* Products Grid */}
-        <div className="products-grid">
-          {filteredProducts.filter((product) => !candleProducts.some((c) => c.id === product.id)).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
 
         {/* Info footer note */}
         <div className="text-center mt-14 text-sm text-brand-brown/60 max-w-md mx-auto">

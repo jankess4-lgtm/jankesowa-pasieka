@@ -79,7 +79,7 @@ export default function ProduktyPage() {
                 </h2>
                 <p className="text-[#374151] leading-relaxed mb-3">
                   Ręcznie odlewane z naszego wosku, z pasieki w Topolnie na Kujawach: walec z motywem roślinnym,
-                  aniołki, kószki i serca. Bez parafiny i sztucznych zapachów.
+                  aniołki, stare ule i walce z sercem. Bez parafiny i sztucznych zapachów.
                 </p>
                 <p className="text-sm text-brand-brown/70 mb-5">
                   Świece wliczają się do darmowej wysyłki od 95 zł, tak jak miód. Na razie nie da się ich jeszcze zamówić online — najpierw podamy wymiary i stany.

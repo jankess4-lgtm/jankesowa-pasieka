@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GoogleAdsScripts from "@/components/GoogleAdsScripts";
 import CookieBanner from "@/components/CookieBanner";
+import AdsClickIdCapture from "@/components/AdsClickIdCapture";
 import { CONSENT_STORAGE_KEY } from "@/lib/consent";
 import { organizationJsonLd, jsonLdString } from "@/lib/structured-data";
 
@@ -82,6 +83,7 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               window.gtag = gtag;
+              gtag('set', 'url_passthrough', true);
               gtag('consent', 'default', {
                 ad_storage: 'denied',
                 ad_user_data: 'denied',
@@ -106,6 +108,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#F5EDE4] text-[#1F2937] antialiased">
         <GoogleAdsScripts />
+        <AdsClickIdCapture />
         <AnnouncementBar />
         <Navbar />
         <main>{children}</main>

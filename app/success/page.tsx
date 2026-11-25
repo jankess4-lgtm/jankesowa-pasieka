@@ -16,7 +16,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/useCart";
-import { firePurchaseConversion } from "@/lib/consent";
+import {
+  CONSENT_UPDATED_EVENT,
+  firePurchaseConversion,
+  getStoredConsent,
+  markPurchaseConversionRecord,
+  setEnhancedConversionUserData,
+  shouldFirePurchaseConversion,
+  type ConsentChoice,
+} from "@/lib/consent";
 import { GOOGLE_WRITE_REVIEW_URL } from "@/lib/google-profile";
 
 const STORAGE_KEY = "jankesowa_checkout_form";
@@ -112,20 +120,15 @@ function SuccessContent() {
     fetchSession();
   }, [sessionId, clearCart]);
 
-  // Google Ads purchase conversion — once per Stripe session / browser tab
+  // Google Ads purchase conversion — once per transaction_id, plus one
+  // extra send if the first fire happened while consent was denied and
+  // the visitor later accepts cookies. Ads also dedupes by transaction_id.
   useEffect(() => {
     if (!sessionData?.id || sessionData.payment_status !== "paid") return;
-    if (conversionFiredRef.current) return;
 
-    const storageKey = `gads_conv_${sessionData.id}`;
-    try {
-      if (sessionStorage.getItem(storageKey)) return;
-      sessionStorage.setItem(storageKey, "1");
-    } catch {
-      // If sessionStorage is blocked, ref below still prevents double fire
-    }
-
-    conversionFiredRef.current = true;
+    const transactionId = sessionData.orderRef || sessionData.id;
+    const email =
+      sessionData.customer_email || sessionData.metadata?.customer_email || null;
 
     const value =
       typeof sessionData.amount_total === "number"
@@ -151,11 +154,30 @@ function SuccessContent() {
         };
       });
 
-    firePurchaseConversion({
-      value,
-      transactionId: sessionData.orderRef || sessionData.id,
-      items: items.length > 0 ? items : undefined,
-    });
+    const send = (consent: ConsentChoice | null) => {
+      if (!shouldFirePurchaseConversion(transactionId, consent)) return;
+      if (consent === "granted") {
+        setEnhancedConversionUserData(email);
+      }
+      firePurchaseConversion({
+        value,
+        transactionId,
+        items: items.length > 0 ? items : undefined,
+      });
+      const state: ConsentChoice = consent === "granted" ? "granted" : "denied";
+      markPurchaseConversionRecord(transactionId, state);
+      conversionFiredRef.current = true;
+    };
+
+    send(getStoredConsent());
+
+    const onConsent = (event: Event) => {
+      const choice = (event as CustomEvent<{ choice?: ConsentChoice }>).detail?.choice;
+      if (choice !== "granted") return;
+      send("granted");
+    };
+    window.addEventListener(CONSENT_UPDATED_EVENT, onConsent);
+    return () => window.removeEventListener(CONSENT_UPDATED_EVENT, onConsent);
   }, [sessionData]);
 
   const formatAmount = (amount: number | null | undefined) => {

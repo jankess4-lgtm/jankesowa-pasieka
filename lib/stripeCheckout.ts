@@ -1,5 +1,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { CartItem } from "./types";
+import { getAdsClickIds } from "./ads-click-ids";
+import { getStoredConsent } from "./consent";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -37,6 +39,7 @@ export async function startStripeCheckout(
       })),
       customer: customerData,
       ...(discountCode ? { discountCode } : {}),
+      clickIds: getAdsClickIds(getStoredConsent() === "granted"),
     }),
   });
 

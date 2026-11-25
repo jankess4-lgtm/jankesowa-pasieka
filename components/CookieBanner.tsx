@@ -10,6 +10,7 @@ import {
   setStoredConsent,
   type ConsentChoice,
 } from "@/lib/consent";
+import { persistAdsClickIdsForConsent } from "@/lib/ads-click-ids";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
@@ -27,6 +28,7 @@ export default function CookieBanner() {
 
   const choose = useCallback((choice: ConsentChoice) => {
     setStoredConsent(choice);
+    persistAdsClickIdsForConsent(choice === "granted");
     applyConsentUpdate(choice);
     setVisible(false);
   }, []);

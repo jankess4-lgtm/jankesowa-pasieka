@@ -4,6 +4,7 @@ import { getStock, TRACKED_IDS } from "@/lib/inventory";
 import { products, packingUnits, findBundleForCartId, parseBundleCartIdFor, bundleVarietiesLabel, jarSize, packagesNeeded, findCandleBundleForCartId, parseCandleBundleCartId, candleBundlePrice, candleBundleLabel } from "@/lib/products";
 import { shippingUnitCost, qualifiesForFreeShipping, type DeliveryMethod } from "@/lib/shipping";
 import { checkDiscountCode, type ResolvedDiscount } from "@/lib/discounts";
+import { appendClickIdsToUrl, sanitizeClickIds } from "@/lib/ads-click-ids";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -11,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   try {
-    const { items, customer, discountCode } = await request.json();
+    const { items, customer, discountCode, clickIds } = await request.json();
 
     console.log("Full cart items received:", JSON.stringify(items, null, 2));
 
@@ -243,7 +244,10 @@ export async function POST(request: NextRequest) {
       line_items: lineItems,
       ...(discount ? { discounts: [{ promotion_code: discount.promotionCodeId }] } : {}),
       ...(shippingOptions ? { shipping_options: shippingOptions } : {}),
-      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
+      success_url: appendClickIdsToUrl(
+        `${origin}/success?session_id={CHECKOUT_SESSION_ID}&order=${orderRef}`,
+        sanitizeClickIds(clickIds)
+      ),
       cancel_url: `${origin}/cancel`,
       ...(customer?.email ? { customer_email: customer.email } : {}),
       metadata: {

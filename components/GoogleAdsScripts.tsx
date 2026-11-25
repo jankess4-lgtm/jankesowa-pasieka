@@ -13,7 +13,7 @@ export default function GoogleAdsScripts() {
     function gtag(){dataLayer.push(arguments);}
     window.gtag = window.gtag || gtag;
     gtag('js', new Date());
-    gtag('config', '${gadsId}');
+    gtag('config', '${gadsId}', { url_passthrough: true });
   `;
 
   return (

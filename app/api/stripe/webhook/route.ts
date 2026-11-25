@@ -105,7 +105,7 @@ async function sendAdminEmail(order: any) {
     await resend.emails.send({
       from: "Jankesowa Pasieka <zamowienia@jankesowapasieka.pl>",
       to: "jankesowa.pasieka@gmail.com",
-      replyTo: "jankesowa.pasieka@gmail.com",
+      replyTo: "kontakt@jankesowapasieka.pl",
       subject: `Nowe zamówienie #${order.orderId} — ${order.totalAmount} zł`,
       html: `
         <h2>Nowe zamówienie w Jankesowej Pasiece</h2>

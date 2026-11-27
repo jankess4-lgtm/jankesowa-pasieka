@@ -47,25 +47,6 @@ export function formatPln(amount: number): string {
   return `${rounded.toFixed(2).replace(".", ",")} zł`;
 }
 
-function firstNameFrom(name?: string | null): string | null {
-  if (!name) return null;
-  const trimmed = name.trim();
-  if (trimmed === "Nie podano") return null;
-  const first = trimmed.split(/\s+/)[0] ?? "";
-  if (first.length < 2 || first.length > 30) return null;
-  if (!/^[A-Za-zÀ-öø-ÿĄąĆćĘęŁłŃńÓóŚśŹźŻż-]+$/.test(first)) return null;
-  const letters = first.replace(/-/g, "");
-  const allUpper = letters === letters.toUpperCase();
-  const allLower = letters === letters.toLowerCase();
-  if (allUpper || allLower) {
-    return first
-      .split("-")
-      .map((part) => (part ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase() : part))
-      .join("-");
-  }
-  return first;
-}
-
 export function isRealCustomerEmail(email?: string | null): boolean {
   if (!email) return false;
   const value = email.trim();
@@ -163,9 +144,7 @@ function deliveryText(order: OrderConfirmationInput): { text: string; html: stri
 }
 
 export function buildOrderConfirmationEmail(order: OrderConfirmationInput): OrderConfirmationEmail {
-  const first = firstNameFrom(order.customerName);
-  const greeting = first ? `Dzień dobry ${first},` : "Dzień dobry,";
-  const greetingHtml = first ? `Dzień dobry ${escapeHtml(first)},` : "Dzień dobry,";
+  const greeting = "Dzień dobry,";
   const orderId = (order.orderId || "").trim() || "—";
   const subject = `Dziękujemy za zamówienie ${orderId} – Jankesowa Pasieka`;
 
@@ -255,7 +234,7 @@ ${SHOP_URL}
         <div style="margin-top:10px;color:#f5e6c8;font-size:18px;letter-spacing:0.5px;font-family:Georgia,'Times New Roman',serif;">Jankesowa Pasieka</div>
       </div>
       <div style="padding:28px 28px 24px;">
-        <p style="margin:0 0 16px;font-size:17px;line-height:1.6;">${greetingHtml}</p>
+        <p style="margin:0 0 16px;font-size:17px;line-height:1.6;">${greeting}</p>
         <p style="margin:0 0 20px;font-size:17px;line-height:1.6;">dziękuję za zamówienie w Jankesowej Pasiece. Potwierdzam, że zamówienie <strong>${escapeHtml(orderId)}</strong> zostało opłacone i do mnie dotarło.</p>
         <p style="margin:0 0 8px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#92400E;font-family:Arial,Helvetica,sans-serif;">Zamówione produkty</p>
         <table style="width:100%;border-collapse:collapse;margin:0 0 8px;">

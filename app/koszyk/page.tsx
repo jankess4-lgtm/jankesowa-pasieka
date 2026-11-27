@@ -1,6 +1,7 @@
 "use client";
 
 import PromoSwiecie from "@/components/PromoSwiecie";
+import TrustSignals from "@/components/TrustSignals";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -498,6 +499,21 @@ export default function KoszykPage() {
   const handleCheckout = async () => {
     if (!validateForm()) {
       toast.error("Proszę uzupełnić wymagane pola");
+      // Na telefonie przycisk "Zapłać" jest przyklejony na dole, a pole z błędem bywa poza ekranem.
+      const errs: FormErrors = {};
+      validateContactFields(customer, errs);
+      validateAddressFields(customer, errs);
+      validateParcelFields(customer, errs);
+      const firstId = ["parcelLocker", "street", "postalCode", "city", "fullName", "phone", "email"].find(
+        (id) => (errs as Record<string, unknown>)[id]
+      );
+      setTimeout(() => {
+        const target = firstId ? document.getElementById(firstId) : null;
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+          target.focus({ preventScroll: true });
+        }
+      }, 50);
       return;
     }
 
@@ -524,7 +540,7 @@ export default function KoszykPage() {
         setDiscountError(message);
         toast.error(message);
       } else {
-        toast.error("Błąd podczas inicjowania płatności");
+        toast.error(message ? `Nie udało się przejść do płatności: ${message}` : "Nie udało się przejść do płatności. Spróbuj ponownie lub napisz: kontakt@jankesowapasieka.pl");
       }
     } finally {
       setIsSubmitting(false);
@@ -1167,11 +1183,10 @@ export default function KoszykPage() {
                 {isSubmitting ? "Przekierowanie do płatności..." : `Zapłać ${grandTotal} zł`}
               </Button>
 
-              <p className="text-[10px] text-center text-brand-brown/50 leading-snug mt-4">
-                Bezpieczna płatność online kartą, BLIK lub Przelewy24.
-                <br />
+              <p className="text-xs text-center text-brand-brown/60 leading-snug mt-4">
                 Po opłaceniu skontaktujemy się w sprawie dostawy.
               </p>
+              <TrustSignals compact className="mt-5" />
             </div>
           </div>
         </div>

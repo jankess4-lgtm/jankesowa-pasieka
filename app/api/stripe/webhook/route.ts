@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { Resend } from "resend";
 import { decrementStock } from "@/lib/inventory";
 import { scheduleReviewRequestEmail } from "@/lib/review-request";
+import { sendOrderConfirmationEmail } from "@/lib/order-confirmation";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -69,6 +70,13 @@ export async function POST(request: NextRequest) {
 
     await sendAdminEmail(orderInfo);
     await sendAdminSMS(orderInfo);
+
+    // Potwierdzenie dla klienta (sklep). Nie zastępuje potwierdzenia płatności ze Stripe.
+    try {
+      await sendOrderConfirmationEmail(orderInfo, { sessionId: session.id });
+    } catch (confirmErr) {
+      console.error("Potwierdzenie zamówienia dla klienta nie zostało wysłane:", confirmErr);
+    }
 
     // Prośba o opinię Google — domyślnie tylko log, bez wysyłki.
     // Włączenie: REVIEW_REQUEST_LIVE=true (klienci) albo REVIEW_REQUEST_TEST=true

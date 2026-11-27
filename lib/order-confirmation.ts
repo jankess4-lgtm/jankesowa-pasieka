@@ -213,7 +213,7 @@ ${delivery.text}
 Gdyby pojawiły się pytania, odpowiedz na tę wiadomość albo napisz na kontakt@jankesowapasieka.pl — chętnie pomogę.
 
 Serdecznie pozdrawiam
-Jankesowa Pasieka – Kujawy
+Jankesowa Pasieka – Kujawy nadwiślańskie
 ${SHOP_URL}
 `;
 
@@ -249,7 +249,7 @@ ${SHOP_URL}
         <p style="margin:20px 0 8px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#92400E;font-family:Arial,Helvetica,sans-serif;">Dostawa</p>
         ${delivery.html}
         <p style="margin:20px 0 0;font-size:16px;line-height:1.6;color:#92400E;">Gdyby pojawiły się pytania, odpowiedz na tę wiadomość albo napisz na <a href="mailto:kontakt@jankesowapasieka.pl" style="color:#92400E;">kontakt@jankesowapasieka.pl</a> — chętnie pomogę.</p>
-        <p style="margin:24px 0 0;font-size:17px;line-height:1.6;">Serdecznie pozdrawiam<br />Jankesowa Pasieka – Kujawy</p>
+        <p style="margin:24px 0 0;font-size:17px;line-height:1.6;">Serdecznie pozdrawiam<br />Jankesowa Pasieka – Kujawy nadwiślańskie</p>
       </div>
     </div>
     <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#A16207;font-family:Arial,Helvetica,sans-serif;"><a href="${SHOP_URL}" style="color:#92400E;">jankesowapasieka.pl</a></p>
